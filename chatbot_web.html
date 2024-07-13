@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            background-color: white;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+        }
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.25em;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .message.bot .content {
+            background-color: #e6e6e6;
+            margin-left: 10px;
+        }
+        .message.user .content {
+            background-color: #007bff;
+            color: white;
+            margin-right: 10px;
+            align-self: flex-end;
+        }
+        .message .content {
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-top-left-radius: 10px;
+        }
+        .chat-input button {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border: none;
+            cursor: pointer;
+            border-top-right-radius: 10px;
+        }
+        .chat-input button:focus {
+            outline: none;
+        }
+        .chat-input input:focus {
+            outline: none;
+        }
+        .voice-button {
+            background-color: #28a745;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            border-top-right-radius: 10px;
+            color: white;
+        }
+        .voice-button:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Chatbot</div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
+            <button id="voice-button" class="voice-button">🎤</button>
+        </div>
+    </div>
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+        const voiceButton = document.getElementById('voice-button');
+
+        const messages = [
+            { pattern: 'hi', response: 'Hello, how can I help you today?' },
+            { pattern: 'how are you', response: 'I am fine, what about you?' },
+        ];
+
+        function addMessage(content, isBot) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            if (isBot) {
+                messageElement.classList.add('bot');
+                messageElement.innerHTML = `<div class="content">${content}</div>`;
+            } else {
+                messageElement.classList.add('user');
+                messageElement.innerHTML = `<div class="content">${content}</div>`;
+            }
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleMessage(input) {
+            input = input.toLowerCase().trim();
+            const matchedMessage = messages.find(msg => input.includes(msg.pattern));
+            if (matchedMessage) {
+                addMessage(matchedMessage.response, true);
+                speak(matchedMessage.response);
+            } else {
+                const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+                window.open(searchUrl, '_blank');
+            }
+        }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        }
+
+        sendButton.addEventListener('click', () => {
+            const input = chatInput.value;
+            if (input) {
+                addMessage(input, false);
+                handleMessage(input);
+                chatInput.value = '';
+            }
+        });
+
+        chatInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        voiceButton.addEventListener('click', () => {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const voiceInput = event.results[0][0].transcript;
+                addMessage(voiceInput, false);
+                handleMessage(voiceInput);
+            };
+
+            recognition.onerror = function(event) {
+                console.error(event.error);
+            };
+        });
+    </script>
+</body>
+</html>

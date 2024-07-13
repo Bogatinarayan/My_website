@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Section with Centered Video</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global Styles */
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #e5e5e5;
+        }
+
+        /* Navbar Styles */
+
+        .navbar {
+      background-color: #e5e5e5;
+            color: #00ff00; /* Bright green text color */
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center; /* Center align text */
+            overflow: hidden; /* Hide overflow text */
+            white-space: nowrap; /* Prevent text from wrapping */
+            z-index: 1000; /* Ensure navbar is on top of other content */
+            font-weight: bold; /* Bold text for navbar */
+            transition: top 0.3s; /* Smooth transition for hiding/showing */
+        }
+
+        .navbar.hidden {
+            top: -50px; /* Move navbar above viewport when hidden */
+        }
+
+        /* Video Styles */
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-container video {
+            min-width: 100%;
+            min-height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer; /* Show pointer cursor on hover */
+        }
+
+        .video-container video:focus {
+            outline: none; /* Remove default focus outline */
+        }
+
+        .video-container .play-pause {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: #fff;
+            display: none; /* Hidden by default */
+            cursor: pointer; /* Show pointer cursor */
+        }
+
+        /* Team Section */
+
+        .team {
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .team h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .team-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px; /* Space between cards */
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 18rem;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 12rem; /* Adjust as needed */
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-info button {
+            margin: 2rem 1rem;
+        }
+
+        .card-name {
+            font-size: 2rem;
+            margin: 10px 0;
+        }
+
+        .card-role {
+            font-size: 1rem;
+            color: #888;
+            margin: 5px 0;
+        }
+
+        .card-email {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .glow-button {
+            font-size: 1.25rem;
+            color: #fff;
+            background-color: #333;
+            border: 2px solid rgb(0, 255, 0); /* Light green border */
+            padding: 0.625rem 1.25rem; /* Using rem for padding */
+            border-radius: 0.625rem; /* Using rem for border radius */
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 20px rgb(0, 255, 0), 0 0 30px rgb(0, 255, 0), 0 0 40px rgb(0, 255, 0);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .card {
+                width: calc(33.33% - 20px);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                width: calc(100% - 20px);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .card-img {
+                height: 10rem; /* Adjust height for smaller screens */
+            }
+
+            .card-name {
+                font-size: 1.5rem;
+            }
+
+            .card-role {
+                font-size: 0.875rem;
+            }
+
+            .glow-button {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+
+
+
+#slidingText{
+    font-size: 129%;
+  color: #fff;
+  text-align: center;
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
+
+}
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+  }
+  to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+  }
+}
+
+            
+        
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar" id="navbar">
+        <div id="slidingText">Founder and Developer Narayan Bogati</div>
+    </div>
+
+  
+    <!-- Team Section -->
+    <section class="team">
+        <h1>MY Project</h1>
+        <div class="team-cards">
+            <!-- Row 1 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="e_comfrontpage.PNG" alt="User 1">
+                </div>
+                <div class="card-info">
+                    <h2 class="card-name">Ecommerce </h2>
+                    <p class="card-role">Website </p>
+                    <p class="card-email">Develop in 2024</p>
+                    <p><button class="glow-button" onclick="ecom()">SEE</button></p>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="chatbot.png" alt="User 2">
+                </div>
+                <div class="card-info">
+                    <h2 class="card-name">ChatBot </h2>
+                    <p class="card-role">Website </p>
+                    <p class="card-email">Develop in 2024</p>
+                    <p><button class="glow-button" onclick="chatbot()">SEE </button></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="jarvispic.jpg" alt="User 3">
+                </div>
+                <div class="card-info">
+                    <h2 class="card-name">Jarvis Ai</h2>
+                    <p class="card-role">Applicaton</p>
+                    <p class="card-email">Develop in 2024</p>
+                    <p><button class="glow-button" onclick="jarvis_ai()">SEE</button></p>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="logouter.PNG" alt="User 4">
+                </div>
+                <div class="card-info">
+                    <h2 class="card-name">Email log-outer</h2>
+                    <p class="card-role">Website</p>
+                    <p class="card-email">Develop in 2024</p>
+                    <p><button class="glow-button" onclick="email_logouter()">SEE</button></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="mypicceo.JPG" alt="User 5">
+                </div>
+                <div class="card-info">
+                    <h2 class="card-name">coming </h2>
+                    <p class="card-role">coming</p>
+                    <p class="card-email">coming</p>
+                    <p><button class="glow-button" onclick="openPdfInNewTab()">Contact</button></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="mypicceo.JPG" alt="User 6">
+                </div>
+                <div class="card-info">
+                    <h2 class="card-name">coming </h2>
+                    <p class="card-role">coming</p>
+                    <p class="card-email">coming</p>
+                    <p><button class="glow-button" onclick="openPdfInNewTab()">Contact</button></p>
+                </div>
+            </div>
+
+
+            
+
+        </div>
+    </section>
+
+
+      <!-- Video Section -->
+      <div class="video-container" id="videoContainer">
+        <video id="backgroundVideo" autoplay muted loop>
+            <source src="20210408_145253.mp4" type="video/mp4">
+     
+        </video>
+        <div class="play-pause" id="playPause">&#9658;</div>
+    </div>
+
+    <!-- JavaScript for functions -->
+    <script>
+        
+        // Toggle play/pause and fullscreen on video click
+        var video = document.getElementById('backgroundVideo');
+        var playPauseBtn = document.getElementById('playPause');
+        var videoContainer = document.getElementById('videoContainer');
+        var navbar = document.getElementById('navbar');
+
+        video.addEventListener('click', function () {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.style.display = 'none';
+            } else {
+                video.pause();
+                playPauseBtn.style.display = 'block';
+            }
+        });
+
+        videoContainer.addEventListener('click', function () {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.style.display = 'none';
+            } else {
+                video.pause();
+                playPauseBtn.style.display = 'block';
+            }
+        });
+
+        // Hide navbar on scroll down, show on scroll up
+        var lastScrollTop = 0;
+        window.addEventListener('scroll', function () {
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop) {
+                // Downscroll
+                navbar.style.top = '-50px';
+            } else {
+                // Upscroll
+                navbar.style.top = '0';
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Sliding text animation for navbar
+        var slidingText = document.getElementById('slidingText');
+        var text = slidingText.innerText;
+        var index = 0;
+        setInterval(function () {
+            index = (index + 1) % (text.length + 1);
+            slidingText.textContent = text.substring(0, index);
+        }, 100);
+
+        // Automatically adjust video size on window resize
+        window.addEventListener('resize', function () {
+            var aspectRatio = 16 / 9; // Standard widescreen aspect ratio
+            var containerWidth = videoContainer.offsetWidth;
+            var containerHeight = videoContainer.offsetHeight;
+
+            var videoWidth = containerWidth;
+            var videoHeight = containerWidth / aspectRatio;
+
+            if (videoHeight < containerHeight) {
+                videoHeight = containerHeight;
+                videoWidth = containerHeight * aspectRatio;
+            }
+
+            video.style.width = videoWidth + 'px';
+            video.style.height = videoHeight + 'px';
+        });
+
+        // Initial resize handling
+        window.dispatchEvent(new Event('resize'));
+
+function chatbot(){
+   window.location.href = "chatbot_detail.html"
+
+}
+        function ecom() {
+            window.location.href = "about11.html";
+        }
+
+        function jarvis_ai(){
+
+            window.location.href ="jarvis_project.html"
+        }
+
+
+function email_logouter()
+{
+    
+            window.location.href ="log_out_deatilhtml.html"
+}
+        
+    </script>
+</body>
+
+</html>

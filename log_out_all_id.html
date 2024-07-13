@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bogati Logouter</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin-top: 5em;
+      background-image: url('nepaliboy.png'); 
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    
+    h1 {
+      margin: 0 auto;
+      text-align: center;
+      font-size: 4em;
+    }
+    
+    ul {
+      width: 500px;
+      margin: 2em auto;
+    }
+  
+    .hidden {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      top: -10px;
+      left: -10px;
+    }
+    
+    .success {
+      font-weight: bold;
+      color: #0a0;
+    }
+    
+    .error {
+      color: #a00;
+    }
+
+    #message {
+      font-size: 24px;
+      color: #333;
+      font-weight: bold;
+      border: 3px solid rgb(0, 0, 0); /* Initial RGB color */
+text-align: center;
+      display: none;
+      animation: changeBorderColor 2s infinite;
+    
+      background-color: 	#FFB6C1;
+    }
+
+    @keyframes changeBorderColor {
+      0% { border-color: rgb(255, 0, 0); }   /* Red */
+      33% { border-color: rgb(0, 255, 0); }  /* Green */
+      66% { border-color: rgb(0, 0, 255); }  /* Blue */
+      100% { border-color: rgb(255, 0, 0); } /* Red */
+    }
+  </style>
+
+  <script>
+    function cleanup(func, el, delayCleanup) {
+      return function() {
+        if (delayCleanup) {
+          delayCleanup = false;
+          return;
+        }
+        func();
+        el.parentNode.removeChild(el);
+      };
+    }
+  
+    function get(url) {
+      return function(success, error) {
+        var img = document.createElement("img");
+        img.onload = cleanup(success, img);
+        img.onerror = cleanup(success, img);
+        img.className = "hidden";
+        document.body.appendChild(img);
+        img.src = url;
+      };
+    }
+    
+    var numPostFrames = 0;
+    function post(url, params, fakeOk) {
+      params = params || {};
+      return function(success, error) {
+        var form = document.createElement("form");
+        var iframe = document.createElement("iframe");
+
+        iframe.className = "hidden";
+        iframe.onload = cleanup(cleanup(success, form), iframe, true);
+        iframe.onerror = cleanup(cleanup(error, form), iframe, true);
+        iframe.name = "iframe" + numPostFrames++;
+        document.body.appendChild(iframe);
+        
+        form.action = url;
+        form.method = "POST";
+        form.target = iframe.name;
+        
+        for (var param in params) {
+          if (params.hasOwnProperty(param)) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.name = param;
+            input.value = params[param];
+            form.appendChild(input);
+          }
+        }
+        
+        document.body.appendChild(form);
+        form.submit();
+        
+        if (fakeOk) {
+          success();
+        }
+      };
+    }
+    
+    function and(one, two) {
+      return function(success, error) {
+        var oneSuccess = false;
+        var twoSuccess = false;
+        var oneSuccessFunc = function() {
+          oneSuccess = true;
+          if (twoSuccess) {
+            success();
+          }
+        };
+        var twoSuccessFunc = function() {
+          twoSuccess = true;
+          if (oneSuccess) {
+            success();
+          }
+        };
+        one(oneSuccessFunc, error);
+        two(twoSuccessFunc, error);
+      }
+    }
+    
+    function doSites(list, sites) {
+      sites.forEach(function(site) {
+        if (!site.length) {
+          return;
+        }
+        
+        var name = site[0];
+        var action = site[1];
+        
+        var li = document.createElement("li");
+        var nameNode = document.createElement("strong");
+        nameNode.appendChild(document.createTextNode(name));
+        var statusNode = document.createElement("span");
+        statusNode.innerHTML = "...";
+        li.appendChild(nameNode);
+        li.appendChild(document.createTextNode(': '));
+        li.appendChild(statusNode);
+        
+        var success = function() {
+          statusNode.innerHTML = "OK";
+          statusNode.className = "success";
+        };
+        var error = function() {
+          statusNode.innerHTML = "error";
+          statusNode.className = "error";
+        };
+        
+        action(success, error);
+        
+        list.appendChild(li);
+      });
+    }
+    
+    window.onload = function() {
+      doSites(document.getElementById("sitelist"), [
+        ["Bogati script running...", and(get("http://my.screenname.aol.com/_cqr/logout/mcLogout.psp?sitedomain=startpage.aol.com&authLev=0&lang=en&locale=us"), get("https://api.screenname.aol.com/auth/logout?state=snslogout&r=" + Math.random()))],
+        ["Bogati script running...", get("http://www.amazon.com/gp/flex/sign-out.html?action=sign-out")],
+        ["Bogati script running...", get("http://www.blogger.com/logout.g")],
+        ["Bogati script running...", get("http://www.delicious.com/logout")],
+        ["Bogati script running...", post("http://www.deviantart.com/users/logout")],
+        ["Bogati script running...", get("https://panel.dreamhost.com/index.cgi?Nscmd=Nlogout")],
+        ["Bogati script running...", get("https://www.dropbox.com/logout")],
+        ["Bogati script running...", get("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn")],
+        ["Bogati script running...", get("https://www.gandi.net/login/out")],
+        ["Bogati script running...", get("https://github.com/logout")],
+        ["Bogati script running...", get("http://mail.google.com/mail/?logout")],
+        ["Bogati script running...", get("https://www.google.com/accounts/Logout")],
+        ["Bogati script running...", get("https://secure.hulu.com/logout")],
+        ["Bogati script running...", get("http://www.instapaper.com/user/logout")],
+        ["Bogati script running...", get("https://manager.linode.com/session/logout")],
+        ["Bogati script running...", post("http://www.livejournal.com/logout.bml", {"action:killall": "1"})],
+        ["Bogati script running...", get("http://www.myspace.com/index.cfm?fuseaction=signout")],
+        ["Bogati script running...", get("http://www.netflix.com/Logout")],
+        ["Bogati script running...", get("http://www.nytimes.com/logout")],
+        ["Bogati script running...", get("https://secure.newegg.com/NewMyAccount/AccountLogout.aspx")],
+        ["Bogati script running...", get("http://photobucket.com/logout")],
+        ["Bogati script running...", get("https://secure.skype.com/account/logout")],
+        ["Bogati script running...", get("http://slashdot.org/my/logout")],
+        ["Bogati script running...", get("http://soundcloud.com/logout")],
+        ["Bogati script running...", get("http://steamcommunity.com/?action=doLogout")],
+        ["Bogati script running...", get("http://store.steampowered.com/logout/")],
+        ["Bogati script running...", get("https://www.thinkgeek.com/brain/account/login.cgi?a=lo")],
+        ["Bogati script running...", get("http://www.threadless.com/logout")],
+        ["Bogati script running...", get("http://www.tumblr.com/logout")],
+        ["Bogati script running...", get("http://vimeo.com/log_out")],
+        ["Bogati script running...", get("http://en.wikipedia.org/w/index.php?title=Special:UserLogout")],
+        ["Bogati script running...", get("http://login.live.com/logout.srf")],
+        ["Bogati script running...", get("https://account.woot.com/logout")],
+        ["Bogati script running...", get("https://wordpress.com/wp-login.php?action=logout")],
+        ["Bogati script running...", get("https://login.yahoo.com/config/login?.src=fpctx&logout=1&.direct=1&.done=http://www.yahoo.com/")],
+        ["Bogati script running...", post("http://www.youtube.com", {"action_logout": "1"}, true)],
+        
+        []
+      ]);
+      
+      setTimeout(function() {
+          document.getElementById("message").style.display = "block";
+      }, 5000);
+    };
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-24596689-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+<body>
+  <h1 class="waitnb">Wait Logouting </h1>
+  <ul id="sitelist">
+  </ul>
+
+  <div id="message">Logged Out Successfully</div>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>narayan | Portfolio</title>
+  <!-- Custom CSS -->
+
+  <link rel="stylesheet" href="css/skins/color-red.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="IMG_0058.png" />
+  <style>
+  .glow-on-hover {
+            width: 220px;
+            height: 50px;
+            border: none;
+            outline: none;
+            color: #fff;
+            background: #111;
+            cursor: pointer;
+            position: relative;
+            z-index: 0;
+            border-radius: 10px;
+            transition: color 0.2s ease-in-out;
+            font-size: 1rem;
+        }
+
+        .glow-on-hover:before {
+            content: '';
+            background: linear-gradient(45deg, #00ff00, #32ff7e, #00ff00, #32ff7e);
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(5px);
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            animation: glowing 20s linear infinite;
+            border-radius: 10px;
+        }
+
+        .glow-on-hover:after {
+            z-index: -1;
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            left: 0;
+            top: 0;
+            border-radius: 10px;
+        }
+
+        .glow-on-hover:hover {
+            color: #000;
+            background: #00ff00;
+        }
+
+        @keyframes glowing {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        @media (max-width: 600px) {
+            .glow-on-hover {
+                width: 180px;
+                height: 45px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .glow-on-hover {
+                width: 150px;
+                height: 40px;
+                font-size: 0.8rem;
+            }
+        }
+
+  </style>
+</head>
+
+<body class="dark">
+  <canvas id="matrixCanvas"></canvas>
+  <!-- Matrix -->
+  <script src="/js/matrix.js"></script>
+  <!-- Main Container Start -->
+  <div class="main-container">
+    <!-- Aside Start -->
+    <div class="aside">
+      <div class="logo">
+        <a href="index.html"><span>Bo</span>gati</a>
+      </div>
+      <div class="nav-toggler">
+        <span></span>
+      </div>
+      <ul class="nav">
+        <li>
+          <a href="#home" class="active"><i class="fa fa-home"></i> Home</a>
+        </li>
+        <li>
+          <a href="#about"><i class="fa fa-user"></i> About</a>
+        </li>
+        <li>
+          <a href="#education"><i class="fa fa-book"></i> Educations</a>
+        </li>
+        <li>
+          <a href="#contact"><i class="fa fa-comments"></i> Contact</a>
+        </li>
+
+      </ul>
+    </div>
+    <!-- Aside End -->
+    <!-- Main Content Start -->
+    <div class="main-content">
+      <!-- Home Section Start -->
+      <section class="home active section" id="home">
+        <div class="container">
+          <div class="row">
+            <div class="home-info padd-15">
+              <h3 class="hello"> 
+                Hello, my name is <span class="name">Narayan Bogati</span>
+              </h3>
+              <h3 class="my-profession">
+                I'm a <span class="typing"></span>
+              </h3>
+              <p>Welcome to my portfolio ! I'm specialized Networking .Hacking,Web Developer,penetration testing,Graphic Designer,Hardware Maintennance  . My goal is to identify and address potential vulnerabilities before malicious actors can exploit them.</p>
+           
+              <a href="NarayanBogatiResume.pdf" class="btn" download="NarayanBogatiResume.pdf">Download CV</a>
+              &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; <button class="glow-on-hover" onclick="openPage()">MY project </button>
+
+            </div>
+            <div class="home-img padd-15">
+              <img src="homepic.png" alt="hero" />
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Home Section End -->
+
+      <!-- About Section Start -->
+      <section class="about section" id="about">
+        <div class="container">
+          <div class="row">
+            <div class="section-title padd-15">
+              <h2>About Me</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="about-content padd-15">
+              <div class="row">
+                <div class="about-text padd-15">
+                  <h3>I'm Narayan Bogati and<span>  IT expert</span></h3>
+                  <p>
+                    Butwal IT person help in many area of IT and specialized in hacking and fronten Developer                 </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="personal-info padd-15">
+                  <div class="row">
+                    <div class="info-item padd-15">
+                      <p>Birthday : 09/01/2003<span></span></p>
+                    </div>
+                    <div class="info-item padd-15">
+                      <p>Age : 21<span></span></p>
+                    </div>
+                    <div class="info-item padd-15">
+                      <p>Website : <span>www.narayanbogati.com.np</span></p>
+                    </div>
+                    <div class="info-item padd-15">
+                      <p>Email : <span>boy082913@gmail.com</span></p>
+                    </div>
+                    <div class="info-item padd-15">
+                      <p>Degree : <span>Computer Engineering</span></p>
+                    </div>
+                    <div class="info-item padd-15">
+                      <p>Phone : <span>9762519563</span></p>
+                    </div>
+                    <div class="info-item padd-15">
+                      <p>City : <span>Butwal</span></p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="buttons padd-15">
+                      <a href="NarayanBogatiResume.pdf" class="btn" download="NarayanBogatiResume.pdf">Download CV</a>
+                      <a href="#contact" class="btn hire-me">Hire Me</a>
+                 
+                    </div>
+                  </div>
+                </div>
+                <div class="skills padd-15">
+                  <div class="row">
+                    <div class="skills-item padd-15">
+                      <h5>HTML and CSS</h5>
+                      <div class="progress">
+                        <div class="progress-in" style="width: 95%"></div>
+                        <div class="skill-percent">95%</div>
+                      </div>
+                    </div>
+                    <div class="skills-item padd-15">
+                      <h5>js / php</h5>
+                      <div class="progress">
+                        <div class="progress-in" style="width: 85%"></div>
+                        <div class="skill-percent">45%</div>
+                      </div>
+                    </div>
+                    <div class="skills-item padd-15">
+                      <h5>Web penetration</h5>
+                      <div class="progress">
+                        <div class="progress-in" style="width: 85%"></div>
+                        <div class="skill-percent">85%</div>
+                      </div>
+                    </div>
+                    <div class="skills-item padd-15">
+                      <h5>Web and app testing</h5>
+                      <div class="progress">
+                        <div class="progress-in" style="width: 97%"></div>
+                        <div class="skill-percent">87%</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- About Section End -->
+
+      <!-- Educations & Experience Section Start -->
+      <section class="education section" id="education">
+        <div class="container">
+          <div class="row">
+            <div class="section-title padd-15">
+              <h2>Educations & Experience</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="education padd-15">
+              <h3 class="title">Education</h3>
+              <div class="row">
+                <div class="timeline-box padd-15">
+                  <div class="timeline shadow-dark">
+                    <!-- Timeline item -->
+                    <div class="timeline-item">
+                      <div class="circle-dot"></div>
+                      <h3 class="timeline-date">
+                        <i class="fa fa-calendar"></i> 2081
+                      </h3>
+                      <h4 class="timeline-title">
+                      Ethical Hacking
+                      </h4>
+                     <p class="timeline-text">                     
+Narayan Bogati, known in hacking circles as "ButwalByte," is a formidable computer engineer specializing in identity manipulation. With a knack for breaching and securing ID systems, Bogati thrives on the cutting edge of digital identity innovation, blending technical expertise with a hacker's intuition for exploiting vulnerabilities.
+
+        </div>
+                    <!-- Timeline item -->
+                    <div class="timeline-item">
+                      <div class="circle-dot"></div>
+                      <h3 class="timeline-date">
+                        <i class="fa fa-calendar"></i>2081
+                      </h3>
+                      <h4 class="timeline-title">
+                        Hardware
+                      </h4>
+                      <p class="timeline-text">
+                       
+                        Narayan Bogati is a skilled computer engineer specializing in hardware maintenance, based in Butwal. With a meticulous approach to troubleshooting and repairing computer systems, he ensures optimal functionality and reliability. Bogati's expertise spans across diagnosing hardware issues, implementing solutions, and optimizing performance, making him a trusted professional in the fie         </div>
+                    <!-- Timeline item -->
+                    <div class="timeline-item">
+                      <div class="circle-dot"></div>
+                      <h3 class="timeline-date">
+                        <i class="fa fa-calendar"></i> 2081
+                      </h3>
+                      <h4 class="timeline-title">
+                        Expert in IT
+                      </h4>
+                      <p class="timeline-text">
+                        Narayan Bogati is a skilled computer engineer hailing from Butwal. With expertise in identity management, he excels in designing secure and efficient ID systems. Bogati combines technical prowess with a passion for innovation, contributing significantly to the field of digital identity solutions.   </div>
+                    <!-- Timeline item -->
+                    <div class="timeline-item">
+                      <div class="circle-dot"></div>
+                      <h3 class="timeline-date">
+                        <i class="fa fa-calendar"></i> 2081
+                      </h3>
+
+
+
+                      <h4 class="timeline-title">
+                        Pentester
+                      </h4>
+                      <p class="timeline-text">
+                     
+Narayan Bogati is a skilled penetration tester, based in Butwal, adept at assessing and fortifying digital security. With expertise in identifying vulnerabilities in systems and networks, he employs ethical hacking techniques to simulate attacks and enhance defenses. Bogati's proficiency in penetration testing tools and methodologies ensures robust protection against cyber threats, making him an invaluable asset in safeguarding digital assets.     </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="experience padd-15">
+              <h3 class="title">Experience</h3>
+              <div class="row">
+                <div class="timeline-box padd-15">
+                  <div class="timeline shadow-dark">
+                    <!-- Timeline item -->
+                    <div class="timeline-item">
+                      <div class="circle-dot"></div>
+                      <h3 class="timeline-date">
+                        <i class="fa fa-calendar"></i> 2081
+                      </h3>
+                      <h4 class="timeline-title">
+                    Web Developer
+                      </h4>
+                      <p class="timeline-text">
+                        Narayan Bogati is a versatile web developer proficient in HTML, CSS, and JavaScript, with a strong backend foundation in PHP. Based in Butwal, he excels in crafting dynamic and responsive web solutions. Bogati's expertise spans frontend design and backend development, ensuring seamless integration and functionality across all aspects of web projects.     </p>
+                  </div>
+                    <!-- Timeline item -->
+                    <div class="timeline-item">
+                      <div class="circle-dot"></div>
+                      <h3 class="timeline-date">
+                        <i class="fa fa-calendar"></i> 2081
+                      </h3>
+                      <h4 class="timeline-title">
+                        Graphic Designer
+                      </h4>
+                      <p class="timeline-text">
+                        Narayan Bogati is a talented graphic designer based in Butwal, renowned for creating captivating visual concepts. With a keen eye for aesthetics and proficiency in design software like Adobe Photoshop and Illustrator, he crafts compelling graphics that resonate with clients' brands. Bogati blends creativity with technical skill to deliver impactful visual solutions across various media.    </p>
+                        </div>
+                    <!-- Timeline item -->
+                    <div class="timeline-item">
+                      <div class="circle-dot"></div>
+                      <h3 class="timeline-date">
+                        <i class="fa fa-calendar"></i> 2081
+                      </h3>
+                      <h4 class="timeline-title">
+                    Networking
+                      </h4>
+                      <p class="timeline-text">
+                       
+Narayan Bogati is a skilled network expert based in Butwal, specializing in designing and maintaining robust network infrastructures. With a deep understanding of networking protocols and security measures, he ensures efficient data transmission and secure connectivity. Bogati's expertise includes configuring routers, managing switches, and implementing scalable network solutions tailored to business needs.  </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+      </section>
+      <!-- Educations & Experience Section End -->
+
+      <!-- Contact Section Start -->
+      <section class="contact section" id="contact">
+        <div class="container">
+          <div class="row">
+            <div class="section-title padd-15">
+              <h2>Contact Me</h2>
+            </div>
+          </div>
+          <h3 class="contact-title padd-15">Do You Have Any Questions?</h3>
+          <h4 class="contact-sub-title padd-15">I'M always their for you</h4>
+          <div class="row">
+            <!-- Contact info item-->
+            <div class="contact-info-item padd-15">
+              <div class="icon"><i class="fa fa-phone"></i></div>
+              <h4>Phone No.</h4>
+              <p>+977 9762519563</p>
+            </div>
+            <!-- Contact info item-->
+            <div class="contact-info-item padd-15">
+              <div class="icon"><i class="fa fa-map-marker-alt"></i></div>
+              <h4>Location</h4>
+              <p>Butwal</p>
+            </div>
+            <!-- Contact info item-->
+            <div class="contact-info-item padd-15">
+              <div class="icon"><i class="fa fa-envelope"></i></div>
+              <h4>Email</h4>
+              <p>boy082913@gmail.com</p>
+            </div>
+            <!-- Contact info item-->
+            <div class="contact-info-item padd-15">
+              <div class="icon"><i class="fa fa-globe-europe"></i></div>
+              <h4>Connecting the world</h4>
+              <p><a href="https://www.youtube.com/@narayanbogati2191">Youtube</a></p>
+            </div>
+          </div>
+          <h3 class="contact-title padd-15">SEND ME AN EMAIL</h3>
+          <h4 class="contact-sub-title padd-15">
+            I'M VERY RESPONSIVE TO MESSAGES
+          </h4>
+          <!-- Contact form -->
+          <div class="row">
+            <div class="contact-form padd-15">
+              <div class="row">
+                <div class="form-item col-6 padd-15">
+                  <div class="form-group">
+                    <input type="text" id="name" class="form-control" placeholder="Name" />
+                  </div>
+                </div>
+                <div class="form-item col-6 padd-15">
+                  <div class="form-group">
+                    <input type="email"  id="email" class="form-control" placeholder="Email" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-item col-12 padd-15">
+                  <div class="form-group">
+                    <input type="email" id="subject"  class="form-control" placeholder="Subject" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-item col-12 padd-15">
+                  <div class="form-group">
+                    <textarea class="form-control" placeholder="Message"    id="message"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-item col-12 padd-15">
+                  <div class="form-group">
+                    <button type="submit" class="btn" onclick="sendEmail()">Send Message </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Contact Section End -->
+    </div>
+    <!-- Main Content End -->
+  </div>
+  <!-- Main Container End -->
+  <!-- Custom JS -->
+  <script>
+    
+
+    function sendEmail() {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var subject = document.getElementById("subject").value;
+        var message = document.getElementById("message").value;
+
+        // Form validation
+        if (!name || !email || !subject || !message) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        var emailTo = "boy082913@gmail.com"; // Replace with your actual email
+        var emailSubject = "Message from " + name + ": " + subject;
+        var emailBody = "Name: " + name + "\nEmail: " + email + "\n\nMessage:\n" + message;
+
+        var mailtoLink = "mailto:" + emailTo +
+            "?subject=" + encodeURIComponent(emailSubject) +
+            "&body=" + encodeURIComponent(emailBody);
+
+        try {
+            // Show a message to indicate the email is being sent
+            alert("Sending email...");
+
+            // Attempt to send the email
+            window.location.href = mailtoLink;
+
+            // Clear input fields after sending
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("subject").value = "";
+            document.getElementById("message").value = "";
+
+        } catch (error) {
+            console.error("Error sending email:", error);
+            alert("Error sending email. Please try again later.");
+        }
+    }
+    function openPage() {
+        window.location.href = 'narayanmyproject.html';
+    }
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"
+    referrerpolicy="no-referrer"></script>
+  <script src="js/script.js"></script>
+  <script src="js/matrix.js"></script>
+</body>
+
+</html>

@@ -6,7 +6,40 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>narayan | Portfolio</title>
+  <title>Narayan Bogati - Ethical Hacker and Computer Engineer from Nepal</title>
+    
+
+    <meta name="description" content="Learn about Who is Narayan Bogati, an ethical hacker and computer engineer from Nepal. Discover his contributions to technology and cybersecurity, including his journey in the Bogati family and his role as a leading hacker in Nepal.">
+    <meta name="keywords" content="Narayan Bogati, who is Narayan Bogati, tell me about Narayan Bogati, Narayan Bogati Nepal, Bogati family, Bogati, Bugatti, Bogati Narayan, computer engineer Narayan Bogati, ethical hacker Narayan, who is the number 1 hacker in Nepal, who is Narayan Bogati hacker, Nepali hacker, Nepal technology, Nepal computer engineer, Narayan coder, Nepal cybersecurity,Narayan bugati, Narayan bugatti, who is Narayan bugatti , Nepali hacker, who is hacker bogati , naran, who is naran, who is narayan bogati in nepla, who is narayan bogati in butwal, butwal hacker, who is Narayan, hacker Bogati">
+    
+    <!-- Open Graph /  -->
+    <meta property="og:title" content="Narayan Bogati - Ethical Hacker and Computer Engineer from Nepal">
+    <meta property="og:description" content="Explore the career of Narayan Bogati, an ethical hacker and computer engineer from Nepal.">
+    <meta property="og:image" content="https://www.narayanbogati.com.np/IMG_0058.png"> 
+    <meta property="og:url" content="https://www.narayanbogati.com.np">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:title" content="Narayan Bogati - Ethical Hacker and Computer Engineer from Nepal">
+    <meta name="twitter:description" content="Discover Narayan Bogati, an ethical hacker and computer engineer from Nepal, with expertise in cybersecurity and technology.">
+    <meta name="twitter:image" content="https://www.narayanbogati.com.np/IMG_0058.png">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.narayanbogati.com.np">
+
+    <!-- JSON-LD Structured Data for Image -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ImageObject",
+        "contentUrl": "https://www.narayanbogati.com.np/IMG_0058.png",  
+        "name": "Narayan Bogati - Ethical Hacker and Computer Engineer from Nepal",
+        "description": "An image of Narayan Bogati, an ethical hacker and computer engineer from Nepal."
+    }
+    </script>
+  
   <!-- Custom CSS -->
 
   <link rel="stylesheet" href="css/skins/color-red.css" />
@@ -132,7 +165,7 @@
               <h3 class="my-profession">
                 I'm a <span class="typing"></span>
               </h3>
-              <p>Welcome to my portfolio ! I'm specialized Networking .Hacking,Web Developer,penetration testing,Graphic Designer,Hardware Maintennance  . My goal is to identify and address potential vulnerabilities before malicious actors can exploit them.</p>
+              <p>Welcome to my portfolio ! I'm specialized in Ethical hacking, Web Developing ,penetration testing,Graphic Designer and Hardware Maintennance. My goal is to identify and address potential vulnerabilities before malicious actors can exploit them.</p>
            
               <a href="NarayanBogatiResume.pdf" class="btn" download="NarayanBogatiResume.pdf">Download CV</a>
               &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; <button class="glow-on-hover" onclick="openPage()">MY project </button>
@@ -443,7 +476,57 @@ Narayan Bogati is a skilled network expert based in Butwal, specializing in desi
   <!-- Main Container End -->
   <!-- Custom JS -->
   <script>
-    
+    //security 
+     // Preventing screenshots with a keyboard shortcut
+document.addEventListener('keydown', function (e) {
+    // Additional common shortcut: Ctrl + Shift + PrtSc
+    if (e.ctrlKey && e.shiftKey && e.key === 'PrintScreen') {
+        e.preventDefault();
+        showAlert('Screenshots are disabled.');
+    }
+
+    // Disable keyboard shortcuts like F12 (DevTools), Ctrl+U (View Source), etc.
+    if (e.key === 'F12' || (e.ctrlKey && e.key === 'u')) {
+        e.preventDefault();
+        showAlert('This action is disabled.');
+    }
+});
+
+// Image Object Detection Method (reloads the page when DevTools are opened)
+(function() {
+    const element = new Image();
+    Object.defineProperty(element, 'id', {
+        get: function() {
+            // Reload the page when DevTools are opened
+            window.location.reload();
+        }
+    });
+    console.log(element); // This triggers the detection mechanism
+})();
+
+// Function to show alert and automatically hide it after 1000 milliseconds
+function showAlert(message) {
+    // Create alert div
+    const alertDiv = document.createElement('div');
+    alertDiv.textContent = message;
+    alertDiv.classList.add('custom-alert');
+    document.body.appendChild(alertDiv);
+
+    // Automatically hide the alert after 1000 milliseconds
+    setTimeout(() => {
+        alertDiv.style.opacity = '0'; // Fade out
+        setTimeout(() => {
+            document.body.removeChild(alertDiv); // Remove from DOM
+        }, 500); // Wait for fade-out transition to finish
+    }, 1000); // Show for 1000 milliseconds
+}
+
+// Disable right-click context menu
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    showAlert('Right-click is disabled.');
+});
+
 
     function sendEmail() {
         var name = document.getElementById("name").value;

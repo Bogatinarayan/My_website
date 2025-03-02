@@ -122,7 +122,7 @@ document.addEventListener('contextmenu', function(e) {
 
 
 var typed = new Typed(".typing", {
-  strings: ["", "Web Developer", "Cyber Security Expert"],
+  strings: ["", "Web Developer", "Cyber Security Expert","Digital Marketer","Business consultant" ,"Young Entrepreneur",],
   typeSpeed: 100,
   BackSpeed: 60,
   loop: true,

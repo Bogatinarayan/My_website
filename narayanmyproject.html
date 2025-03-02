@@ -44,6 +44,8 @@
 
         /* Video Styles */
 
+
+
         .video-container {
             position: relative;
             width: 100%;
@@ -79,6 +81,11 @@
             cursor: pointer; /* Show pointer cursor */
         }
 
+
+
+
+
+        
         /* Team Section */
 
         .team {
@@ -202,6 +209,45 @@
             }
         }
 
+        
+        .a {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Adds space between content and video */
+}
+
+.b {
+    width: 80vw;
+    height: 45vw; /* 16:9 Aspect Ratio */
+    max-width: 800px;
+    max-height: 450px;
+    object-fit: cover; /* Ensures video fills the frame properly */
+}
+
+/* Responsive Fixes */
+@media (max-width: 1024px) {
+    .b {
+        width: 90vw;
+        height: 50vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .b {
+        width: 95vw;
+        height: 55vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .b {
+        width: 100vw;
+        height: 60vw;
+    }
+}
 
 
 #slidingText{
@@ -257,15 +303,19 @@
             <!-- Row 2 -->
             <div class="card">
                 <div class="card-img">
-                    <img src="chatbot.png" alt="User 2">
+                    <img src="https://www.vaamaeducation.com.np/img/logos/vaama_logo1.ico" alt="User 6">
                 </div>
                 <div class="card-info">
-                    <h2 class="card-name">ChatBot </h2>
-                    <p class="card-role">Website </p>
-                    <p class="card-email">Develop in 2024</p>
-                    <p><button class="glow-button" onclick="chatbot()">SEE </button></p>
+                    <h2 class="card-name">Institute Web </h2>
+                    <p class="card-role">Vaama education</p>
+                    <p class="card-email">Develop in 2025</p>
+                    <p><button class="glow-button" onclick="vaama()">SEE</button></p>
                 </div>
             </div>
+
+
+
+
 
             <div class="card">
                 <div class="card-img">
@@ -317,6 +367,19 @@
                 </div>
             </div>
 
+
+
+
+
+
+        
+
+
+
+
+
+
+
         
    <div class="card">
                 <div class="card-img">
@@ -329,23 +392,28 @@
                     <p><button class="glow-button" onclick="sasto()">SEE</button></p>
                 </div>
             </div>
-        </div>
 
-        
+
+         
+
+
+
             <div class="card">
                 <div class="card-img">
-                    <img src="https://www.vaamaeducation.com.np/img/logos/vaama_logo1.ico" alt="User 6">
+                    <img src="chatbot.png" alt="User 2">
                 </div>
                 <div class="card-info">
-                    <h2 class="card-name">Institute Web </h2>
-                    <p class="card-role">Vaama education</p>
-                    <p class="card-email">Develop in 2025</p>
-                    <p><button class="glow-button" onclick="vaama()">SEE</button></p>
+                    <h2 class="card-name">ChatBot </h2>
+                    <p class="card-role">Website </p>
+                    <p class="card-email">Develop in 2024</p>
+                    <p><button class="glow-button" onclick="chatbot()">SEE </button></p>
                 </div>
             </div>
-        </div>
 
-      <div class="card">
+
+
+
+            <div class="card">
                 <div class="card-img">
                     <img src="mypicceo.JPG" alt="User 6">
                 </div>
@@ -356,30 +424,64 @@
                     <p><button class="glow-button" onclick="coming()">SEE</button></p>
                 </div>
             </div>
+            
+      <div class="card">
+        <div class="card-img">
+            <img src="mypicceo.JPG" alt="User 6">
         </div>
-        <div class="card">
-                <div class="card-img">
-                    <img src="mypicceo.JPG" alt="User 6">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">coming </h2>
-                    <p class="card-role"></p>
-                    <p class="card-email"></p>
-                    <p><button class="glow-button" onclick="coming()">SEE</button></p>
-                </div>
-            </div>
+        <div class="card-info">
+            <h2 class="card-name">coming</h2>
+            <p class="card-role"></p>
+            <p class="card-email"></p>
+            <p><button class="glow-button" onclick="coming()">SEE</button></p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-img">
+            <img src="mypicceo.JPG" alt="User 6">
+        </div>
+        <div class="card-info">
+            <h2 class="card-name">coming</h2>
+            <p class="card-role"></p>
+            <p class="card-email"></p>
+            <p><button class="glow-button" onclick="coming()">SEE</button></p>
+        </div>
+    </div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
         </div>
     </section>
 
 
-      <!-- Video Section -->
-      <div class="video-container" id="videoContainer">
-        <video id="backgroundVideo" autoplay muted loop>
-            <source src="20210408_145253.mp4" type="video/mp4">
      
+
+    <div class="a">
+        <video class="b" autoplay muted loop playsinline>
+            <source src="myprojectcontact.mp4" type="video/mp4">
+            <source src="myvideo.webm" type="video/webm">
+            <source src="myvideo.ogv" type="video/ogg">
+  
         </video>
-        <div class="play-pause" id="playPause">&#9658;</div>
     </div>
+
+
+    
+
+
+
 
     <!-- JavaScript for functions -->
     <script>

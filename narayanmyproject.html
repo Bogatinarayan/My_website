@@ -1,605 +1,655 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Section with Centered Video</title>
+    <title>Portfolio Projects | Narayan Bogati</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Base Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap');
+        
+        :root {
+            --primary-color: #00cc66;
+            --primary-dark: #009944;
+            --secondary-color: #111827;
+            --text-color: #333333;
+            --light-text: #666666;
+            --bg-color: #e5e5e5;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-
-        /* Global Styles */
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #e5e5e5;
-        }
-
-        /* Navbar Styles */
-
-        .navbar {
-      background-color: #e5e5e5;
-            color: #00ff00; /* Bright green text color */
-            padding: 10px 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            text-align: center; /* Center align text */
-            overflow: hidden; /* Hide overflow text */
-            white-space: nowrap; /* Prevent text from wrapping */
-            z-index: 1000; /* Ensure navbar is on top of other content */
-            font-weight: bold; /* Bold text for navbar */
-            transition: top 0.3s; /* Smooth transition for hiding/showing */
-        }
-
-        .navbar.hidden {
-            top: -50px; /* Move navbar above viewport when hidden */
-        }
-
-        /* Video Styles */
-
-
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 100vh; /* Full viewport height */
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .video-container video {
-            min-width: 100%;
-            min-height: 100%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer; /* Show pointer cursor on hover */
-        }
-
-        .video-container video:focus {
-            outline: none; /* Remove default focus outline */
-        }
-
-        .video-container .play-pause {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3rem;
-            color: #fff;
-            display: none; /* Hidden by default */
-            cursor: pointer; /* Show pointer cursor */
-        }
-
-
-
-
-
         
-        /* Team Section */
-
-        .team {
-            padding: 30px 20px;
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
             text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .header h1::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            max-width: 800px;
+            margin: 0 auto;
             margin-top: 20px;
         }
-
-        .team h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+        
+        /* Filter Tabs */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
         }
-
-        .team-cards {
+        
+        .filter-tabs {
             display: flex;
             flex-wrap: wrap;
+            gap: 10px;
             justify-content: center;
-            gap: 20px; /* Space between cards */
         }
-
-        .card {
-            background-color: white;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        
+        .filter-btn {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .filter-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 10px;
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: 18rem;
-            height: auto;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
-
-        .card:hover {
+        
+        .project-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--hover-shadow);
         }
-
-        .card-img {
-            width: 100%;
-            height: 12rem; /* Adjust as needed */
+        
+        .project-img {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
         }
-
-        .card-img img {
+        
+        .project-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
-
-        .card-info button {
-            margin: 2rem 1rem;
+        
+        .project-card:hover .project-img img {
+            transform: scale(1.05);
         }
-
-        .card-name {
-            font-size: 2rem;
-            margin: 10px 0;
+        
+        .project-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 12px;
+            font-size: 0.75rem;
+            border-radius: 20px;
+            font-weight: 500;
+            z-index: 2;
         }
-
-        .card-role {
-            font-size: 1rem;
-            color: #888;
-            margin: 5px 0;
+        
+        .project-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
-
-        .card-email {
-            font-size: 1rem;
-            color: #555;
-        }
-
-        .glow-button {
+        
+        .project-title {
             font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .project-desc {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .tech-tag {
+            background: rgba(0, 204, 102, 0.1);
+            color: var(--primary-dark);
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+        
+        /* Glow Button from your original code */
+        .glow-button {
+            font-size: 1rem;
             color: #fff;
             background-color: #333;
-            border: 2px solid rgb(0, 255, 0); /* Light green border */
-            padding: 0.625rem 1.25rem; /* Using rem for padding */
-            border-radius: 0.625rem; /* Using rem for border radius */
+            border: 2px solid rgb(0, 255, 0);
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.625rem;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s ease-in-out;
+            margin-top: auto;
         }
 
         .glow-button:hover {
             box-shadow: 0 0 20px rgb(0, 255, 0), 0 0 30px rgb(0, 255, 0), 0 0 40px rgb(0, 255, 0);
         }
-
-        /* Responsive Styles */
-        @media (max-width: 1200px) {
-            .card {
-                width: calc(33.33% - 20px);
-            }
-        }
-
-        @media (max-width: 800px) {
-            .card {
-                width: calc(50% - 20px);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .card {
-                width: calc(100% - 20px);
-            }
-        }
-
-        @media (max-width: 400px) {
-            .card-img {
-                height: 10rem; /* Adjust height for smaller screens */
-            }
-
-            .card-name {
-                font-size: 1.5rem;
-            }
-
-            .card-role {
-                font-size: 0.875rem;
-            }
-
-            .glow-button {
-                font-size: 1rem;
-                padding: 0.5rem 1rem;
-            }
-        }
-
         
-        .a {
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px; /* Adds space between content and video */
-}
-
-.b {
-    width: 80vw;
-    height: 45vw; /* 16:9 Aspect Ratio */
-    max-width: 800px;
-    max-height: 450px;
-    object-fit: cover; /* Ensures video fills the frame properly */
-}
-
-/* Responsive Fixes */
-@media (max-width: 1024px) {
-    .b {
-        width: 90vw;
-        height: 50vw;
-    }
-}
-
-@media (max-width: 768px) {
-    .b {
-        width: 95vw;
-        height: 55vw;
-    }
-}
-
-@media (max-width: 480px) {
-    .b {
-        width: 100vw;
-        height: 60vw;
-    }
-}
-
-
-#slidingText{
-    font-size: 129%;
-  color: #fff;
-  text-align: center;
-  -webkit-animation: glow 1s ease-in-out infinite alternate;
-  -moz-animation: glow 1s ease-in-out infinite alternate;
-  animation: glow 1s ease-in-out infinite alternate;
-
-}
-@-webkit-keyframes glow {
-  from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
-  }
-  to {
-    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
-  }
-}
-
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+        
+        /* Video Container */
+        .video-container {
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 60px;
+            margin-bottom: 40px;
+        }
+        
+        .video-container video {
+            width: 80vw;
+            height: 45vw;
+            max-width: 800px;
+            max-height: 450px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .projects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
             
+            .video-container video {
+                width: 90vw;
+                height: 50vw;
+            }
+        }
         
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .video-container video {
+                width: 95vw;
+                height: 55vw;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-tabs {
+                overflow-x: auto;
+                padding-bottom: 10px;
+                justify-content: flex-start;
+                width: 100%;
+            }
+            
+            .filter-btn {
+                white-space: nowrap;
+            }
+            
+            .video-container video {
+                width: 100%;
+                height: 60vw;
+            }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
     </style>
 </head>
-
 <body>
-    <!-- Navbar -->
-    <div class="navbar" id="navbar">
-        <div id="slidingText">Founder and Developer Narayan Bogati</div>
-    </div>
-
-  
-    <!-- Team Section -->
-    <section class="team">
-        <h1>MY Project</h1>
-        <div class="team-cards">
-
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>MY Projects</h1>
+            <p>Explore my portfolio of projects across various domains including web development, cybersecurity, hardware, networking, and more.</p>
+        </div>
         
+        <!-- Filter Tabs -->
+        <div class="filter-container">
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-filter="all">All Projects</button>
+                <button class="filter-btn" data-filter="website">Websites</button>
+                <button class="filter-btn" data-filter="application">Applications</button>
+                <button class="filter-btn" data-filter="software">Software</button>
+                <button class="filter-btn" data-filter="business">Business</button>
+            </div>
+        </div>
         
-            <!-- Row 2 -->
-            <div class="card">
-                <div class="card-img">
-                    <img src="e_comfrontpage.PNG" alt="User 1">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">Ecommerce </h2>
-                    <p class="card-role">Website </p>
-                    <p class="card-email">Develop in 2024</p>
-                    <p><button class="glow-button" onclick="ecom()">SEE</button></p>
-                </div>
-            </div>
-
-            <!-- Row 2 -->
-            <div class="card">
-                <div class="card-img">
-                    <img src="https://www.vaamaeducation.com.np/img/logos/vaama_logo1.ico" alt="User 6">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">Institute Web </h2>
-                    <p class="card-role">Vaama education</p>
-                    <p class="card-email">Develop in 2025</p>
-                    <p><button class="glow-button" onclick="vaama()">SEE</button></p>
-                </div>
-            </div>
-
-
-
-
-
-            <div class="card">
-                <div class="card-img">
-                    <img src="jarvispic.jpg" alt="User 3">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">Jarvis Ai</h2>
-                    <p class="card-role">Applicaton</p>
-                    <p class="card-email">Develop in 2024</p>
-                    <p><button class="glow-button" onclick="jarvis_ai()">SEE</button></p>
-                </div>
-            </div>
-
-            <!-- Row 3 -->
-                <div class="card">
-                <div class="card-img">
-                    <img src="majorpic.jpeg" alt="User 6">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">Major project </h2>
-                    <p class="card-role">Jarvsi AI</p>
-                    <p class="card-email">CTC-2021</p>
-                    <p><button class="glow-button" onclick="majorwebsite()">SEE</button></p>
-                </div>
-            </div>
-
-               <div class="card">
-                <div class="card-img">
-                    <img src="directdownload.png" alt="User 5">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">All Downloader </h2>
-                    <p class="card-role">Webite</p>
-                    <p class="card-email"></p>
-                    <p><button class="glow-button" onclick="downlaodanyting()">SEE</button></p>
-                </div>
-            </div>
-
-            
-            <div class="card">
-                <div class="card-img">
-                    <img src="logouter.PNG" alt="User 4">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">Email log-outer</h2>
-                    <p class="card-role">Website</p>
-                    <p class="card-email">Develop in 2024</p>
-                    <p><button class="glow-button" onclick="email_logouter()">SEE</button></p>
-                </div>
-            </div>
-
-
-
-
-
-
+        <!-- Empty State -->
+        <div class="empty-state">
+            <p>No projects found in this category.</p>
+            <button class="filter-btn" data-filter="all">Show All Projects</button>
+        </div>
         
-
-
-
-
-
-
-
-        
-   <div class="card">
-                <div class="card-img">
-                    <img src="Sasto_Design_Nepal/sasto_design_nepal_logo.jpg" alt="User 6">
+        <!-- Projects Grid -->
+        <div class="projects-grid">
+            <!-- Ecommerce Project -->
+            <div class="project-card" data-category="website">
+                <div class="project-img">
+                    <img src="e_comfrontpage.PNG" alt="Ecommerce Website">
+                    <div class="project-category">Website</div>
                 </div>
-                <div class="card-info">
-                    <h2 class="card-name">Sasto Design Nepal</h2>
-                    <p class="card-role">Business</p>
-                    <p class="card-email">website</p>
-                    <p><button class="glow-button" onclick="sasto()">SEE</button></p>
-                </div>
-            </div>
-
-
-         
-
-
-
-            <div class="card">
-                <div class="card-img">
-                    <img src="chatbot.png" alt="User 2">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">ChatBot </h2>
-                    <p class="card-role">Website </p>
-                    <p class="card-email">Develop in 2024</p>
-                    <p><button class="glow-button" onclick="chatbot()">SEE </button></p>
-                </div>
-            </div>
-
-
-
-
-            <div class="card">
-                <div class="card-img">
-                    <img src="mypicceo.JPG" alt="User 6">
-                </div>
-                <div class="card-info">
-                    <h2 class="card-name">coming</h2>
-                    <p class="card-role"></p>
-                    <p class="card-email"></p>
-                    <p><button class="glow-button" onclick="coming()">SEE</button></p>
+                <div class="project-content">
+                    <h3 class="project-title">Ecommerce</h3>
+                    <p class="project-desc">An online shopping platform with product listings, shopping cart, and secure checkout.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                    </div>
+                    <button class="glow-button" onclick="ecom()">SEE PROJECT</button>
                 </div>
             </div>
             
-      <div class="card">
-        <div class="card-img">
-            <img src="mypicceo.JPG" alt="User 6">
+            <!-- Vaama Education -->
+            <div class="project-card" data-category="website">
+                <div class="project-img">
+                    <img src="https://www.vaamaeducation.com.np/img/logos/vaama_logo1.ico" alt="Vaama Education">
+                    <div class="project-category">Website</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Institute Web</h3>
+                    <p class="project-desc">A comprehensive website for Vaama Education institute with course information and student portal.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">PHP</span>
+                    </div>
+                    <button class="glow-button" onclick="vaama()">SEE PROJECT</button>
+                </div>
+            </div>
+            
+            <!-- Jarvis AI -->
+            <div class="project-card" data-category="application">
+                <div class="project-img">
+                    <img src="jarvispic.jpg" alt="Jarvis AI">
+                    <div class="project-category">Application</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Jarvis AI</h3>
+                    <p class="project-desc">An AI assistant application with voice recognition and automated task execution capabilities.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">NLP</span>
+                    </div>
+                    <button class="glow-button" onclick="jarvis_ai()">SEE PROJECT</button>
+                </div>
+            </div>
+            
+            <!-- Major Project -->
+            <div class="project-card" data-category="application">
+                <div class="project-img">
+                    <img src="majorpic.jpeg" alt="Major Project">
+                    <div class="project-category">Application</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Major Project</h3>
+                    <p class="project-desc">Jarvis AI implementation for CTC-2021 with advanced features and integrations.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">AI</span>
+                        <span class="tech-tag">Machine Learning</span>
+                    </div>
+                    <button class="glow-button" onclick="majorwebsite()">SEE PROJECT</button>
+                </div>
+            </div>
+            
+            <!-- All Downloader -->
+            <div class="project-card" data-category="website">
+                <div class="project-img">
+                    <img src="directdownload.png" alt="All Downloader">
+                    <div class="project-category">Website</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">All Downloader</h3>
+                    <p class="project-desc">A web application that allows users to download content from various platforms and sources.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">API Integration</span>
+                    </div>
+                    <button class="glow-button" onclick="downlaodanyting()">SEE PROJECT</button>
+                </div>
+            </div>
+            
+            <!-- Email Log-outer -->
+            <div class="project-card" data-category="website">
+                <div class="project-img">
+                    <img src="logouter.PNG" alt="Email Log-outer">
+                    <div class="project-category">Website</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Email Log-outer</h3>
+                    <p class="project-desc">A tool that helps users securely log out from multiple email accounts across different devices.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">OAuth</span>
+                    </div>
+                    <button class="glow-button" onclick="email_logouter()">SEE PROJECT</button>
+                </div>
+            </div>
+            
+            <!-- Sasto Design Nepal -->
+            <div class="project-card" data-category="business">
+                <div class="project-img">
+                    <img src="Sasto_Design_Nepal/sasto_design_nepal_logo.jpg" alt="Sasto Design Nepal">
+                    <div class="project-category">Business</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Sasto Design Nepal</h3>
+                    <p class="project-desc">A business website for a design company offering affordable design services in Nepal.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Bootstrap</span>
+                    </div>
+                    <button class="glow-button" onclick="sasto()">SEE PROJECT</button>
+                </div>
+            </div>
+            
+            <!-- ChatBot -->
+            <div class="project-card" data-category="website">
+                <div class="project-img">
+                    <img src="chatbot.png" alt="ChatBot">
+                    <div class="project-category">Website</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">ChatBot</h3>
+                    <p class="project-desc">An interactive chatbot implementation with natural language processing capabilities.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">NLP</span>
+                        <span class="tech-tag">API</span>
+                    </div>
+                    <button class="glow-button" onclick="chatbot()">SEE PROJECT</button>
+                </div>
+            </div>
+            
+            <!-- Coming Soon Projects -->
+            <div class="project-card" data-category="software">
+                <div class="project-img">
+                    <img src="mypicceo.JPG" alt="Coming Soon">
+                    <div class="project-category">Coming Soon</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Coming Soon</h3>
+                    <p class="project-desc">New project under development. Stay tuned for updates on this exciting new venture.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">TBD</span>
+                    </div>
+                    <button class="glow-button" onclick="coming()">SEE PROJECT</button>
+                </div>
+            </div>
+            
+            <div class="project-card" data-category="software">
+                <div class="project-img">
+                    <img src="mypicceo.JPG" alt="Coming Soon">
+                    <div class="project-category">Coming Soon</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Coming Soon</h3>
+                    <p class="project-desc">New project under development. Stay tuned for updates on this exciting new venture.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">TBD</span>
+                    </div>
+                    <button class="glow-button" onclick="coming()">SEE PROJECT</button>
+                </div>
+            </div>
         </div>
-        <div class="card-info">
-            <h2 class="card-name">coming</h2>
-            <p class="card-role"></p>
-            <p class="card-email"></p>
-            <p><button class="glow-button" onclick="coming()">SEE</button></p>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-img">
-            <img src="mypicceo.JPG" alt="User 6">
-        </div>
-        <div class="card-info">
-            <h2 class="card-name">coming</h2>
-            <p class="card-role"></p>
-            <p class="card-email"></p>
-            <p><button class="glow-button" onclick="coming()">SEE</button></p>
-        </div>
-    </div>
-
-
-
-
-
         
-
-
-
-
-
-
-
-        
+        <!-- Video Container -->
+        <div class="video-container">
+            <video autoplay muted loop playsinline>
+                <source src="myprojectcontact.mp4" type="video/mp4">
+                <source src="myvideo.webm" type="video/webm">
+                <source src="myvideo.ogv" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
         </div>
-    </section>
-
-
-     
-
-    <div class="a">
-        <video class="b" autoplay muted loop playsinline>
-            <source src="myprojectcontact.mp4" type="video/mp4">
-            <source src="myvideo.webm" type="video/webm">
-            <source src="myvideo.ogv" type="video/ogg">
-  
-        </video>
     </div>
-
-
     
-
-
-
-
-    <!-- JavaScript for functions -->
     <script>
+        // Project Filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+        const emptyState = document.querySelector('.empty-state');
+        const projectsGrid = document.querySelector('.projects-grid');
         
-        // Toggle play/pause and fullscreen on video click
-        var video = document.getElementById('backgroundVideo');
-        var playPauseBtn = document.getElementById('playPause');
-        var videoContainer = document.getElementById('videoContainer');
-        var navbar = document.getElementById('navbar');
-
-        video.addEventListener('click', function () {
-            if (video.paused) {
-                video.play();
-                playPauseBtn.style.display = 'none';
-            } else {
-                video.pause();
-                playPauseBtn.style.display = 'block';
-            }
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                const filter = btn.getAttribute('data-filter');
+                let visibleProjects = 0;
+                
+                projectCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'flex';
+                        visibleProjects++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Show empty state if no projects match the filter
+                if (visibleProjects === 0) {
+                    emptyState.style.display = 'block';
+                    projectsGrid.style.display = 'none';
+                } else {
+                    emptyState.style.display = 'none';
+                    projectsGrid.style.display = 'grid';
+                }
+            });
         });
-
-        videoContainer.addEventListener('click', function () {
-            if (video.paused) {
-                video.play();
-                playPauseBtn.style.display = 'none';
-            } else {
-                video.pause();
-                playPauseBtn.style.display = 'block';
-            }
+        
+        // Reset filter when clicking "Show All Projects" in empty state
+        document.querySelector('.empty-state .filter-btn').addEventListener('click', () => {
+            filterBtns.forEach(btn => {
+                if (btn.getAttribute('data-filter') === 'all') {
+                    btn.click();
+                }
+            });
         });
-
-        // Hide navbar on scroll down, show on scroll up
-        var lastScrollTop = 0;
-        window.addEventListener('scroll', function () {
-            var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > lastScrollTop) {
-                // Downscroll
-                navbar.style.top = '-50px';
-            } else {
-                // Upscroll
-                navbar.style.top = '0';
-            }
-            lastScrollTop = scrollTop;
+        
+        // Project Card Hover Effect
+        projectCards.forEach(card => {
+            const img = card.querySelector('.project-img img');
+            
+            card.addEventListener('mouseenter', () => {
+                img.style.transform = 'scale(1.05)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                img.style.transform = 'scale(1)';
+            });
         });
-
-        // Sliding text animation for navbar
-        var slidingText = document.getElementById('slidingText');
-        var text = slidingText.innerText;
-        var index = 0;
-        setInterval(function () {
-            index = (index + 1) % (text.length + 1);
-            slidingText.textContent = text.substring(0, index);
-        }, 100);
-
-        // Automatically adjust video size on window resize
-        window.addEventListener('resize', function () {
-            var aspectRatio = 16 / 9; // Standard widescreen aspect ratio
-            var containerWidth = videoContainer.offsetWidth;
-            var containerHeight = videoContainer.offsetHeight;
-
-            var videoWidth = containerWidth;
-            var videoHeight = containerWidth / aspectRatio;
-
-            if (videoHeight < containerHeight) {
-                videoHeight = containerHeight;
-                videoWidth = containerHeight * aspectRatio;
-            }
-
-            video.style.width = videoWidth + 'px';
-            video.style.height = videoHeight + 'px';
-        });
-
-        // Initial resize handling
-        window.dispatchEvent(new Event('resize'));
-
-function chatbot(){
-   window.location.href = "chatbot_detail.html"
-
-}
+        
+        // Navigation functions from your original code
+        function chatbot() {
+            window.location.href = "chatbot_detail.html";
+        }
+        
         function ecom() {
             window.location.href = "about11.html";
         }
-
-        function jarvis_ai(){
-
-            window.location.href ="jarvis_project.html"
-        }
-
-
-function email_logouter()
-{
-    
-            window.location.href ="log_out_deatilhtml.html"
-}
-
-
-function downlaodanyting()
-{
-    
-            window.location.href ="downlaod_anything.html"
-}
-
-        function majorwebsite(){
-            window.location.href="jarvis_website/final.html"
-        }
-
-function sasto(){
-            window.location.href="Sasto_Design_Nepal/inedx.html"
-        }
-
-
-function vaama(){
-            window.location.href="https://www.vaamaeducation.com.np/"
-        }
-      
-
         
+        function jarvis_ai() {
+            window.location.href = "jarvis_project.html";
+        }
         
+        function email_logouter() {
+            window.location.href = "log_out_deatilhtml.html";
+        }
+        
+        function downlaodanyting() {
+            window.location.href = "downlaod_anything.html";
+        }
+        
+        function majorwebsite() {
+            window.location.href = "jarvis_website/final.html";
+        }
+        
+        function sasto() {
+            window.location.href = "Sasto_Design_Nepal/inedx.html";
+        }
+        
+        function vaama() {
+            window.location.href = "https://www.vaamaeducation.com.np/";
+        }
+        
+        function coming() {
+            alert("This project is coming soon! Check back later for updates.");
+        }
     </script>
 </body>
-
 </html>

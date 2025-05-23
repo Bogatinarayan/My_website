@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,7 +80,7 @@
         .filter-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
         
@@ -112,6 +111,43 @@
         }
         
         .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        /* Sub Filter Tabs */
+        .sub-filter-container {
+            display: none;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .sub-filter-container.active {
+            display: flex;
+        }
+        
+        .sub-filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .sub-filter-btn {
+            background: rgba(0, 204, 102, 0.1);
+            color: var(--primary-dark);
+            border: 1px solid rgba(0, 204, 102, 0.3);
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+        
+        .sub-filter-btn:hover, .sub-filter-btn.active {
             background: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
@@ -207,7 +243,7 @@
             font-weight: 500;
         }
         
-        /* Glow Button from your original code */
+        /* Glow Button */
         .glow-button {
             font-size: 1rem;
             color: #fff;
@@ -225,6 +261,55 @@
 
         .glow-button:hover {
             box-shadow: 0 0 20px rgb(0, 255, 0), 0 0 30px rgb(0, 255, 0), 0 0 40px rgb(0, 255, 0);
+        }
+        
+        /* Media Card for IoT Projects */
+        .media-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .media-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .media-content {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .media-content video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background: rgba(0, 204, 102, 0.8);
         }
         
         /* Empty State */
@@ -259,6 +344,48 @@
             object-fit: cover;
             border-radius: 10px;
             box-shadow: var(--shadow);
+        }
+        
+        /* Modal for Media Viewer */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .modal img, .modal video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: var(--primary-color);
         }
         
         /* Responsive */
@@ -298,14 +425,14 @@
                 grid-template-columns: 1fr;
             }
             
-            .filter-tabs {
+            .filter-tabs, .sub-filter-tabs {
                 overflow-x: auto;
                 padding-bottom: 10px;
                 justify-content: flex-start;
                 width: 100%;
             }
             
-            .filter-btn {
+            .filter-btn, .sub-filter-btn {
                 white-space: nowrap;
             }
             
@@ -340,10 +467,10 @@
         <!-- Header -->
         <div class="header">
             <h1>MY Projects</h1>
-            <p>Explore my portfolio of projects across various domains including web development, cybersecurity, hardware, networking, and more.</p>
+            <p>Explore my portfolio of projects across various domains including web development, cybersecurity, hardware, networking, graphic design, and IoT projects.</p>
         </div>
         
-        <!-- Filter Tabs -->
+        <!-- Main Filter Tabs -->
         <div class="filter-container">
             <div class="filter-tabs">
                 <button class="filter-btn active" data-filter="all">All Projects</button>
@@ -351,6 +478,31 @@
                 <button class="filter-btn" data-filter="application">Applications</button>
                 <button class="filter-btn" data-filter="software">Software</button>
                 <button class="filter-btn" data-filter="business">Business</button>
+                <button class="filter-btn" data-filter="graphics">Graphic Design</button>
+                <button class="filter-btn" data-filter="iot">IoT & Hardware</button>
+            </div>
+        </div>
+        
+        <!-- Sub Filter Tabs for Graphics -->
+        <div class="sub-filter-container" id="graphics-sub-filters">
+            <div class="sub-filter-tabs">
+                <button class="sub-filter-btn active" data-sub-filter="all-graphics">All Graphics</button>
+                <button class="sub-filter-btn" data-sub-filter="banners">Banners</button>
+                <button class="sub-filter-btn" data-sub-filter="ads">Advertisements</button>
+                <button class="sub-filter-btn" data-sub-filter="logos">Logos</button>
+                <button class="sub-filter-btn" data-sub-filter="posters">Posters</button>
+                <button class="sub-filter-btn" data-sub-filter="social-media">Social Media</button>
+            </div>
+        </div>
+        
+        <!-- Sub Filter Tabs for IoT -->
+        <div class="sub-filter-container" id="iot-sub-filters">
+            <div class="sub-filter-tabs">
+                <button class="sub-filter-btn active" data-sub-filter="all-iot">All IoT</button>
+                <button class="sub-filter-btn" data-sub-filter="arduino">Arduino Projects</button>
+                <button class="sub-filter-btn" data-sub-filter="raspberry">Raspberry Pi</button>
+                <button class="sub-filter-btn" data-sub-filter="sensors">Sensor Projects</button>
+                <button class="sub-filter-btn" data-sub-filter="automation">Home Automation</button>
             </div>
         </div>
         
@@ -362,7 +514,7 @@
         
         <!-- Projects Grid -->
         <div class="projects-grid">
-            <!-- Ecommerce Project -->
+            <!-- Existing Projects -->
             <div class="project-card" data-category="website">
                 <div class="project-img">
                     <img src="e_comfrontpage.PNG" alt="Ecommerce Website">
@@ -380,7 +532,6 @@
                 </div>
             </div>
             
-            <!-- Vaama Education -->
             <div class="project-card" data-category="website">
                 <div class="project-img">
                     <img src="https://www.vaamaeducation.com.np/img/logos/vaama_logo1.ico" alt="Vaama Education">
@@ -399,7 +550,6 @@
                 </div>
             </div>
             
-            <!-- Jarvis AI -->
             <div class="project-card" data-category="application">
                 <div class="project-img">
                     <img src="jarvispic.jpg" alt="Jarvis AI">
@@ -417,7 +567,6 @@
                 </div>
             </div>
             
-            <!-- Major Project -->
             <div class="project-card" data-category="application">
                 <div class="project-img">
                     <img src="majorpic.jpeg" alt="Major Project">
@@ -435,7 +584,6 @@
                 </div>
             </div>
             
-            <!-- All Downloader -->
             <div class="project-card" data-category="website">
                 <div class="project-img">
                     <img src="directdownload.png" alt="All Downloader">
@@ -454,7 +602,6 @@
                 </div>
             </div>
             
-            <!-- Email Log-outer -->
             <div class="project-card" data-category="website">
                 <div class="project-img">
                     <img src="logouter.PNG" alt="Email Log-outer">
@@ -473,7 +620,6 @@
                 </div>
             </div>
             
-            <!-- Sasto Design Nepal -->
             <div class="project-card" data-category="business">
                 <div class="project-img">
                     <img src="Sasto_Design_Nepal/sasto_design_nepal_logo.jpg" alt="Sasto Design Nepal">
@@ -492,7 +638,6 @@
                 </div>
             </div>
             
-            <!-- ChatBot -->
             <div class="project-card" data-category="website">
                 <div class="project-img">
                     <img src="chatbot.png" alt="ChatBot">
@@ -511,22 +656,166 @@
                 </div>
             </div>
             
-            <!-- Coming Soon Projects -->
-            <div class="project-card" data-category="software">
+            <!-- Graphic Design Projects -->
+            <div class="project-card" data-category="graphics" data-subcategory="banners">
                 <div class="project-img">
-                    <img src="mypicceo.JPG" alt="Coming Soon">
-                    <div class="project-category">Coming Soon</div>
+                    <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Web Banner Design">
+                    <div class="project-category">Banner</div>
                 </div>
                 <div class="project-content">
-                    <h3 class="project-title">Coming Soon</h3>
-                    <p class="project-desc">New project under development. Stay tuned for updates on this exciting new venture.</p>
+                    <h3 class="project-title">Web Banner Collection</h3>
+                    <p class="project-desc">Professional web banners for various clients including e-commerce, education, and business websites.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">TBD</span>
+                        <span class="tech-tag">Photoshop</span>
+                        <span class="tech-tag">Illustrator</span>
+                        <span class="tech-tag">Figma</span>
                     </div>
-                    <button class="glow-button" onclick="coming()">SEE PROJECT</button>
+                    <button class="glow-button" onclick="openGraphicsModal('banners')">VIEW BANNERS</button>
                 </div>
             </div>
             
+            <div class="project-card" data-category="graphics" data-subcategory="ads">
+                <div class="project-img">
+                    <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Advertisement Design">
+                    <div class="project-category">Advertisement</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Advertisement Designs</h3>
+                    <p class="project-desc">Creative advertisement designs for social media, print, and digital marketing campaigns.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Photoshop</span>
+                        <span class="tech-tag">InDesign</span>
+                        <span class="tech-tag">After Effects</span>
+                    </div>
+                    <button class="glow-button" onclick="openGraphicsModal('ads')">VIEW ADS</button>
+                </div>
+            </div>
+            
+            <div class="project-card" data-category="graphics" data-subcategory="logos">
+                <div class="project-img">
+                    <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Logo Design">
+                    <div class="project-category">Logo</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Logo Design Portfolio</h3>
+                    <p class="project-desc">Custom logo designs for businesses, startups, and personal brands with modern and creative approaches.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Illustrator</span>
+                        <span class="tech-tag">Photoshop</span>
+                        <span class="tech-tag">CorelDraw</span>
+                    </div>
+                    <button class="glow-button" onclick="openGraphicsModal('logos')">VIEW LOGOS</button>
+                </div>
+            </div>
+            
+            <div class="project-card" data-category="graphics" data-subcategory="posters">
+                <div class="project-img">
+                    <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Poster Design">
+                    <div class="project-category">Poster</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Event Posters</h3>
+                    <p class="project-desc">Eye-catching poster designs for events, conferences, workshops, and promotional campaigns.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Photoshop</span>
+                        <span class="tech-tag">Illustrator</span>
+                        <span class="tech-tag">Canva</span>
+                    </div>
+                    <button class="glow-button" onclick="openGraphicsModal('posters')">VIEW POSTERS</button>
+                </div>
+            </div>
+            
+            <div class="project-card" data-category="graphics" data-subcategory="social-media">
+                <div class="project-img">
+                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Social Media Design">
+                    <div class="project-category">Social Media</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Social Media Graphics</h3>
+                    <p class="project-desc">Engaging social media posts, stories, and cover designs for various platforms and brands.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Photoshop</span>
+                        <span class="tech-tag">Canva</span>
+                        <span class="tech-tag">Figma</span>
+                    </div>
+                    <button class="glow-button" onclick="openGraphicsModal('social-media')">VIEW DESIGNS</button>
+                </div>
+            </div>
+            
+            <!-- IoT & Hardware Projects -->
+            <div class="project-card" data-category="iot" data-subcategory="arduino">
+                <div class="project-img">
+                    <img src="https://images.unsplash.com/photo-1553406830-ef2513450d76?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Arduino Smart Home">
+                    <div class="project-category">Arduino</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Smart Home System</h3>
+                    <p class="project-desc">Arduino-based home automation with sensors, LED control, and mobile app integration.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Arduino</span>
+                        <span class="tech-tag">C++</span>
+                        <span class="tech-tag">Sensors</span>
+                        <span class="tech-tag">WiFi</span>
+                    </div>
+                    <button class="glow-button" onclick="openIoTModal('arduino-home')">VIEW PROJECT</button>
+                </div>
+            </div>
+            
+            <div class="project-card" data-category="iot" data-subcategory="raspberry">
+                <div class="project-img">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Raspberry Pi Security">
+                    <div class="project-category">Raspberry Pi</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Security Camera System</h3>
+                    <p class="project-desc">Raspberry Pi-powered security system with motion detection and remote monitoring capabilities.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Raspberry Pi</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">OpenCV</span>
+                        <span class="tech-tag">Flask</span>
+                    </div>
+                    <button class="glow-button" onclick="openIoTModal('pi-security')">VIEW PROJECT</button>
+                </div>
+            </div>
+            
+            <div class="project-card" data-category="iot" data-subcategory="sensors">
+                <div class="project-img">
+                    <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Weather Station">
+                    <div class="project-category">Sensors</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Weather Monitoring Station</h3>
+                    <p class="project-desc">IoT weather station with multiple sensors for temperature, humidity, pressure, and air quality monitoring.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">ESP32</span>
+                        <span class="tech-tag">DHT22</span>
+                        <span class="tech-tag">BMP280</span>
+                        <span class="tech-tag">ThingSpeak</span>
+                    </div>
+                    <button class="glow-button" onclick="openIoTModal('weather-station')">VIEW PROJECT</button>
+                </div>
+            </div>
+            
+            <div class="project-card" data-category="iot" data-subcategory="automation">
+                <div class="project-img">
+                    <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Plant Watering System">
+                    <div class="project-category">Automation</div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Automated Plant Watering</h3>
+                    <p class="project-desc">Smart irrigation system with soil moisture sensors and automated watering schedule.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Arduino</span>
+                        <span class="tech-tag">Soil Sensor</span>
+                        <span class="tech-tag">Water Pump</span>
+                        <span class="tech-tag">Blynk</span>
+                    </div>
+                    <button class="glow-button" onclick="openIoTModal('plant-watering')">VIEW PROJECT</button>
+                </div>
+            </div>
+            
+            <!-- Coming Soon Projects -->
             <div class="project-card" data-category="software">
                 <div class="project-img">
                     <img src="mypicceo.JPG" alt="Coming Soon">
@@ -554,43 +843,115 @@
         </div>
     </div>
     
+    <!-- Modal for Media Viewer -->
+    <div id="mediaModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+    
     <script>
-        // Project Filtering
+        // Filter functionality
         const filterBtns = document.querySelectorAll('.filter-btn');
+        const subFilterContainers = document.querySelectorAll('.sub-filter-container');
+        const subFilterBtns = document.querySelectorAll('.sub-filter-btn');
         const projectCards = document.querySelectorAll('.project-card');
         const emptyState = document.querySelector('.empty-state');
         const projectsGrid = document.querySelector('.projects-grid');
         
+        let currentMainFilter = 'all';
+        let currentSubFilter = 'all';
+        
+        // Main filter functionality
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Remove active class from all buttons
                 filterBtns.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked button
                 btn.classList.add('active');
                 
-                const filter = btn.getAttribute('data-filter');
-                let visibleProjects = 0;
+                currentMainFilter = btn.getAttribute('data-filter');
                 
-                projectCards.forEach(card => {
-                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                        card.style.display = 'flex';
-                        visibleProjects++;
-                    } else {
-                        card.style.display = 'none';
-                    }
+                // Hide all sub-filter containers
+                subFilterContainers.forEach(container => {
+                    container.classList.remove('active');
                 });
                 
-                // Show empty state if no projects match the filter
-                if (visibleProjects === 0) {
-                    emptyState.style.display = 'block';
-                    projectsGrid.style.display = 'none';
+                // Show relevant sub-filter container
+                if (currentMainFilter === 'graphics') {
+                    document.getElementById('graphics-sub-filters').classList.add('active');
+                    currentSubFilter = 'all-graphics';
+                } else if (currentMainFilter === 'iot') {
+                    document.getElementById('iot-sub-filters').classList.add('active');
+                    currentSubFilter = 'all-iot';
                 } else {
-                    emptyState.style.display = 'none';
-                    projectsGrid.style.display = 'grid';
+                    currentSubFilter = 'all';
                 }
+                
+                // Reset sub-filter buttons
+                subFilterBtns.forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`[data-sub-filter="${currentSubFilter}"]`)?.classList.add('active');
+                
+                filterProjects();
             });
         });
+        
+        // Sub-filter functionality
+        subFilterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const parentContainer = btn.closest('.sub-filter-container');
+                parentContainer.querySelectorAll('.sub-filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                currentSubFilter = btn.getAttribute('data-sub-filter');
+                filterProjects();
+            });
+        });
+        
+        function filterProjects() {
+            let visibleProjects = 0;
+            
+            projectCards.forEach(card => {
+                const category = card.getAttribute('data-category');
+                const subcategory = card.getAttribute('data-subcategory');
+                let shouldShow = false;
+                
+                if (currentMainFilter === 'all') {
+                    shouldShow = true;
+                } else if (currentMainFilter === 'graphics') {
+                    if (category === 'graphics') {
+                        if (currentSubFilter === 'all-graphics' || subcategory === currentSubFilter) {
+                            shouldShow = true;
+                        }
+                    }
+                } else if (currentMainFilter === 'iot') {
+                    if (category === 'iot') {
+                        if (currentSubFilter === 'all-iot' || subcategory === currentSubFilter) {
+                            shouldShow = true;
+                        }
+                    }
+                } else {
+                    if (category === currentMainFilter) {
+                        shouldShow = true;
+                    }
+                }
+                
+                if (shouldShow) {
+                    card.style.display = 'flex';
+                    visibleProjects++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show empty state if no projects match
+            if (visibleProjects === 0) {
+                emptyState.style.display = 'block';
+                projectsGrid.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                projectsGrid.style.display = 'grid';
+            }
+        }
         
         // Reset filter when clicking "Show All Projects" in empty state
         document.querySelector('.empty-state .filter-btn').addEventListener('click', () => {
@@ -614,7 +975,140 @@
             });
         });
         
-        // Navigation functions from your original code
+        // Modal functionality
+        const modal = document.getElementById('mediaModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeBtn = document.querySelector('.close');
+        
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalContent.innerHTML = '';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                modalContent.innerHTML = '';
+            }
+        });
+        
+        // Graphics modal function
+        function openGraphicsModal(type) {
+            const content = getGraphicsContent(type);
+            modalContent.innerHTML = content;
+            modal.style.display = 'block';
+        }
+        
+        // IoT modal function
+        function openIoTModal(project) {
+            const content = getIoTContent(project);
+            modalContent.innerHTML = content;
+            modal.style.display = 'block';
+        }
+        
+        function getGraphicsContent(type) {
+            // You can replace these with your actual graphic design images
+            const graphics = {
+                banners: [
+                    'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ],
+                ads: [
+                    'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ],
+                logos: [
+                    'https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ],
+                posters: [
+                    'https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ],
+                'social-media': [
+                    'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ]
+            };
+            
+            let content = `<h2 style="color: white; text-align: center; margin-bottom: 20px;">${type.charAt(0).toUpperCase() + type.slice(1)} Collection</h2>`;
+            content += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">';
+            
+            graphics[type]?.forEach((img, index) => {
+                content += `<img src="${img}" alt="${type} ${index + 1}" style="width: 100%; border-radius: 10px; cursor: pointer;">`;
+            });
+            
+            content += '</div>';
+            content += '<p style="color: white; text-align: center; margin-top: 20px;">Upload your actual graphic designs to replace these placeholder images.</p>';
+            
+            return content;
+        }
+        
+        function getIoTContent(project) {
+            // You can replace these with your actual IoT project images and videos
+            const projects = {
+                'arduino-home': {
+                    title: 'Arduino Smart Home System',
+                    images: [
+                        'https://images.unsplash.com/photo-1553406830-ef2513450d76?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                    ],
+                    videos: [
+                        // Add your video URLs here
+                        'your-project-video.mp4'
+                    ]
+                },
+                'pi-security': {
+                    title: 'Raspberry Pi Security System',
+                    images: [
+                        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                    ],
+                    videos: []
+                },
+                'weather-station': {
+                    title: 'Weather Monitoring Station',
+                    images: [
+                        'https://images.unsplash.com/photo-1581092160562-40aa08e78837?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                    ],
+                    videos: []
+                },
+                'plant-watering': {
+                    title: 'Automated Plant Watering System',
+                    images: [
+                        'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                    ],
+                    videos: []
+                }
+            };
+            
+            const proj = projects[project];
+            let content = `<h2 style="color: white; text-align: center; margin-bottom: 20px;">${proj.title}</h2>`;
+            
+            if (proj.images.length > 0) {
+                content += '<h3 style="color: white; margin-bottom: 15px;">Project Images</h3>';
+                content += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">';
+                proj.images.forEach((img, index) => {
+                    content += `<img src="${img}" alt="${proj.title} ${index + 1}" style="width: 100%; border-radius: 10px;">`;
+                });
+                content += '</div>';
+            }
+            
+            if (proj.videos.length > 0) {
+                content += '<h3 style="color: white; margin-bottom: 15px;">Project Videos</h3>';
+                content += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">';
+                proj.videos.forEach((video, index) => {
+                    content += `<video controls style="width: 100%; border-radius: 10px;">
+                        <source src="${video}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>`;
+                });
+                content += '</div>';
+            }
+            
+            content += '<p style="color: white; text-align: center; margin-top: 20px;">Upload your actual project photos and videos to showcase your IoT work.</p>';
+            
+            return content;
+        }
+        
+        // Original navigation functions
         function chatbot() {
             window.location.href = "chatbot_detail.html";
         }

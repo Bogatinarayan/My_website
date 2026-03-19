@@ -527,6 +527,25 @@
 <!--         all project should be hear  narayan bogati portfolio -->
 
             <!-- Existing Projects  this is th first project -->
+           <div class="project-card" data-category="website">
+    <div class="project-img">
+        <img src="images/project_home_page/coverletter-compressor.png" alt="Document Tools Website">
+        <div class="project-category">Website</div>
+    </div>
+    <div class="project-content">
+        <h3 class="project-title">Document Tools Web App</h3>
+        <p class="project-desc">
+            A multi-feature web app that generates .com.np cover letters, merges images, and compresses files under 200KB with download support.
+        </p>
+        <div class="project-tech">
+            <span class="tech-tag">HTML</span>
+            <span class="tech-tag">CSS</span>
+            <span class="tech-tag">JavaScript</span>
+        </div>
+        <button class="glow-button" onclick="documentToolsProject()">SEE PROJECT</button>
+    </div>
+</div>
+            
 <div class="project-card" data-category="website">
     <div class="project-img">
         <img src="images/project_home_page/royalkarnaliinn.com.np.jpeg" alt="Hotel Website">
@@ -1526,7 +1545,9 @@ function fusionPharma() {
     window.open("https://fusionpharmaceuticals.com.np/", "_blank");
 }
         
-
+function documentToolsProject() {
+    window.location.href = "document_tools.html";
+}
 
         function coming() {
             alert("This project is coming soon! Check back later for updates.");

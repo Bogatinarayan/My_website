@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NarayanBogati Tools — Image Merger & Cover Letter</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ══════════════════════════════════════════════════════
+   BASE RESET
+══════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f0f4ff; min-height: 100vh; color: #1e293b; display: flex; flex-direction: column; }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+@keyframes popIn    { from{opacity:0;transform:scale(.88)}        to{opacity:1;transform:scale(1)} }
+@keyframes spin     { to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════════════════════ */
+.navbar {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 2px 12px rgba(15,23,42,0.06);
+  position: sticky; top: 0; z-index: 50;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.nav-logo {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb, #6366f1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: #fff; font-weight: 800;
+}
+.nav-brand-name {
+  font-size: 0.95rem; font-weight: 800; color: #0f172a;
+  letter-spacing: -0.02em;
+}
+.nav-brand-name span { color: #3b82f6; }
+
+/* Tab switcher in navbar */
+.nav-tabs {
+  display: flex; gap: 6px;
+  background: #f1f5f9;
+  padding: 5px; border-radius: 12px;
+}
+.nav-tab {
+  padding: 8px 20px; border-radius: 9px;
+  border: none; background: transparent;
+  font-family: 'Inter',sans-serif; font-size: 0.82rem; font-weight: 600;
+  color: #64748b; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 7px;
+  white-space: nowrap;
+}
+.nav-tab:hover { color: #0f172a; background: rgba(255,255,255,0.7); }
+.nav-tab.active {
+  background: #fff; color: #2563eb;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.1);
+}
+
+.nav-right {
+  font-size: 0.75rem; color: #94a3b8; font-weight: 500;
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+
+/* ══════════════════════════════════════════════════════
+   PAGES (tab panels)
+══════════════════════════════════════════════════════ */
+.page { display: none; flex: 1; }
+.page.active { display: block; animation: fadeUp .35s ease; }
+
+/* Page sub-header */
+.page-header { text-align: center; padding: 44px 24px 24px; }
+.page-header h1 { font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 800; color: #0f172a; letter-spacing: -0.03em; margin-bottom: 8px; }
+.page-header h1 span { color: #3b82f6; }
+.page-header p { font-size: 0.83rem; color: #64748b; margin-top: 6px; }
+.header-line { width: 60px; height: 4px; background: linear-gradient(90deg,#3b82f6,#6366f1); border-radius: 2px; margin: 10px auto 0; }
+
+/* ══════════════════════════════════════════════════════
+   SHARED COMPONENTS
+══════════════════════════════════════════════════════ */
+.tech-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tech-tag  { font-size: 0.62rem; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+/* ══════════════════════════════════════════════════════
+   ██  PAGE 1 — IMAGE MERGER
+══════════════════════════════════════════════════════ */
+.im-wrap { max-width: 960px; margin: 0 auto; padding: 20px 24px 60px; }
+
+.card { background: #fff; border-radius: 20px; box-shadow: 0 4px 24px rgba(15,23,42,0.08), 0 1px 4px rgba(15,23,42,0.04); overflow: hidden; margin-bottom: 24px; }
+.card-inner { padding: 32px; }
+
+/* Upload zones */
+.zones-grid { display: grid; grid-template-columns: 1fr 56px 1fr; align-items: center; margin-bottom: 28px; }
+.zone-wrap { display: flex; flex-direction: column; gap: 8px; }
+.zone-label { font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px; }
+.zone-badge { width: 20px; height: 20px; border-radius: 50%; font-size: 0.62rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.zb1 { background: #eff6ff; color: #3b82f6; border: 1.5px solid #bfdbfe; }
+.zb2 { background: #f0fdf4; color: #22c55e; border: 1.5px solid #bbf7d0; }
+
+.upload-zone { height: 200px; border-radius: 14px; border: 2px dashed #cbd5e1; background: #f8fafc; position: relative; overflow: hidden; cursor: pointer; transition: border-color .2s, background .2s, transform .2s, box-shadow .2s; }
+.upload-zone:hover { border-color: #3b82f6; background: #eff6ff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.12); }
+.upload-zone.drag-over { border-color: #2563eb; background: #dbeafe; transform: translateY(-3px); box-shadow: 0 10px 28px rgba(59,130,246,0.18); }
+.upload-zone.has-img { border-style: solid; border-color: #3b82f6; background: #fff; }
+.zone-file { display: none !important; }
+.zone-body { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; pointer-events: none; }
+.zone-ico-wrap { width: 52px; height: 52px; border-radius: 12px; background: #eff6ff; display: flex; align-items: center; justify-content: center; }
+.zone-ico-wrap svg { color: #3b82f6; }
+.zone-hint { font-size: 0.78rem; font-weight: 500; color: #94a3b8; }
+.zone-sub  { font-size: 0.68rem; color: #cbd5e1; }
+.zone-prev { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 12px; display: none; }
+.zone-chg  { position: absolute; inset: 0; border-radius: 12px; background: rgba(15,23,42,0.55); display: none; align-items: center; justify-content: center; gap: 6px; font-size: 0.72rem; font-weight: 600; color: #fff; cursor: pointer; }
+.upload-zone.has-img:hover .zone-chg { display: flex; }
+.plus-conn { display: flex; align-items: center; justify-content: center; align-self: center; margin-top: 26px; width: 44px; height: 44px; border-radius: 50%; background: #fff; border: 2px solid #e2e8f0; color: #3b82f6; font-size: 1.2rem; font-weight: 700; box-shadow: 0 2px 8px rgba(59,130,246,0.1); flex-shrink: 0; }
+
+/* Direction pills */
+.dir-section { margin-bottom: 24px; }
+.dir-label { font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; text-align: center; }
+.dir-pills { display: flex; gap: 12px; }
+.dir-pill { flex: 1; padding: 14px 16px; border-radius: 12px; border: 2px solid #e2e8f0; background: #f8fafc; cursor: pointer; transition: all .2s; font-family: 'Inter',sans-serif; display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: 600; color: #64748b; }
+.dir-pill:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
+.dir-pill.active { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+.dir-icon { display: flex; gap: 4px; align-items: center; }
+.di { border-radius: 3px; background: currentColor; }
+
+/* Merge button */
+.merge-btn { width: 100%; padding: 18px; border: none; border-radius: 14px; background: linear-gradient(135deg,#2563eb,#3b82f6,#6366f1); color: #fff; font-family: 'Inter',sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all .25s; margin-top: 4px; box-shadow: 0 4px 14px rgba(59,130,246,0.3); }
+.merge-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(59,130,246,0.4); }
+.merge-btn:active:not(:disabled) { transform: translateY(0); }
+.merge-btn:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+
+/* Merger loading */
+.im-loading { display: none; flex-direction: column; align-items: center; gap: 16px; padding: 48px 0 40px; }
+.im-loading.on { display: flex; animation: fadeUp .3s ease; }
+.spin-ring { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #e2e8f0; border-top-color: #3b82f6; border-right-color: #6366f1; animation: spin .7s linear infinite; }
+.load-pct  { font-size: 1.5rem; font-weight: 800; color: #3b82f6; letter-spacing: -0.02em; }
+.bar-track { width: 260px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+.bar-fill  { height: 100%; background: linear-gradient(90deg,#2563eb,#3b82f6,#6366f1); border-radius: 3px; width: 0%; transition: width .12s linear; }
+.load-lbl  { font-size: 0.78rem; color: #94a3b8; font-weight: 500; }
+
+/* Result */
+.im-result { display: none; }
+.im-result.on { display: block; animation: fadeUp .5s ease; }
+.result-card { background: #fff; border-radius: 20px; box-shadow: 0 4px 24px rgba(15,23,42,0.08); overflow: hidden; }
+.result-topbar { padding: 20px 28px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
+.result-title { font-size: 1.05rem; font-weight: 700; color: #0f172a; }
+.result-meta  { font-size: 0.72rem; color: #94a3b8; margin-top: 2px; }
+.canvas-viewport { width: 100%; max-height: 520px; overflow: auto; background: #0f172a; display: flex; align-items: flex-start; justify-content: center; padding: 24px; }
+.canvas-viewport::-webkit-scrollbar { width: 6px; height: 6px; }
+.canvas-viewport::-webkit-scrollbar-track { background: #1e293b; }
+.canvas-viewport::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 3px; }
+#im-canvas { display: block; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+
+/* Download bar (merger) */
+.im-dl-bar { padding: 20px 28px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; gap: 12px; }
+.dl-btn-full  { flex: 1; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(135deg,#2563eb,#3b82f6); color: #fff; font-family: 'Inter',sans-serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(59,130,246,0.3); }
+.dl-btn-full:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.4); }
+.dl-btn-small { flex: 1; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; background: #fff; color: #475569; font-family: 'Inter',sans-serif; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.dl-btn-small:hover { border-color: #3b82f6; color: #3b82f6; transform: translateY(-1px); }
+
+/* ══════════════════════════════════════════════════════
+   ██  PAGE 2 — COVER LETTER GENERATOR
+══════════════════════════════════════════════════════ */
+.cl-wrap { max-width: 1140px; margin: 0 auto; padding: 20px 24px 60px; display: grid; grid-template-columns: 390px 1fr; gap: 28px; align-items: start; }
+
+/* Form card */
+.form-card { background: #fff; border-radius: 20px; box-shadow: 0 4px 24px rgba(15,23,42,0.08); padding: 30px; position: sticky; top: 80px; }
+.form-card h2 { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 5px; }
+.form-card .sub { font-size: 0.74rem; color: #94a3b8; margin-bottom: 22px; line-height: 1.6; }
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 0.72rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+.field input { width: 100%; padding: 10px 13px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Inter',sans-serif; font-size: 0.88rem; color: #0f172a; background: #f8fafc; transition: border-color .2s, background .2s; outline: none; }
+.field input:focus { border-color: #3b82f6; background: #fff; }
+.field input::placeholder { color: #cbd5e1; }
+.field input.err { border-color: #ef4444; background: #fff5f5; }
+.field .hint { font-size: 0.67rem; color: #94a3b8; margin-top: 4px; }
+.field .errmsg { font-size: 0.67rem; color: #ef4444; margin-top: 4px; display: none; }
+.field input.err ~ .errmsg { display: block; }
+.gen-btn { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(135deg,#2563eb,#3b82f6,#6366f1); color: #fff; font-family: 'Inter',sans-serif; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: all .25s; margin-top: 6px; box-shadow: 0 4px 14px rgba(59,130,246,0.3); }
+.gen-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(59,130,246,0.38); }
+
+/* Preview card */
+.preview-card { background: #fff; border-radius: 20px; box-shadow: 0 4px 24px rgba(15,23,42,0.08); overflow: hidden; }
+.preview-topbar { padding: 16px 22px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.preview-title { font-size: 0.95rem; font-weight: 700; color: #0f172a; }
+.preview-meta  { font-size: 0.7rem; color: #94a3b8; margin-top: 2px; }
+.topbar-right  { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.eye-btn { display: none; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; border: 2px solid #3b82f6; background: #eff6ff; cursor: pointer; transition: all .2s; font-family: 'Inter',sans-serif; font-size: 0.8rem; font-weight: 700; color: #2563eb; }
+.eye-btn.show { display: flex; }
+.eye-btn:hover { background: #3b82f6; color: #fff; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,130,246,0.3); }
+.eye-btn:hover svg { stroke: #fff; }
+
+.canvas-wrap { background: #dde3ee; padding: 20px; display: flex; justify-content: center; min-height: 280px; align-items: flex-start; }
+#cl-canvas { display: block; max-width: 100%; height: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.18); border-radius: 2px; }
+.placeholder-msg { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 60px 24px; color: #94a3b8; width: 100%; }
+.placeholder-msg svg { opacity: .3; }
+.placeholder-msg p { font-size: 0.82rem; text-align: center; line-height: 1.7; }
+
+/* Cover letter download bar */
+.cl-dl-bar { padding: 16px 22px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; gap: 8px; flex-wrap: wrap; }
+.cl-dl-btn { flex: 1; min-width: 110px; padding: 13px 10px; border-radius: 11px; font-family: 'Inter',sans-serif; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 6px; border: none; }
+.cl-dl-pdf { background: linear-gradient(135deg,#dc2626,#ef4444); color: #fff; box-shadow: 0 3px 10px rgba(220,38,38,0.25); }
+.cl-dl-pdf:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(220,38,38,0.35); }
+.cl-dl-png { background: linear-gradient(135deg,#2563eb,#3b82f6); color: #fff; box-shadow: 0 3px 10px rgba(59,130,246,0.25); }
+.cl-dl-png:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(59,130,246,0.35); }
+.cl-dl-jpg { background: #fff; color: #475569; border: 2px solid #e2e8f0 !important; }
+.cl-dl-jpg:hover { border-color: #3b82f6 !important; color: #3b82f6; transform: translateY(-1px); }
+
+/* ══════════════════════════════════════════════════════
+   MODALS (shared)
+══════════════════════════════════════════════════════ */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.65); backdrop-filter: blur(6px); z-index: 500; align-items: center; justify-content: center; }
+.modal-overlay.on { display: flex; }
+.modal-box { background: #fff; border-radius: 20px; padding: 36px; max-width: 480px; width: 92%; box-shadow: 0 24px 60px rgba(15,23,42,0.2); animation: popIn .28s cubic-bezier(.34,1.56,.64,1); }
+.modal-box.sm { max-width: 400px; padding: 32px; }
+.modal-icon { width: 52px; height: 52px; border-radius: 14px; background: #fff7ed; border: 2px solid #fed7aa; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.modal-box h3 { font-size: 1.1rem; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+.modal-box p  { font-size: 0.8rem; color: #64748b; line-height: 1.75; margin-bottom: 20px; }
+.warn-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.warn-row  { display: flex; gap: 10px; padding: 11px 14px; border-radius: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
+.warn-row .wlabel { font-size: 0.68rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; min-width: 68px; padding-top: 1px; }
+.warn-row .wval   { font-size: 0.82rem; font-weight: 600; color: #0f172a; word-break: break-all; }
+.modal-btns { display: flex; gap: 10px; }
+.mbtn-primary { flex: 1; padding: 13px; border: none; border-radius: 11px; background: linear-gradient(135deg,#2563eb,#3b82f6); color: #fff; font-family: 'Inter',sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: all .2s; }
+.mbtn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(59,130,246,0.38); }
+.mbtn-cancel { flex: 1; padding: 13px; border: 2px solid #e2e8f0; border-radius: 11px; background: #fff; color: #475569; font-family: 'Inter',sans-serif; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all .2s; }
+.mbtn-cancel:hover { border-color: #94a3b8; color: #1e293b; }
+.qual-opts { display: flex; flex-direction: column; gap: 10px; }
+.qual-opt { padding: 16px 18px; border-radius: 12px; border: 2px solid #e2e8f0; background: #f8fafc; cursor: pointer; transition: all .2s; text-align: left; }
+.qual-opt:hover { border-color: #3b82f6; background: #eff6ff; }
+.qual-opt .qt { font-size: 0.86rem; font-weight: 700; color: #0f172a; margin-bottom: 3px; }
+.qual-opt .qd { font-size: 0.7rem; color: #94a3b8; }
+.qual-opt:hover .qt { color: #2563eb; }
+.qual-opt.small:hover .qt { color: #22c55e; }
+.qual-cancel-link { display: block; width: 100%; margin-top: 10px; padding: 8px; background: none; border: none; color: #94a3b8; font-family: 'Inter',sans-serif; font-size: 0.75rem; cursor: pointer; text-align: center; }
+.qual-cancel-link:hover { color: #475569; text-decoration: underline; }
+
+/* ══════════════════════════════════════════════════════
+   ZOOM VIEWER
+══════════════════════════════════════════════════════ */
+.viewer-bg { display: none; position: fixed; inset: 0; background: rgba(2,5,14,0.92); backdrop-filter: blur(8px); z-index: 600; flex-direction: column; }
+.viewer-bg.on { display: flex; }
+.viewer-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; background: rgba(15,23,42,0.95); border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+.viewer-toolbar .vtitle { font-size: 0.88rem; font-weight: 700; color: #f1f5f9; }
+.vt-btns { display: flex; align-items: center; gap: 8px; }
+.vt-btn { min-width: 38px; height: 38px; padding: 0 10px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.07); color: #e2e8f0; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; font-family: 'Inter',sans-serif; }
+.vt-btn:hover { background: rgba(59,130,246,0.28); border-color: #3b82f6; color: #fff; }
+.zoom-label { font-size: 0.82rem; font-weight: 700; color: #94a3b8; min-width: 52px; text-align: center; }
+.viewer-scroll { flex: 1; overflow: auto; }
+.viewer-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.viewer-scroll::-webkit-scrollbar-track { background: #0f172a; }
+.viewer-scroll::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
+.img-wrapper { min-width: 100%; min-height: 100%; display: flex; align-items: flex-start; justify-content: center; padding: 32px; }
+#viewerImg { display: block; box-shadow: 0 12px 48px rgba(0,0,0,0.7); border-radius: 3px; transition: width .18s ease; }
+
+/* ══════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════ */
+footer {
+  background: #0f172a;
+  color: #94a3b8;
+  text-align: center;
+  padding: 28px 24px;
+  font-size: 0.78rem;
+  margin-top: auto;
+}
+footer .footer-inner { max-width: 800px; margin: 0 auto; }
+footer .footer-logo { font-size: 1rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin-bottom: 8px; }
+footer .footer-logo span { color: #3b82f6; }
+footer .copyright { color: #64748b; font-size: 0.73rem; margin-top: 6px; line-height: 1.7; }
+footer .footer-link { color: #3b82f6; text-decoration: none; font-weight: 600; }
+footer .footer-link:hover { text-decoration: underline; }
+footer .footer-divider { width: 40px; height: 2px; background: linear-gradient(90deg,#3b82f6,#6366f1); border-radius: 1px; margin: 12px auto; }
+
+/* Responsive */
+@media (max-width: 860px) {
+  .cl-wrap { grid-template-columns: 1fr; }
+  .form-card { position: static; }
+  .nav-right { display: none; }
+}
+@media (max-width: 600px) {
+  .nav-tab span { display: none; }
+  .nav-tab { padding: 8px 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ NAVBAR ══════════ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#">
+      <div class="nav-logo">NB</div>
+      <span class="nav-brand-name">Narayan<span>Bogati</span> Tools</span>
+    </a>
+
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('merger', this)">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <span>Image Merger</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('coverletter', this)">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span>Cover Letter</span>
+      </button>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-dot"></div>
+      narayanbogati.com.np
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE 1 — IMAGE MERGER
+══════════════════════════════════════════════════════ -->
+<div class="page active" id="page-merger">
+
+  <div class="page-header">
+    <h1>Image <span>Merger</span></h1>
+    <div class="header-line"></div>
+    <p>Join two images horizontally or vertically — 100% in your browser, no upload, no server</p>
+  </div>
+
+  <div class="im-wrap">
+    <div class="card">
+      <div class="card-inner">
+
+        <div class="zones-grid">
+          <div class="zone-wrap">
+            <div class="zone-label"><div class="zone-badge zb1">1</div>First Image</div>
+            <div class="upload-zone" id="im-zone1">
+              <input type="file" accept="image/*" class="zone-file" id="im-file1">
+              <div class="zone-body" id="im-ph1">
+                <div class="zone-ico-wrap">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <span class="zone-hint">Click or drag &amp; drop</span>
+                <span class="zone-sub">PNG, JPG, WEBP</span>
+              </div>
+              <img id="im-prev1" class="zone-prev" alt="">
+              <div class="zone-chg">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Change
+              </div>
+            </div>
+          </div>
+
+          <div class="plus-conn" style="margin-top:26px;">+</div>
+
+          <div class="zone-wrap">
+            <div class="zone-label"><div class="zone-badge zb2">2</div>Second Image</div>
+            <div class="upload-zone" id="im-zone2">
+              <input type="file" accept="image/*" class="zone-file" id="im-file2">
+              <div class="zone-body" id="im-ph2">
+                <div class="zone-ico-wrap" style="background:#f0fdf4;">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <span class="zone-hint">Click or drag &amp; drop</span>
+                <span class="zone-sub">PNG, JPG, WEBP</span>
+              </div>
+              <img id="im-prev2" class="zone-prev" alt="">
+              <div class="zone-chg">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Change
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dir-section">
+          <div class="dir-label">Join Direction</div>
+          <div class="dir-pills">
+            <button class="dir-pill active" id="im-lay-h" onclick="imSetLayout('h',this)">
+              <div class="dir-icon"><div class="di" style="width:34px;height:24px;"></div><div class="di" style="width:34px;height:24px;opacity:.35;"></div></div>
+              Horizontal
+            </button>
+            <button class="dir-pill" id="im-lay-v" onclick="imSetLayout('v',this)">
+              <div class="dir-icon" style="flex-direction:column;"><div class="di" style="width:48px;height:14px;"></div><div class="di" style="width:48px;height:14px;opacity:.35;"></div></div>
+              Vertical
+            </button>
+          </div>
+        </div>
+
+        <div class="tech-tags" style="margin-bottom:16px;">
+          <span class="tech-tag">Canvas API</span>
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">100% Browser</span>
+        </div>
+
+        <button class="merge-btn" id="merge-btn" onclick="imStartMerge()" disabled>
+          <span id="merge-btn-txt">Upload both images to get started</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="im-loading" id="im-loading">
+      <div class="spin-ring"></div>
+      <div class="load-pct" id="im-lpct">0%</div>
+      <div class="bar-track"><div class="bar-fill" id="im-lbar"></div></div>
+      <div class="load-lbl" id="im-llbl">Preparing…</div>
+    </div>
+
+    <div class="im-result" id="im-result">
+      <div class="result-card">
+        <div class="result-topbar">
+          <div>
+            <div class="result-title">✅ Merged Image</div>
+            <div class="result-meta" id="im-res-meta">—</div>
+          </div>
+          <div class="tech-tags"><span class="tech-tag" id="im-dir-tag">Horizontal</span></div>
+        </div>
+        <div class="canvas-viewport"><canvas id="im-canvas"></canvas></div>
+        <div class="im-dl-bar">
+          <button class="dl-btn-full" onclick="imDoDownload('full')">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download Full Quality
+          </button>
+          <button class="dl-btn-small" onclick="imDoDownload('small')">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download &lt; 200 KB
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE 2 — COVER LETTER GENERATOR
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-coverletter">
+
+  <div class="page-header">
+    <h1>.NP Domain <span>Cover Letter</span></h1>
+    <div class="header-line"></div>
+    <p>Fill in your details · Review · Download as PDF, PNG or JPG</p>
+  </div>
+
+  <div class="cl-wrap">
+    <div class="form-card">
+      <h2>Your Information</h2>
+      <p class="sub">Enter the details below. You will get a confirmation review before the letter is created.</p>
+
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="cl-date">
+        <div class="hint">Appears top-right of the letter</div>
+        <div class="errmsg">Please select a date</div>
+      </div>
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" id="cl-name" placeholder="e.g. Narayan Bogati" maxlength="60">
+        <div class="hint">Appears in body (2×) and signature</div>
+        <div class="errmsg">Full name is required</div>
+      </div>
+      <div class="field">
+        <label>Domain Name</label>
+        <input type="text" id="cl-domain" placeholder="e.g. bogatinarayan.com.np" maxlength="80">
+        <div class="hint">Replaced in 3 places in the letter</div>
+        <div class="errmsg">Domain name is required</div>
+      </div>
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="cl-email" placeholder="e.g. yourname@gmail.com" maxlength="80">
+        <div class="errmsg">Valid email is required</div>
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <input type="text" id="cl-phone" placeholder="e.g. 9762519563" maxlength="20">
+        <div class="errmsg">Phone number is required</div>
+      </div>
+
+      <button class="gen-btn" onclick="clOpenWarning()">⚡ Generate Cover Letter</button>
+    </div>
+
+    <div class="preview-card">
+      <div class="preview-topbar">
+        <div>
+          <div class="preview-title">Cover Letter Preview</div>
+          <div class="preview-meta" id="cl-prev-meta">Fill the form and click Generate</div>
+        </div>
+        <div class="topbar-right">
+          <button class="eye-btn" id="cl-eye-btn" onclick="clOpenViewer()">
+            <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            View Full Size
+          </button>
+          <div class="tech-tags">
+            <span class="tech-tag">Canvas API</span>
+            <span class="tech-tag">PDF · PNG · JPG</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="canvas-wrap" id="cl-canvas-wrap">
+        <div class="placeholder-msg" id="cl-placeholder">
+          <svg width="52" height="52" fill="none" viewBox="0 0 24 24" stroke="#94a3b8" stroke-width="1.1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <p>Your cover letter will appear here<br>after you fill the form and click Generate</p>
+        </div>
+        <canvas id="cl-canvas" style="display:none;"></canvas>
+      </div>
+
+      <div class="cl-dl-bar" id="cl-dl-bar" style="display:none;">
+        <button class="cl-dl-btn cl-dl-pdf" onclick="clStartDownload('pdf')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Download PDF
+        </button>
+        <button class="cl-dl-btn cl-dl-png" onclick="clStartDownload('png')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Download PNG
+        </button>
+        <button class="cl-dl-btn cl-dl-jpg" onclick="clStartDownload('jpg')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Download JPG
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ WARNING MODAL ══════════ -->
+<div class="modal-overlay" id="warn-modal" onclick="if(event.target===this)clCloseWarning()">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+    </div>
+    <h3>Please Check Your Information</h3>
+    <p>Review all details carefully before generating. Make sure your domain name, full name and email are correct.</p>
+    <div class="warn-rows" id="warn-rows"></div>
+    <div class="modal-btns">
+      <button class="mbtn-cancel" onclick="clCloseWarning()">✎ Edit Details</button>
+      <button class="mbtn-primary" onclick="clConfirmGenerate()">✓ Looks Good — Generate</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ QUALITY MODAL ══════════ -->
+<div class="modal-overlay" id="qual-modal" onclick="if(event.target===this)clCloseQual()">
+  <div class="modal-box sm">
+    <h3 id="qual-title">Download</h3>
+    <p id="qual-desc">Choose the quality for your download.</p>
+    <div class="qual-opts">
+      <div class="qual-opt" onclick="clDoDownload('full')">
+        <div class="qt">Full Quality</div>
+        <div class="qd" id="qual-full-desc">Original resolution · Lossless</div>
+      </div>
+      <div class="qual-opt small" onclick="clDoDownload('small')">
+        <div class="qt">Compressed &lt; 200 KB</div>
+        <div class="qd">Smart compression · Best quality within 200 KB</div>
+      </div>
+    </div>
+    <button class="qual-cancel-link" onclick="clCloseQual()">Cancel</button>
+  </div>
+</div>
+
+<!-- ══════════ ZOOM VIEWER ══════════ -->
+<div class="viewer-bg" id="viewer-bg">
+  <div class="viewer-toolbar">
+    <span class="vtitle">👁 Cover Letter — Full Size View</span>
+    <div class="vt-btns">
+      <button class="vt-btn" onclick="vzoomOut()">−</button>
+      <span class="zoom-label" id="zoom-label">100%</span>
+      <button class="vt-btn" onclick="vzoomIn()">+</button>
+      <button class="vt-btn" onclick="vzoomReset()" style="font-size:0.68rem;padding:0 10px;min-width:46px;">FIT</button>
+      <button class="vt-btn" onclick="clCloseViewer()" style="margin-left:8px;border-color:rgba(239,68,68,0.5);color:#fca5a5;font-size:0.9rem;">✕ Close</button>
+    </div>
+  </div>
+  <div class="viewer-scroll" id="viewer-scroll">
+    <div class="img-wrapper">
+      <img id="viewerImg" src="" alt="Cover Letter">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Narayan<span>Bogati</span> Tools</div>
+    <div class="footer-divider"></div>
+    <div class="copyright">
+      © 2026 All Rights Reserved &nbsp;·&nbsp;
+      <a class="footer-link" href="https://narayanbogati.com.np" target="_blank">narayanbogati.com.np</a>
+      <br>Image Merger &amp; .NP Domain Cover Letter Generator &nbsp;·&nbsp; Built with Canvas API &amp; JavaScript
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+// ══════════════════════════════════════════════════
+// TAB SWITCHER
+// ══════════════════════════════════════════════════
+function switchTab(tab, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════════════════
+// IMAGE MERGER
+// ══════════════════════════════════════════════════
+let im_img1 = null, im_img2 = null, im_layout = 'h';
+
+document.getElementById('im-zone1').addEventListener('click', () => document.getElementById('im-file1').click());
+document.getElementById('im-zone2').addEventListener('click', () => document.getElementById('im-file2').click());
+document.getElementById('im-file1').addEventListener('change', function() { if (this.files[0]) imReadImg(1, this.files[0]); });
+document.getElementById('im-file2').addEventListener('change', function() { if (this.files[0]) imReadImg(2, this.files[0]); });
+
+[1,2].forEach(n => {
+  const z = document.getElementById('im-zone' + n);
+  z.addEventListener('dragenter', e => e.preventDefault());
+  z.addEventListener('dragover',  e => { e.preventDefault(); e.stopPropagation(); z.classList.add('drag-over'); });
+  z.addEventListener('dragleave', e => { if (!z.contains(e.relatedTarget)) z.classList.remove('drag-over'); });
+  z.addEventListener('drop', e => {
+    e.preventDefault(); e.stopPropagation(); z.classList.remove('drag-over');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) imReadImg(n, f);
+  });
+});
+
+function imReadImg(n, file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const im = new Image();
+    im.onload = () => {
+      if (n === 1) im_img1 = im; else im_img2 = im;
+      const prev = document.getElementById('im-prev' + n);
+      prev.src = ev.target.result; prev.style.display = 'block';
+      document.getElementById('im-ph' + n).style.display = 'none';
+      document.getElementById('im-zone' + n).classList.add('has-img');
+      imCheckReady();
+    };
+    im.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function imCheckReady() {
+  const btn = document.getElementById('merge-btn');
+  const txt = document.getElementById('merge-btn-txt');
+  if (im_img1 && im_img2) { btn.disabled = false; txt.textContent = '⚡  Merge Images Now'; }
+  else if (im_img1) txt.textContent = 'Now upload the second image →';
+  else if (im_img2) txt.textContent = '← Now upload the first image';
+}
+
+function imSetLayout(l, el) {
+  im_layout = l;
+  document.querySelectorAll('.dir-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function imStartMerge() {
+  if (!im_img1 || !im_img2) return;
+  document.getElementById('im-result').classList.remove('on');
+  document.getElementById('merge-btn').disabled = true;
+  document.getElementById('merge-btn-txt').textContent = 'Merging…';
+  document.getElementById('im-loading').classList.add('on');
+
+  const steps = [[12,'Reading image data…'],[30,'Calculating frame size…'],[52,'Drawing first image…'],[76,'Drawing second image…'],[92,'Compositing frame…'],[100,'Complete!']];
+  let i = 0;
+  const tick = setInterval(() => {
+    if (i >= steps.length) { clearInterval(tick); setTimeout(imRenderMerge, 300); return; }
+    const [pct, lbl] = steps[i++];
+    document.getElementById('im-lpct').textContent = pct + '%';
+    document.getElementById('im-lbar').style.width = pct + '%';
+    document.getElementById('im-llbl').textContent = lbl;
+  }, 230);
+}
+
+function imRenderMerge() {
+  const canvas = document.getElementById('im-canvas');
+  const ctx = canvas.getContext('2d');
+  if (im_layout === 'h') {
+    const H  = Math.max(im_img1.naturalHeight, im_img2.naturalHeight);
+    const W2 = Math.round(im_img2.naturalWidth * (H / im_img2.naturalHeight));
+    const W1 = Math.round(im_img1.naturalWidth * (H / im_img1.naturalHeight));
+    canvas.width = W2 + W1; canvas.height = H;
+    ctx.drawImage(im_img2, 0, 0, W2, H);
+    ctx.drawImage(im_img1, W2, 0, W1, H);
+  } else {
+    const W  = Math.max(im_img1.naturalWidth, im_img2.naturalWidth);
+    const H1 = Math.round(im_img1.naturalHeight * (W / im_img1.naturalWidth));
+    const H2 = Math.round(im_img2.naturalHeight * (W / im_img2.naturalWidth));
+    canvas.width = W; canvas.height = H1 + H2;
+    ctx.drawImage(im_img1, 0, 0, W, H1);
+    ctx.drawImage(im_img2, 0, H1, W, H2);
+  }
+  const estKB = Math.round(canvas.width * canvas.height * 3.5 / 1024);
+  document.getElementById('im-res-meta').textContent = `${canvas.width} × ${canvas.height} px · ~${estKB > 1024 ? (estKB/1024).toFixed(1)+' MB' : estKB+' KB'} PNG`;
+  document.getElementById('im-dir-tag').textContent = im_layout === 'h' ? 'Horizontal' : 'Vertical';
+  document.getElementById('im-loading').classList.remove('on');
+  document.getElementById('merge-btn').disabled = false;
+  document.getElementById('merge-btn-txt').textContent = '⚡  Merge Again';
+  const res = document.getElementById('im-result');
+  res.classList.add('on');
+  setTimeout(() => res.scrollIntoView({ behavior:'smooth', block:'start' }), 120);
+}
+
+function imDoDownload(type) {
+  const canvas = document.getElementById('im-canvas');
+  const dir = im_layout === 'h' ? 'horizontal' : 'vertical';
+  if (type === 'full') {
+    imSave(canvas.toDataURL('image/png'), `narayanbogati${dir}full.png`); return;
+  }
+  const TARGET = 200 * 1024;
+  let lo = 0.01, hi = 0.95, bestQ = 0.5, dataUrl, size;
+  for (let iter = 0; iter < 14; iter++) {
+    const mid = (lo + hi) / 2;
+    dataUrl = canvas.toDataURL('image/jpeg', mid); size = b64bytes(dataUrl);
+    if (size <= TARGET) { bestQ = mid; lo = mid; } else { hi = mid; }
+    if (hi - lo < 0.004) break;
+  }
+  dataUrl = canvas.toDataURL('image/jpeg', bestQ); size = b64bytes(dataUrl);
+  if (size > TARGET) {
+    const tmp = document.createElement('canvas'), tc = tmp.getContext('2d');
+    let sLo = 0.05, sHi = 1.0;
+    for (let iter = 0; iter < 14; iter++) {
+      const mid = (sLo + sHi) / 2;
+      tmp.width = Math.max(1, Math.round(canvas.width * mid));
+      tmp.height = Math.max(1, Math.round(canvas.height * mid));
+      tc.drawImage(canvas, 0, 0, tmp.width, tmp.height);
+      dataUrl = tmp.toDataURL('image/jpeg', 0.88); size = b64bytes(dataUrl);
+      if (size <= TARGET) sHi = mid; else sLo = mid;
+      if (sHi - sLo < 0.004) break;
+    }
+    tmp.width = Math.max(1, Math.round(canvas.width * sHi));
+    tmp.height = Math.max(1, Math.round(canvas.height * sHi));
+    tc.drawImage(canvas, 0, 0, tmp.width, tmp.height);
+    dataUrl = tmp.toDataURL('image/jpeg', 0.88); size = b64bytes(dataUrl);
+  }
+  imSave(dataUrl, `narayanbogati${dir}${Math.round(size/1024)}kb.jpg`);
+}
+
+function imSave(dataUrl, name) {
+  const a = document.createElement('a'); a.href = dataUrl; a.download = name;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// ══════════════════════════════════════════════════
+// COVER LETTER GENERATOR
+// ══════════════════════════════════════════════════
+(function() {
+  const t = new Date();
+  document.getElementById('cl-date').value = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+})();
+
+let cl_pendingFmt = null, cl_zoomPct = 100, cl_baseImgW = 0;
+
+function clValidate() {
+  const rules = [
+    { id:'cl-date',   ok: v => v !== '' },
+    { id:'cl-name',   ok: v => v.trim().length > 1 },
+    { id:'cl-domain', ok: v => v.trim().length > 3 },
+    { id:'cl-email',  ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+    { id:'cl-phone',  ok: v => v.trim().length >= 7 },
+  ];
+  let pass = true;
+  rules.forEach(r => {
+    const el = document.getElementById(r.id);
+    const valid = r.ok(el.value);
+    el.classList.toggle('err', !valid);
+    if (!valid) pass = false;
+  });
+  return pass;
+}
+
+function clOpenWarning() {
+  if (!clValidate()) {
+    document.querySelector('#page-coverletter .field input.err')?.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+  const fields = [
+    ['Date',   document.getElementById('cl-date').value],
+    ['Name',   document.getElementById('cl-name').value.trim()],
+    ['Domain', document.getElementById('cl-domain').value.trim()],
+    ['Email',  document.getElementById('cl-email').value.trim()],
+    ['Phone',  document.getElementById('cl-phone').value.trim()],
+  ];
+  document.getElementById('warn-rows').innerHTML = fields.map(([l,v]) =>
+    `<div class="warn-row"><span class="wlabel">${l}</span><span class="wval">${v}</span></div>`
+  ).join('');
+  document.getElementById('warn-modal').classList.add('on');
+}
+function clCloseWarning()   { document.getElementById('warn-modal').classList.remove('on'); }
+function clConfirmGenerate() { clCloseWarning(); clGenerate(); }
+
+function clGenerate() {
+  const date   = document.getElementById('cl-date').value;
+  const name   = document.getElementById('cl-name').value.trim();
+  const domain = document.getElementById('cl-domain').value.trim();
+  const email  = document.getElementById('cl-email').value.trim();
+  const phone  = document.getElementById('cl-phone').value.trim();
+
+  const W = 1240, HMAX = 1754, ML = 108, MR = 108, maxW = W - ML - MR;
+  const canvas = document.getElementById('cl-canvas');
+  canvas.width = W; canvas.height = HMAX;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, HMAX);
+  ctx.fillStyle = '#000000'; ctx.textBaseline = 'top';
+
+  const FS = 22, LH = Math.round(FS * 2.1);
+  const WF = `bold ${FS}px Georgia,'Times New Roman',serif`;
+  const NF = `bold ${FS}px Arial,Helvetica,sans-serif`;
+
+  ctx.font = NF; ctx.textAlign = 'right';
+  ctx.fillText(date, W - MR, 108);
+  ctx.textAlign = 'left';
+
+  let y = 210;
+  ctx.font = WF;
+  ctx.fillText('To,', ML, y);                                  y += Math.round(LH*1.1);
+  ctx.fillText('The Host Master', ML, y);                      y += LH;
+  ctx.fillText('Mercantile Communications PVT .LTD', ML, y);  y += LH;
+  ctx.fillText('Kathmandu, Nepal', ML, y);
+
+  y += Math.round(LH*1.9);
+  ctx.fillText('subject: Application for .np domain registration', ML, y);
+
+  y += Math.round(LH*2.1);
+  ctx.fillText('Dear Sir/Madam,', ML, y);
+
+  y += Math.round(LH*2.1);
+  y = clWrap(ctx, `I would like to request registration of ${domain} domain under my name ${name} with domain ${domain}`, ML, y, maxW, LH, WF);
+  y += Math.round(LH*1.7);
+  y = clWrap(ctx, `Applying for registration of ${domain} follows all the terms and conditions. Required documents for domain registration are attached with the form.`, ML, y, maxW, LH, WF);
+  y += Math.round(LH*1.7);
+  y = clWrap(ctx, `I would be grateful for your help. Thank you for your kind consideration. Looking forward to hearing from you soon. Thank you!`, ML, y, maxW, LH, WF);
+
+  y += Math.round(LH*2.4);
+  ctx.font = WF; ctx.fillText('Yours Sincerely,', ML, y); y += Math.round(LH*1.15);
+  ctx.font = WF; ctx.fillText(name, ML, y);   y += LH;
+  ctx.font = NF; ctx.fillText(email, ML, y);  y += LH;
+  ctx.font = NF; ctx.fillText(phone, ML, y);
+  y += Math.round(LH*1.6);
+
+  // Crop
+  const fH = Math.min(y, HMAX);
+  const tmp = document.createElement('canvas'); tmp.width = W; tmp.height = fH;
+  tmp.getContext('2d').drawImage(canvas, 0, 0, W, fH, 0, 0, W, fH);
+  canvas.width = W; canvas.height = fH;
+  canvas.getContext('2d').drawImage(tmp, 0, 0);
+
+  const dataUrl = canvas.toDataURL('image/png');
+  const vImg = document.getElementById('viewerImg');
+  vImg.src = dataUrl;
+  vImg.onload = () => { cl_baseImgW = vImg.naturalWidth; };
+
+  document.getElementById('cl-placeholder').style.display = 'none';
+  canvas.style.display = 'block';
+  document.getElementById('cl-dl-bar').style.display = 'flex';
+  document.getElementById('cl-prev-meta').textContent = `${domain} · ${name}`;
+  document.getElementById('cl-eye-btn').classList.add('show');
+  setTimeout(() => document.getElementById('cl-canvas-wrap').scrollIntoView({ behavior:'smooth', block:'start' }), 120);
+}
+
+function clWrap(ctx, text, x, y, maxW, lh, font) {
+  ctx.font = font;
+  const words = text.split(' '); let line = '', cy = y;
+  for (let i = 0; i < words.length; i++) {
+    const test = line + (line ? ' ' : '') + words[i];
+    if (ctx.measureText(test).width > maxW && line) { ctx.fillText(line, x, cy); cy += lh; line = words[i]; }
+    else { line = test; }
+  }
+  if (line) { ctx.fillText(line, x, cy); cy += lh; }
+  return cy;
+}
+
+// Viewer
+function clOpenViewer()  { cl_zoomPct = 100; clApplyZoom(); document.getElementById('viewer-bg').classList.add('on'); }
+function clCloseViewer() { document.getElementById('viewer-bg').classList.remove('on'); }
+function clApplyZoom() {
+  const img = document.getElementById('viewerImg');
+  const baseW = Math.min(cl_baseImgW || 900, window.innerWidth * 0.88);
+  img.style.width  = Math.round(baseW * cl_zoomPct / 100) + 'px';
+  img.style.height = 'auto';
+  document.getElementById('zoom-label').textContent = cl_zoomPct + '%';
+}
+function vzoomIn()    { cl_zoomPct = Math.min(cl_zoomPct + 15, 400); clApplyZoom(); }
+function vzoomOut()   { cl_zoomPct = Math.max(cl_zoomPct - 15, 20);  clApplyZoom(); }
+function vzoomReset() { cl_zoomPct = 100; clApplyZoom(); }
+document.getElementById('viewer-scroll').addEventListener('wheel', function(e) {
+  e.preventDefault(); if (e.deltaY < 0) vzoomIn(); else vzoomOut();
+}, { passive: false });
+
+// Download
+function clStartDownload(fmt) {
+  cl_pendingFmt = fmt;
+  if (fmt === 'pdf') { clDoDownload('full'); return; }
+  const canvas = document.getElementById('cl-canvas');
+  const testUrl = fmt === 'png' ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.97);
+  const sizeKB  = Math.round(b64bytes(testUrl) / 1024);
+  if (sizeKB <= 200) { clDoDownload('full'); return; }
+  document.getElementById('qual-title').textContent   = fmt === 'png' ? 'Download PNG' : 'Download JPG';
+  document.getElementById('qual-full-desc').textContent = `Original quality · ~${sizeKB} KB`;
+  document.getElementById('qual-desc').textContent    = `This file is ~${sizeKB} KB. Choose Full Quality or compress under 200 KB.`;
+  document.getElementById('qual-modal').classList.add('on');
+}
+function clCloseQual() { document.getElementById('qual-modal').classList.remove('on'); }
+
+function clDoDownload(quality) {
+  clCloseQual();
+  const canvas  = document.getElementById('cl-canvas');
+  const rawName = document.getElementById('cl-name').value.trim();
+  const base    = rawName.toLowerCase().replace(/[^a-z0-9]/g, '') + 'generatecoverletter';
+  const fmt     = cl_pendingFmt;
+
+  if (fmt === 'pdf') { clExportPDF(base); return; }
+
+  if (fmt === 'png') {
+    const data = quality === 'full' ? canvas.toDataURL('image/png') : clCompressPNG(canvas);
+    const kb   = Math.round(b64bytes(data) / 1024);
+    clSave(data, quality === 'full' ? base + '.png' : base + kb + 'kb.png');
+    return;
+  }
+  if (fmt === 'jpg') {
+    if (quality === 'full') { clSave(canvas.toDataURL('image/jpeg', 0.97), base + '.jpg'); }
+    else {
+      const data = clSmartJPEG(canvas, 200 * 1024);
+      const kb   = Math.round(b64bytes(data) / 1024);
+      clSave(data, base + kb + 'kb.jpg');
+    }
+  }
+}
+
+function clSmartJPEG(canvas, target) {
+  let lo = 0.01, hi = 0.95, bestQ = 0.5, dataUrl, size;
+  for (let i = 0; i < 14; i++) {
+    const mid = (lo + hi) / 2; dataUrl = canvas.toDataURL('image/jpeg', mid); size = b64bytes(dataUrl);
+    if (size <= target) { bestQ = mid; lo = mid; } else { hi = mid; }
+    if (hi - lo < 0.004) break;
+  }
+  dataUrl = canvas.toDataURL('image/jpeg', bestQ); size = b64bytes(dataUrl);
+  if (size > target) {
+    const tmp = document.createElement('canvas'), tc = tmp.getContext('2d'); let sLo = 0.05, sHi = 1.0;
+    for (let i = 0; i < 14; i++) {
+      const mid = (sLo + sHi) / 2;
+      tmp.width = Math.max(1, Math.round(canvas.width * mid)); tmp.height = Math.max(1, Math.round(canvas.height * mid));
+      tc.drawImage(canvas, 0, 0, tmp.width, tmp.height); dataUrl = tmp.toDataURL('image/jpeg', 0.88); size = b64bytes(dataUrl);
+      if (size <= target) sHi = mid; else sLo = mid; if (sHi - sLo < 0.004) break;
+    }
+    tmp.width = Math.max(1, Math.round(canvas.width * sHi)); tmp.height = Math.max(1, Math.round(canvas.height * sHi));
+    tc.drawImage(canvas, 0, 0, tmp.width, tmp.height); dataUrl = tmp.toDataURL('image/jpeg', 0.88);
+  }
+  return dataUrl;
+}
+
+function clCompressPNG(canvas) {
+  const target = 200 * 1024; let data = canvas.toDataURL('image/png');
+  if (b64bytes(data) <= target) return data;
+  const tmp = document.createElement('canvas'), tc = tmp.getContext('2d'); let sLo = 0.1, sHi = 1.0;
+  for (let i = 0; i < 14; i++) {
+    const mid = (sLo + sHi) / 2;
+    tmp.width = Math.max(1, Math.round(canvas.width * mid)); tmp.height = Math.max(1, Math.round(canvas.height * mid));
+    tc.drawImage(canvas, 0, 0, tmp.width, tmp.height); data = tmp.toDataURL('image/png');
+    if (b64bytes(data) <= target) sHi = mid; else sLo = mid; if (sHi - sLo < 0.004) break;
+  }
+  tmp.width = Math.max(1, Math.round(canvas.width * sHi)); tmp.height = Math.max(1, Math.round(canvas.height * sHi));
+  tc.drawImage(canvas, 0, 0, tmp.width, tmp.height); return tmp.toDataURL('image/png');
+}
+
+function clExportPDF(base) {
+  const canvas = document.getElementById('cl-canvas');
+  const imgData = canvas.toDataURL('image/jpeg', 0.97);
+  const { jsPDF } = window.jspdf;
+  const pdfW = 210, pdfH = Math.round(pdfW * canvas.height / canvas.width);
+  const pdf = new jsPDF({ orientation: pdfH > pdfW ? 'portrait' : 'landscape', unit:'mm', format:[pdfW, pdfH] });
+  pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH);
+  pdf.save(base + '.pdf');
+}
+
+function clSave(dataUrl, filename) {
+  const a = document.createElement('a'); a.href = dataUrl; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// Shared helper
+function b64bytes(dataUrl) {
+  const b64 = dataUrl.split(',')[1];
+  const pad = b64.endsWith('==') ? 2 : b64.endsWith('=') ? 1 : 0;
+  return Math.floor(b64.length * 3 / 4) - pad;
+}
+</script>
+</body>
+</html>

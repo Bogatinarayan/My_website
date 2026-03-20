@@ -1546,7 +1546,7 @@ function fusionPharma() {
 }
         
 function documentToolsProject() {
-    window.location.href = "document_tools.html";
+    window.location.href = "main.html";
 }
 
         function coming() {

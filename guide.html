@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CamScanner Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+
+  /* ═══ RESET ═══ */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f0f4ff;min-height:100vh;color:#1e293b;display:flex;flex-direction:column;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══ NAVBAR ═══ */
+.navbar{background:#fff;border-bottom:1px solid #e2e8f0;box-shadow:0 2px 12px rgba(15,23,42,.06);position:sticky;top:0;z-index:200;}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:60px;gap:10px;}
+.nav-brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;}
+.nav-logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#2563eb,#6366f1);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#fff;font-weight:800;}
+.nav-brand-name{font-size:.9rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;white-space:nowrap;}
+.nav-brand-name span{color:#3b82f6;}
+.nav-tabs{display:flex;gap:4px;background:#f1f5f9;padding:4px;border-radius:11px;flex-shrink:0;}
+.nav-tab{padding:7px 14px;border-radius:8px;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.nav-tab:hover{color:#0f172a;background:rgba(255,255,255,.7);}
+.nav-tab.active{background:#fff;color:#2563eb;box-shadow:0 2px 8px rgba(15,23,42,.1);}
+.nav-right{font-size:.72rem;color:#94a3b8;font-weight:500;display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;}
+/* Mobile nav: hide brand text + right label on tiny screens */
+@media(max-width:480px){.nav-brand-name{display:none;}.nav-right{display:none;}.nav-tab{padding:7px 10px;font-size:.72rem;}.nav-tab span{display:none;}.nav-tab{gap:0;}}
+
+
+/* ═══ FOOTER ═══ */
+footer{background:#0f172a;color:#64748b;text-align:center;padding:26px 16px;font-size:.72rem;margin-top:auto;}
+.f-logo{font-size:.95rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:6px;}
+.f-logo span{color:#3b82f6;}
+.f-div{width:36px;height:2px;background:linear-gradient(90deg,#3b82f6,#6366f1);border-radius:1px;margin:10px auto;}
+footer a{color:#3b82f6;text-decoration:none;font-weight:600;}
+footer a:hover{text-decoration:underline;}
+</style>
+</head>
+
+
+
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#">
+      <div class="nav-logo">NB</div>
+      <span class="nav-brand-name">Narayan<span>Bogati</span> Tools</span>
+    </a>
+
+<!--     
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('merger',this)">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+         <span>Image Merger</span> 
+      </button>
+
+ -->
+
+<a href="main.html  " class="nav-tab">
+  <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+  </svg>
+  <span>Go to home page </span>
+</a
+
+
+    </div>
+    <div class="nav-right"><div class="nav-dot"></div>narayanbogati.com.np</div>
+  </div>
+</nav>
+
+<body class="bg-slate-50 text-slate-900">
+
+  <!-- Top buttons -->
+  <!-- <section class="max-w-6xl mx-auto px-4 pt-6">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <a href="main.html"
+         class="inline-flex items-center gap-2 rounded-2xl bg-white border border-slate-200 px-5 py-3 font-bold text-slate-800 shadow hover:scale-105 transition">
+        ⬅ Home Page
+      </a> -->
+<!-- RGB Guide Title Box -->
+<div class="w-full flex justify-center mb-4">
+  <div class="relative px-6 py-3 font-bold text-white rounded-xl text-center 
+              bg-slate-900 shadow-lg">
+
+    <!-- RGB Glow Border -->
+    <div class="absolute inset-0 rounded-xl p-[2px] bg-gradient-to-r 
+                from-red-500 via-blue-500 to-green-500 animate-pulse blur-sm opacity-70"></div>
+
+    <!-- Inner Content -->
+    <div class="relative z-10">
+      Video Tutorial Guide
+    </div>
+  </div>
+</div>
+
+<!-- Responsive Full Frame Video -->
+<div class="w-full max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-white">
+  <iframe
+    class="w-full h-[250px] sm:h-[350px] md:h-[500px] lg:h-[600px] xl:h-[700px]"
+    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+    title="CamScanner tutorial guide"
+    allowfullscreen>
+  </iframe>
+</div>
+
+
+  <!-- Main content -->
+  <section class="max-w-6xl mx-auto px-4 py-10">
+    <div class="grid lg:grid-cols-2 gap-8 bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+      
+      <div class="p-8 flex flex-col justify-center">
+        <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-xs font-bold w-fit mb-4">
+          Read before downlaod 
+        </span>
+
+        <h1 class="text-4xl md:text-5xl font-black mb-4 leading-tight">
+          Download <span class="text-blue-600">CamScanner</span>
+        </h1>
+
+        <p class="text-slate-600 mb-6 text-lg leading-7">
+          Scan documents, forms, IDs, certificates, and notes clearly. Use the official app on mobile, or continue to the web tool on desktop.
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-4 mb-8">
+          <div class="bg-slate-50 border rounded-2xl p-4">
+            <h3 class="font-bold mb-1">Clear Scan</h3>
+            <p class="text-sm text-slate-600">Sharp output for daily document work.</p>
+          </div>
+
+          <div class="bg-slate-50 border rounded-2xl p-4">
+            <h3 class="font-bold mb-1">Fast Process</h3>
+            <p class="text-sm text-slate-600">Scan, crop, save, and share quickly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-50 flex items-center justify-center p-8">
+        <div class="bg-black rounded-[2rem] p-3 shadow-2xl rotate-[-5deg]">
+          <div class="bg-white rounded-[1.5rem] overflow-hidden">
+            <div class="bg-blue-600 text-white p-4 flex gap-3 items-center">
+              <div class="bg-white text-blue-600 w-10 h-10 flex items-center justify-center rounded-xl font-bold">
+                CS
+              </div>
+              <div>
+                <div class="font-bold">CamScanner</div>
+                <div class="text-xs text-blue-100">Document scanner</div>
+              </div>
+            </div>
+
+            <div class="p-5">
+              <div class="h-32 border-2 border-dashed border-blue-200 flex items-center justify-center text-blue-600 rounded-xl mb-4 font-semibold">
+                Scan Preview
+              </div>
+
+              <div class="space-y-2">
+                <div class="h-2 bg-gray-200 rounded"></div>
+                <div class="h-2 bg-gray-200 rounded w-3/4"></div>
+                <div class="h-2 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Download button -->
+    <div class="mt-10 flex justify-center">
+      <button onclick="downloadApp()"
+        class="bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 text-white px-10 py-4 rounded-2xl font-extrabold text-lg shadow-xl hover:scale-105 transition">
+        ⬇ Download CamScanner
+      </button>
+    </div>
+  </section>
+
+  <!-- Pro version section -->
+  <section class="max-w-6xl mx-auto px-4 pb-14">
+    <div class="bg-white border rounded-3xl p-8 shadow-lg">
+      <h2 class="text-2xl font-black mb-2">Crack Version</h2>
+      <p class="text-slate-600 mb-4">Enter password to continue.</p>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input id="pass" type="password"
+          class="flex-1 border rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-400 outline-none"
+          placeholder="Enter password">
+        <button onclick="checkPass()"
+          class="bg-black text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition">
+          Continue
+        </button>
+      </div>
+
+      <div id="warningBox" class="hidden mt-4 rounded-2xl border border-red-200 bg-red-50 p-4">
+        <p class="text-red-700 font-bold mb-1">
+          Warning: You are redirecting to Telegram for Crack Version software of cam scanner it may risk your device downlaod at your own risk.
+        </p>
+        <p id="countdownText" class="text-red-600 text-sm">
+          Redirecting in 5 seconds...
+        </p>
+      </div>
+
+      <p id="msg" class="mt-3 text-sm font-semibold hidden"></p>
+    </div>
+  </section>
+
+  <!-- PC modal -->
+  <div id="pcBox" class="hidden fixed inset-0 bg-black/60 items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+      <h3 class="text-xl font-bold mb-2">You are using PC</h3>
+      <p class="text-gray-600 mb-4">
+        Please press continue and use the web version tool.
+      </p>
+      <div class="flex gap-3">
+        <button onclick="goWeb()"
+          class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">
+          Continue
+        </button>
+        <button onclick="closePcBox()"
+          class="w-full bg-slate-100 text-slate-800 py-3 rounded-xl font-bold hover:bg-slate-200 transition">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+<!-- 
+
+  <div class="w-full max-w-2xl mx-auto space-y-4">
+
+
+  <script async src="https://telegram.org/js/telegram-widget.js?23"
+    data-telegram-post="Camscannermoded/14"
+    data-width="100%">
+  </script>
+
+  <a href="https://t.me/Camscannermoded" target="_blank"
+     class="block text-center bg-gradient-to-r from-blue-500 to-cyan-500 
+     hover:scale-105 transition text-white font-bold py-3 rounded-xl shadow-xl">
+     Join Telegram Group 🚀
+  </a>
+
+</div>
+      -->
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="f-logo">Narayan<span>Bogati</span> Tools</div>
+  <div class="f-div"></div>
+  <div>© 2026 All Rights Reserved &nbsp;·&nbsp; <a href="https://narayanbogati.com.np" target="_blank">narayanbogati.com.np</a><br>Image Merger · Cover Letter · Document Converter</div>
+</footer>
+
+
+
+  <script>
+    function isAndroid() {
+      return /Android/i.test(navigator.userAgent);
+    }
+
+    function isIOS() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    function downloadApp() {
+      if (isAndroid()) {
+        window.location.href = "https://play.google.com/store/apps/details?id=com.intsig.camscanner";
+      } else if (isIOS()) {
+        window.location.href = "https://apps.apple.com/us/app/camscanner-pdf-scanner-app/id388627783";
+      } else {
+        document.getElementById("pcBox").classList.remove("hidden");
+        document.getElementById("pcBox").classList.add("flex");
+      }
+    }
+
+    function goWeb() {
+      window.location.href = "webapp.html";
+    }
+
+    function closePcBox() {
+      document.getElementById("pcBox").classList.add("hidden");
+      document.getElementById("pcBox").classList.remove("flex");
+    }
+
+    function checkPass() {
+      const p = document.getElementById("pass").value.trim();
+      const msg = document.getElementById("msg");
+      const warningBox = document.getElementById("warningBox");
+      const countdownText = document.getElementById("countdownText");
+
+      msg.classList.add("hidden");
+      warningBox.classList.add("hidden");
+
+      if (p === "bogati") {
+        warningBox.classList.remove("hidden");
+
+        let seconds = 5;
+        countdownText.innerText = "Redirecting in " + seconds + " seconds...";
+
+        const timer = setInterval(() => {
+          seconds--;
+          countdownText.innerText = "Redirecting in " + seconds + " seconds...";
+
+          if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "https://t.me/Camscannermoded/14";
+          }
+        }, 1000);
+
+      } else {
+        msg.classList.remove("hidden");
+        msg.className = "mt-3 text-sm font-semibold text-red-600";
+        msg.innerText = "Wrong password.";
+      }
+    }
+
+    window.addEventListener("click", function(e) {
+      const modal = document.getElementById("pcBox");
+      if (e.target === modal) {
+        closePcBox();
+      }
+    });
+  </script>
+
+</body>
+</html>

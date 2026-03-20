@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NarayanBogati Tools - Document Scanner</title>
+  <meta name="description" content="Responsive online document scanner with live crop, magic color enhancement, manual crop, auto detect, and download." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background: #eef3ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #1f2937;
+    }
+
+    .glass-card {
+      background: rgba(255,255,255,0.86);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(191, 206, 239, 0.75);
+      box-shadow: 0 10px 35px rgba(90, 116, 170, 0.09);
+    }
+
+    .soft-border { border: 2px dashed #c6d5f2; }
+
+    .filter-btn,
+    .action-btn {
+      transition: all 0.25s ease;
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #4f82ff, #6aa7ff);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 8px 24px rgba(79, 130, 255, 0.25);
+    }
+
+    .range-input::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #4f82ff;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(79,130,255,0.35);
+    }
+
+    .range-input::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: #4f82ff;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(79,130,255,0.35);
+      cursor: pointer;
+    }
+
+    .checker {
+      background-image:
+        linear-gradient(45deg, #f5f8ff 25%, transparent 25%),
+        linear-gradient(-45deg, #f5f8ff 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f5f8ff 75%),
+        linear-gradient(-45deg, transparent 75%, #f5f8ff 75%);
+      background-size: 18px 18px;
+      background-position: 0 0, 0 9px, 9px -9px, -9px 0;
+    }
+
+    #editorWrapper {
+      position: relative;
+      width: 100%;
+      overflow: auto;
+      border-radius: 1.5rem;
+      background: white;
+    }
+
+    #editorCanvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      touch-action: none;
+      cursor: crosshair;
+      background: white;
+    }
+
+    .drop-active {
+      border-color: #4f82ff !important;
+      background: #f3f7ff !important;
+    }
+
+    .sticky-preview {
+      position: sticky;
+      top: 92px;
+    }
+
+    @media (max-width: 1279px) {
+      .sticky-preview { position: static; }
+    }
+
+    /* ═══ FOOTER ═══ */
+footer{background:#0f172a;color:#64748b;text-align:center;padding:26px 16px;font-size:.72rem;margin-top:auto;}
+.f-logo{font-size:.95rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:6px;}
+.f-logo span{color:#3b82f6;}
+.f-div{width:36px;height:2px;background:linear-gradient(90deg,#3b82f6,#6366f1);border-radius:1px;margin:10px auto;}
+footer a{color:#3b82f6;text-decoration:none;font-weight:600;}
+footer a:hover{text-decoration:underline;}
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-500 text-white flex items-center justify-center font-bold shadow-md">
+            NB
+          </div>
+          <div>
+            <h1 class="text-base sm:text-xl font-extrabold tracking-tight">
+              Narayan<span class="text-blue-500">Bogati</span> Tools
+            </h1>
+          </div>
+        </div>
+
+        <div class="hidden md:flex items-center bg-slate-100 rounded-2xl p-1 shadow-inner">
+          <a href="main.html">
+            <button class="px-5 py-2 rounded-xl text-sm font-semibold text-blue-600 bg-white shadow">Go to home page </button>
+          </a>
+          <!-- <button class="px-5 py-2 rounded-xl text-sm font-semibold text-slate-500">Image Merger</button>
+          <button class="px-5 py-2 rounded-xl text-sm font-semibold text-slate-500">Cover Letter</button> -->
+        </div>
+
+        <div class="text-xs sm:text-sm text-slate-400 font-semibold hidden sm:flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>
+          narayanbogati.com.np
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="pt-10 sm:pt-14 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900">
+        Document <span class="text-blue-500">Scanner</span>
+      </h2>
+      <div class="w-20 h-1.5 bg-blue-500 rounded-full mx-auto mt-4 mb-4"></div>
+      <p class="text-slate-500 max-w-2xl mx-auto text-sm sm:text-base lg:text-lg">
+        Upload a document photo, auto detect borders, adjust crop live on the same preview, enhance paper, and download.
+      </p>
+    </div>
+  </section>
+
+  <main class="pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+        <!-- Left Controls -->
+        <div class="xl:col-span-4 space-y-6">
+          <div class="glass-card rounded-3xl p-5 sm:p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-7 h-7 rounded-full border border-blue-300 text-blue-500 flex items-center justify-center text-sm font-bold">1</div>
+              <h3 class="text-sm sm:text-base font-bold uppercase tracking-widest text-slate-600">Upload Document</h3>
+            </div>
+
+            <label id="dropZone" for="fileInput" class="soft-border rounded-3xl min-h-[220px] sm:min-h-[260px] flex flex-col items-center justify-center text-center cursor-pointer bg-slate-50 hover:bg-blue-50/70 transition px-6">
+              <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-500 flex items-center justify-center mb-4 text-3xl shadow-sm">📄</div>
+              <div class="text-lg font-semibold text-slate-600">Click or drag &amp; drop</div>
+              <div class="text-sm text-slate-400 mt-2">PNG, JPG, WEBP</div>
+              <div class="text-xs text-slate-400 mt-3">Best result: clear paper edges and readable text</div>
+            </label>
+            <input id="fileInput" type="file" accept="image/*" class="hidden" />
+
+            <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button id="loadSampleBtn" class="action-btn rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-600 hover:bg-slate-50 transition">
+                Load Demo
+              </button>
+              <button id="resetBtn" class="action-btn rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-600 hover:bg-slate-50 transition">
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-3xl p-5 sm:p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-7 h-7 rounded-full border border-green-300 text-green-500 flex items-center justify-center text-sm font-bold">2</div>
+              <h3 class="text-sm sm:text-base font-bold uppercase tracking-widest text-slate-600">Filters</h3>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <button class="filter-btn active rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold" data-filter="magic">
+                Magic Color
+              </button>
+              <button class="filter-btn rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold" data-filter="bw">
+                Black &amp; White
+              </button>
+              <button class="filter-btn rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold" data-filter="gray">
+                Grayscale
+              </button>
+              <button class="filter-btn rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold" data-filter="original">
+                Original
+              </button>
+            </div>
+
+            <div class="mt-6 space-y-5">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <label class="font-semibold text-slate-600">Brightness</label>
+                  <span id="brightnessValue" class="text-sm text-slate-400">-20</span>
+                </div>
+                <input id="brightness" type="range" min="-100" max="100" value="-20" class="range-input w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer" />
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <label class="font-semibold text-slate-600">Contrast</label>
+                  <span id="contrastValue" class="text-sm text-slate-400">-21</span>
+                </div>
+                <input id="contrast" type="range" min="-100" max="100" value="-21" class="range-input w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer" />
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <label class="font-semibold text-slate-600">Whiten Paper</label>
+                  <span id="whiteBoostValue" class="text-sm text-slate-400">21</span>
+                </div>
+                <input id="whiteBoost" type="range" min="0" max="100" value="21" class="range-input w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer" />
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <label class="font-semibold text-slate-600">Sharpness</label>
+                  <span id="sharpnessValue" class="text-sm text-slate-400">8</span>
+                </div>
+                <input id="sharpness" type="range" min="0" max="100" value="8" class="range-input w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer" />
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-3xl p-5 sm:p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-7 h-7 rounded-full border border-purple-300 text-purple-500 flex items-center justify-center text-sm font-bold">3</div>
+              <h3 class="text-sm sm:text-base font-bold uppercase tracking-widest text-slate-600">Crop &amp; Actions</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button id="autoEnhanceBtn" class="action-btn rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-3 font-bold shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition">
+                Auto Enhance
+              </button>
+              <button id="detectEdgesBtn" class="action-btn rounded-2xl bg-white border border-slate-200 text-slate-600 px-4 py-3 font-bold hover:bg-slate-50 transition">
+                Auto Detect
+              </button>
+              <button id="toggleCropBtn" class="action-btn rounded-2xl bg-white border border-slate-200 text-slate-600 px-4 py-3 font-bold hover:bg-slate-50 transition">
+                Crop Mode: ON
+              </button>
+              <button id="applyCropBtn" class="action-btn rounded-2xl bg-white border border-slate-200 text-slate-600 px-4 py-3 font-bold hover:bg-slate-50 transition">
+                Apply Crop
+              </button>
+              <button id="downloadBtn" class="action-btn rounded-2xl bg-white border border-slate-200 text-slate-600 px-4 py-3 font-bold hover:bg-slate-50 transition sm:col-span-2">
+                Download Scan
+              </button>
+            </div>
+
+            <div class="mt-4 text-xs sm:text-sm text-slate-400 leading-6">
+              Drag the blue corner points directly on the live preview. Crop lines are now on the same document preview.
+            </div>
+
+            <div id="opencvStatus" class="mt-4 text-sm font-semibold text-amber-500">Loading OpenCV...</div>
+          </div>
+        </div>
+
+        <!-- Right Preview -->
+        <div class="xl:col-span-8">
+          <div class="sticky-preview space-y-6">
+            <div class="glass-card rounded-3xl p-4 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <div>
+                  <h3 class="text-lg sm:text-xl font-bold text-slate-700">Live Editor</h3>
+                  <p class="text-sm text-slate-400">Same preview for crop + live result</p>
+                </div>
+                <div class="text-xs sm:text-sm text-slate-400">
+                  Drag corners and see the crop area directly
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div class="rounded-3xl border border-slate-200 bg-white overflow-hidden">
+                  <div class="px-4 py-3 border-b border-slate-100 bg-slate-50">
+                    <h4 class="font-bold text-slate-600">Editor / Crop Preview</h4>
+                  </div>
+                  <div class="checker p-3 min-h-[320px] sm:min-h-[480px] flex items-center justify-center">
+                    <div id="editorWrapper" class="w-full max-h-[72vh]">
+                      <canvas id="editorCanvas"></canvas>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rounded-3xl border border-slate-200 bg-white overflow-hidden">
+                  <div class="px-4 py-3 border-b border-slate-100 bg-slate-50">
+                    <h4 class="font-bold text-slate-600">Final Result</h4>
+                  </div>
+                  <div class="checker min-h-[320px] sm:min-h-[480px] flex items-center justify-center p-3 overflow-auto">
+                    <canvas id="resultCanvas" class="rounded-2xl max-w-full max-h-[70vh] bg-white"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-5 sm:p-6">
+              <h3 class="text-lg sm:text-xl font-bold text-slate-700 mb-4">How to use</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="rounded-2xl bg-white border border-slate-200 p-5">
+                  <div class="text-2xl mb-2">📤</div>
+                  <h4 class="font-bold text-slate-700">1. Upload</h4>
+                  <p class="text-sm text-slate-400 mt-2">Upload the document image.</p>
+                </div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-5">
+                  <div class="text-2xl mb-2">✂️</div>
+                  <h4 class="font-bold text-slate-700">2. Crop Live</h4>
+                  <p class="text-sm text-slate-400 mt-2">Adjust the blue corner handles directly on the same preview.</p>
+                </div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-5">
+                  <div class="text-2xl mb-2">✨</div>
+                  <h4 class="font-bold text-slate-700">3. Enhance</h4>
+                  <p class="text-sm text-slate-400 mt-2">Use Magic Color for paper cleanup without turning it fully black and white.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+    
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="f-logo">Narayan<span>Bogati</span> Tools</div>
+  <div class="f-div"></div>
+  <div>© 2026 All Rights Reserved &nbsp;·&nbsp; <a href="https://narayanbogati.com.np" target="_blank">narayanbogati.com.np</a><br>Image Merger · Cover Letter · Document Converter</div>
+</footer>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const editorCanvas = document.getElementById('editorCanvas');
+    const resultCanvas = document.getElementById('resultCanvas');
+    const editorCtx = editorCanvas.getContext('2d');
+    const resultCtx = resultCanvas.getContext('2d');
+
+    const brightnessInput = document.getElementById('brightness');
+    const contrastInput = document.getElementById('contrast');
+    const whiteBoostInput = document.getElementById('whiteBoost');
+    const sharpnessInput = document.getElementById('sharpness');
+
+    const brightnessValue = document.getElementById('brightnessValue');
+    const contrastValue = document.getElementById('contrastValue');
+    const whiteBoostValue = document.getElementById('whiteBoostValue');
+    const sharpnessValue = document.getElementById('sharpnessValue');
+
+    const resetBtn = document.getElementById('resetBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const autoEnhanceBtn = document.getElementById('autoEnhanceBtn');
+    const detectEdgesBtn = document.getElementById('detectEdgesBtn');
+    const loadSampleBtn = document.getElementById('loadSampleBtn');
+    const applyCropBtn = document.getElementById('applyCropBtn');
+    const toggleCropBtn = document.getElementById('toggleCropBtn');
+    const opencvStatus = document.getElementById('opencvStatus');
+
+    let baseImage = new Image();
+    let imageLoaded = false;
+    let currentFilter = 'magic';
+    let cvReady = false;
+    let cropMode = true;
+
+    let sourceCanvas = document.createElement('canvas');
+    let sourceCtx = sourceCanvas.getContext('2d');
+
+    let cropPoints = [];
+    let draggingPointIndex = -1;
+    const handleRadius = 11;
+
+    function setStatus(msg, color = 'text-amber-500') {
+      opencvStatus.className = `mt-4 text-sm font-semibold ${color}`;
+      opencvStatus.textContent = msg;
+    }
+
+    function syncLabels() {
+      brightnessValue.textContent = brightnessInput.value;
+      contrastValue.textContent = contrastInput.value;
+      whiteBoostValue.textContent = whiteBoostInput.value;
+      sharpnessValue.textContent = sharpnessInput.value;
+    }
+
+    syncLabels();
+
+    function initCropPoints(w, h) {
+      const padX = Math.max(20, w * 0.08);
+      const padY = Math.max(20, h * 0.08);
+      cropPoints = [
+        { x: padX, y: padY },
+        { x: w - padX, y: padY },
+        { x: w - padX, y: h - padY },
+        { x: padX, y: h - padY }
+      ];
+    }
+
+    function fitEditorSize(img) {
+      const maxWidth = 1400;
+      const scale = img.width > maxWidth ? maxWidth / img.width : 1;
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+
+      sourceCanvas.width = w;
+      sourceCanvas.height = h;
+      editorCanvas.width = w;
+      editorCanvas.height = h;
+
+      sourceCtx.clearRect(0, 0, w, h);
+      sourceCtx.drawImage(img, 0, 0, w, h);
+
+      resultCanvas.width = w;
+      resultCanvas.height = h;
+    }
+
+    function loadImageToCanvas(img) {
+      fitEditorSize(img);
+      initCropPoints(sourceCanvas.width, sourceCanvas.height);
+      imageLoaded = true;
+      renderEditor();
+      renderResult();
+    }
+
+    function loadImageFromFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        baseImage = new Image();
+        baseImage.onload = () => loadImageToCanvas(baseImage);
+        baseImage.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      loadImageFromFile(file);
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('drop-active');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('drop-active');
+      });
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer.files[0];
+      loadImageFromFile(file);
+    });
+
+    function clamp(v) {
+      return Math.max(0, Math.min(255, v));
+    }
+
+    function applyBrightnessContrast(data, brightness, contrast) {
+      const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+      for (let i = 0; i < data.length; i += 4) {
+        data[i] = clamp(factor * (data[i] - 128) + 128 + brightness);
+        data[i + 1] = clamp(factor * (data[i + 1] - 128) + 128 + brightness);
+        data[i + 2] = clamp(factor * (data[i + 2] - 128) + 128 + brightness);
+      }
+    }
+
+    function applyGrayscale(data) {
+      for (let i = 0; i < data.length; i += 4) {
+        const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+        data[i] = data[i + 1] = data[i + 2] = gray;
+      }
+    }
+
+    function applyBlackWhite(data, whiteBoost = 0) {
+      for (let i = 0; i < data.length; i += 4) {
+        const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+        const threshold = 158 - (whiteBoost * 0.5);
+        const v = gray > threshold ? 255 : 0;
+        data[i] = data[i + 1] = data[i + 2] = v;
+      }
+    }
+
+    function applyMagicColor(data, whiteBoost = 21) {
+      for (let i = 0; i < data.length; i += 4) {
+        let r = data[i];
+        let g = data[i + 1];
+        let b = data[i + 2];
+
+        const avg = (r + g + b) / 3;
+        const maxCh = Math.max(r, g, b);
+        const minCh = Math.min(r, g, b);
+
+        const shadowLift = whiteBoost * 0.55;
+        const paperLift = whiteBoost * 0.95;
+
+        if (avg > 145) {
+          r += paperLift;
+          g += paperLift;
+          b += paperLift;
+        } else {
+          r += shadowLift * 0.55;
+          g += shadowLift * 0.55;
+          b += shadowLift * 0.55;
+        }
+
+        const yellowCast = Math.max(0, (r + g - b * 2) / 4);
+        b += yellowCast * 0.06;
+        r -= yellowCast * 0.03;
+        g -= yellowCast * 0.02;
+
+        const saturationBoost = 1.06;
+        r = avg + (r - avg) * saturationBoost;
+        g = avg + (g - avg) * saturationBoost;
+        b = avg + (b - avg) * saturationBoost;
+
+        if (maxCh - minCh < 18 && avg > 150) {
+          r = r + whiteBoost * 0.35;
+          g = g + whiteBoost * 0.35;
+          b = b + whiteBoost * 0.35;
+        }
+
+        data[i] = clamp(r);
+        data[i + 1] = clamp(g);
+        data[i + 2] = clamp(b);
+      }
+    }
+
+    function sharpenImage(imageData, width, height, strength = 8) {
+      if (strength <= 0) return imageData;
+
+      const src = imageData.data;
+      const output = new Uint8ClampedArray(src);
+      const factor = strength / 100;
+
+      const kernel = [
+        0, -1, 0,
+        -1, 5, -1,
+        0, -1, 0
+      ];
+
+      for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+          for (let c = 0; c < 3; c++) {
+            let sum = 0;
+            let k = 0;
+            for (let ky = -1; ky <= 1; ky++) {
+              for (let kx = -1; kx <= 1; kx++) {
+                const idx = ((y + ky) * width + (x + kx)) * 4 + c;
+                sum += src[idx] * kernel[k++];
+              }
+            }
+            const idx = (y * width + x) * 4 + c;
+            output[idx] = clamp(src[idx] * (1 - factor) + sum * factor);
+          }
+        }
+      }
+
+      return new ImageData(output, width, height);
+    }
+
+    function getFilteredImageDataFromCanvas(canvas, ctx) {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      const brightness = parseInt(brightnessInput.value, 10);
+      const contrast = parseInt(contrastInput.value, 10);
+      const whiteBoost = parseInt(whiteBoostInput.value, 10);
+      const sharpness = parseInt(sharpnessInput.value, 10);
+
+      if (currentFilter === 'gray') {
+        applyGrayscale(data);
+        applyBrightnessContrast(data, brightness, contrast);
+      } else if (currentFilter === 'bw') {
+        applyGrayscale(data);
+        applyBrightnessContrast(data, brightness, contrast);
+        applyBlackWhite(data, whiteBoost);
+      } else if (currentFilter === 'magic') {
+        applyBrightnessContrast(data, brightness, contrast);
+        applyMagicColor(data, whiteBoost);
+      } else {
+        applyBrightnessContrast(data, brightness, contrast);
+      }
+
+      return sharpenImage(imageData, canvas.width, canvas.height, sharpness);
+    }
+
+    function drawCropOverlay() {
+      if (!cropMode || cropPoints.length !== 4) return;
+
+      editorCtx.save();
+
+      editorCtx.fillStyle = 'rgba(15, 23, 42, 0.30)';
+      editorCtx.beginPath();
+      editorCtx.rect(0, 0, editorCanvas.width, editorCanvas.height);
+      editorCtx.moveTo(cropPoints[0].x, cropPoints[0].y);
+      editorCtx.lineTo(cropPoints[1].x, cropPoints[1].y);
+      editorCtx.lineTo(cropPoints[2].x, cropPoints[2].y);
+      editorCtx.lineTo(cropPoints[3].x, cropPoints[3].y);
+      editorCtx.closePath();
+      editorCtx.fill('evenodd');
+
+      editorCtx.strokeStyle = '#4f82ff';
+      editorCtx.lineWidth = 3;
+      editorCtx.setLineDash([]);
+      editorCtx.beginPath();
+      editorCtx.moveTo(cropPoints[0].x, cropPoints[0].y);
+      editorCtx.lineTo(cropPoints[1].x, cropPoints[1].y);
+      editorCtx.lineTo(cropPoints[2].x, cropPoints[2].y);
+      editorCtx.lineTo(cropPoints[3].x, cropPoints[3].y);
+      editorCtx.closePath();
+      editorCtx.stroke();
+
+      editorCtx.strokeStyle = 'rgba(79,130,255,0.65)';
+      editorCtx.lineWidth = 1.5;
+      editorCtx.setLineDash([8, 8]);
+      editorCtx.beginPath();
+      editorCtx.moveTo((cropPoints[0].x + cropPoints[3].x)/2, (cropPoints[0].y + cropPoints[3].y)/2);
+      editorCtx.lineTo((cropPoints[1].x + cropPoints[2].x)/2, (cropPoints[1].y + cropPoints[2].y)/2);
+      editorCtx.moveTo((cropPoints[0].x + cropPoints[1].x)/2, (cropPoints[0].y + cropPoints[1].y)/2);
+      editorCtx.lineTo((cropPoints[2].x + cropPoints[3].x)/2, (cropPoints[2].y + cropPoints[3].y)/2);
+      editorCtx.stroke();
+      editorCtx.setLineDash([]);
+
+      cropPoints.forEach((p, i) => {
+        editorCtx.fillStyle = '#ffffff';
+        editorCtx.beginPath();
+        editorCtx.arc(p.x, p.y, handleRadius, 0, Math.PI * 2);
+        editorCtx.fill();
+
+        editorCtx.fillStyle = '#4f82ff';
+        editorCtx.beginPath();
+        editorCtx.arc(p.x, p.y, handleRadius - 4, 0, Math.PI * 2);
+        editorCtx.fill();
+
+        editorCtx.fillStyle = '#ffffff';
+        editorCtx.font = 'bold 11px Arial';
+        editorCtx.textAlign = 'center';
+        editorCtx.textBaseline = 'middle';
+        editorCtx.fillText(String(i + 1), p.x, p.y + 0.5);
+      });
+
+      editorCtx.restore();
+    }
+
+    function renderEditor() {
+      if (!imageLoaded) return;
+      editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
+      editorCtx.drawImage(sourceCanvas, 0, 0);
+      drawCropOverlay();
+    }
+
+    function getCropBounds() {
+      const xs = cropPoints.map(p => p.x);
+      const ys = cropPoints.map(p => p.y);
+      const x = Math.max(0, Math.min(...xs));
+      const y = Math.max(0, Math.min(...ys));
+      const w = Math.min(sourceCanvas.width - x, Math.max(...xs) - x);
+      const h = Math.min(sourceCanvas.height - y, Math.max(...ys) - y);
+      return {
+        x: Math.round(x),
+        y: Math.round(y),
+        w: Math.max(1, Math.round(w)),
+        h: Math.max(1, Math.round(h))
+      };
+    }
+
+    function renderResult() {
+      if (!imageLoaded) return;
+
+      const bounds = getCropBounds();
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = bounds.w;
+      tempCanvas.height = bounds.h;
+      const tempCtx = tempCanvas.getContext('2d');
+
+      tempCtx.drawImage(
+        sourceCanvas,
+        bounds.x, bounds.y, bounds.w, bounds.h,
+        0, 0, bounds.w, bounds.h
+      );
+
+      const filtered = getFilteredImageDataFromCanvas(tempCanvas, tempCtx);
+
+      resultCanvas.width = bounds.w;
+      resultCanvas.height = bounds.h;
+      resultCtx.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+      resultCtx.putImageData(filtered, 0, 0);
+    }
+
+    function getCanvasPointer(e, canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function findNearestHandle(pos) {
+      let idx = -1;
+      let minDist = Infinity;
+      cropPoints.forEach((p, i) => {
+        const dx = p.x - pos.x;
+        const dy = p.y - pos.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < handleRadius * 2.2 && dist < minDist) {
+          minDist = dist;
+          idx = i;
+        }
+      });
+      return idx;
+    }
+
+    function clampPoint(point) {
+      point.x = Math.max(0, Math.min(sourceCanvas.width, point.x));
+      point.y = Math.max(0, Math.min(sourceCanvas.height, point.y));
+    }
+
+    function movePoint(index, x, y) {
+      cropPoints[index].x = x;
+      cropPoints[index].y = y;
+      clampPoint(cropPoints[index]);
+      renderEditor();
+      renderResult();
+    }
+
+    function startDrag(e) {
+      if (!imageLoaded || !cropMode) return;
+      const pos = getCanvasPointer(e, editorCanvas);
+      const hit = findNearestHandle(pos);
+      if (hit !== -1) {
+        draggingPointIndex = hit;
+        e.preventDefault();
+      }
+    }
+
+    function duringDrag(e) {
+      if (draggingPointIndex === -1) return;
+      const pos = getCanvasPointer(e, editorCanvas);
+      movePoint(draggingPointIndex, pos.x, pos.y);
+      e.preventDefault();
+    }
+
+    function endDrag() {
+      draggingPointIndex = -1;
+    }
+
+    editorCanvas.addEventListener('mousedown', startDrag);
+    editorCanvas.addEventListener('mousemove', duringDrag);
+    window.addEventListener('mouseup', endDrag);
+
+    editorCanvas.addEventListener('touchstart', startDrag, { passive: false });
+    editorCanvas.addEventListener('touchmove', duringDrag, { passive: false });
+    window.addEventListener('touchend', endDrag, { passive: false });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderResult();
+      });
+    });
+
+    [brightnessInput, contrastInput, whiteBoostInput, sharpnessInput].forEach(input => {
+      input.addEventListener('input', () => {
+        syncLabels();
+        renderResult();
+      });
+    });
+
+    autoEnhanceBtn.addEventListener('click', () => {
+      brightnessInput.value = -20;
+      contrastInput.value = -21;
+      whiteBoostInput.value = 21;
+      sharpnessInput.value = 8;
+      currentFilter = 'magic';
+
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-filter="magic"]').classList.add('active');
+
+      syncLabels();
+      renderResult();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      brightnessInput.value = -20;
+      contrastInput.value = -21;
+      whiteBoostInput.value = 21;
+      sharpnessInput.value = 8;
+      currentFilter = 'magic';
+      cropMode = true;
+      toggleCropBtn.textContent = 'Crop Mode: ON';
+
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-filter="magic"]').classList.add('active');
+
+      syncLabels();
+
+      if (imageLoaded) {
+        initCropPoints(sourceCanvas.width, sourceCanvas.height);
+        renderEditor();
+        renderResult();
+      }
+    });
+
+    toggleCropBtn.addEventListener('click', () => {
+      cropMode = !cropMode;
+      toggleCropBtn.textContent = `Crop Mode: ${cropMode ? 'ON' : 'OFF'}`;
+      renderEditor();
+    });
+
+    applyCropBtn.addEventListener('click', () => {
+      if (!imageLoaded) {
+        alert('Please upload an image first.');
+        return;
+      }
+
+      const bounds = getCropBounds();
+      const newCanvas = document.createElement('canvas');
+      newCanvas.width = bounds.w;
+      newCanvas.height = bounds.h;
+      const newCtx = newCanvas.getContext('2d');
+
+      newCtx.drawImage(
+        sourceCanvas,
+        bounds.x, bounds.y, bounds.w, bounds.h,
+        0, 0, bounds.w, bounds.h
+      );
+
+      sourceCanvas.width = bounds.w;
+      sourceCanvas.height = bounds.h;
+      sourceCtx = sourceCanvas.getContext('2d');
+      sourceCtx.drawImage(newCanvas, 0, 0);
+
+      editorCanvas.width = bounds.w;
+      editorCanvas.height = bounds.h;
+      initCropPoints(bounds.w, bounds.h);
+
+      renderEditor();
+      renderResult();
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      if (!imageLoaded) {
+        alert('Please upload an image first.');
+        return;
+      }
+      const link = document.createElement('a');
+      link.download = 'document-scan.png';
+      link.href = resultCanvas.toDataURL('image/png');
+      link.click();
+    });
+
+    detectEdgesBtn.addEventListener('click', () => {
+      if (!imageLoaded) {
+        alert('Please upload an image first.');
+        return;
+      }
+      if (!cvReady || typeof cv === 'undefined') {
+        alert('OpenCV is still loading or failed to load.');
+        return;
+      }
+
+      try {
+        const src = cv.imread(sourceCanvas);
+        const gray = new cv.Mat();
+        const blurred = new cv.Mat();
+        const edged = new cv.Mat();
+        const contours = new cv.MatVector();
+        const hierarchy = new cv.Mat();
+
+        cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+        cv.GaussianBlur(gray, blurred, new cv.Size(5, 5), 0);
+        cv.Canny(blurred, edged, 60, 180);
+        cv.findContours(edged, contours, hierarchy, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE);
+
+        let biggest = null;
+        let biggestArea = 0;
+
+        for (let i = 0; i < contours.size(); i++) {
+          const cnt = contours.get(i);
+          const peri = cv.arcLength(cnt, true);
+          const approx = new cv.Mat();
+          cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+
+          if (approx.rows === 4) {
+            const area = cv.contourArea(approx);
+            if (area > biggestArea) {
+              biggestArea = area;
+              if (biggest) biggest.delete();
+              biggest = approx.clone();
+            }
+          }
+
+          approx.delete();
+          cnt.delete();
+        }
+
+        if (biggest && biggest.rows === 4) {
+          const pts = [];
+          for (let i = 0; i < 4; i++) {
+            pts.push({
+              x: biggest.intPtr(i, 0)[0],
+              y: biggest.intPtr(i, 0)[1]
+            });
+          }
+
+          const sumSorted = [...pts].sort((a, b) => (a.x + a.y) - (b.x + b.y));
+          const diffSorted = [...pts].sort((a, b) => (a.x - a.y) - (b.x - b.y));
+
+          cropPoints = [
+            sumSorted[0],
+            diffSorted[3],
+            sumSorted[3],
+            diffSorted[0]
+          ].map(p => ({
+            x: Math.max(0, Math.min(sourceCanvas.width, p.x)),
+            y: Math.max(0, Math.min(sourceCanvas.height, p.y))
+          }));
+
+          renderEditor();
+          renderResult();
+        } else {
+          alert('Auto detect could not find a clear 4-corner document. Please adjust manually.');
+        }
+
+        src.delete();
+        gray.delete();
+        blurred.delete();
+        edged.delete();
+        contours.delete();
+        hierarchy.delete();
+        if (biggest) biggest.delete();
+      } catch (err) {
+        console.error(err);
+        alert('Auto detect failed on this image. Please crop manually.');
+      }
+    });
+
+    loadSampleBtn.addEventListener('click', () => {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = 900;
+      tempCanvas.height = 1200;
+      const ctx = tempCanvas.getContext('2d');
+
+      ctx.fillStyle = '#d6dde8';
+      ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+      ctx.save();
+      ctx.translate(450, 600);
+      ctx.rotate(-0.08);
+      ctx.fillStyle = '#f8f4ec';
+      ctx.fillRect(-285, -395, 570, 790);
+
+      ctx.fillStyle = '#1f2937';
+      ctx.font = 'bold 38px Arial';
+      ctx.fillText('INVOICE / DOCUMENT', -180, -260);
+
+      ctx.font = '24px Arial';
+      const lines = [
+        'Name: Narayan Bogati',
+        'Project: Live Crop Scanner',
+        'Address: Kathmandu, Nepal',
+        'Date: 2026-03-20',
+        'Amount: Rs. 10,500',
+        '',
+        'Magic Color keeps document natural',
+        'and does not force black and white.',
+        'Crop handles are shown directly above.'
+      ];
+
+      let y = -180;
+      lines.forEach(line => {
+        ctx.fillText(line, -190, y);
+        y += 54;
+      });
+      ctx.restore();
+
+      const demoImage = new Image();
+      demoImage.onload = () => loadImageToCanvas(demoImage);
+      demoImage.src = tempCanvas.toDataURL('image/png');
+    });
+
+    function waitForOpenCV() {
+      let attempts = 0;
+      const timer = setInterval(() => {
+        attempts++;
+        if (typeof cv !== 'undefined' && cv.getBuildInformation) {
+          cvReady = true;
+          clearInterval(timer);
+          setStatus('OpenCV loaded successfully.', 'text-green-500');
+        } else if (attempts > 120) {
+          clearInterval(timer);
+          setStatus('OpenCV failed to load. Manual crop still works.', 'text-red-500');
+        }
+      }, 500);
+    }
+
+    waitForOpenCV();
+  </script>
+</body>
+</html>

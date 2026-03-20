@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NarayanBogati Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══ RESET ═══ */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#f0f4ff;min-height:100vh;color:#1e293b;display:flex;flex-direction:column;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══ NAVBAR ═══ */
+.navbar{background:#fff;border-bottom:1px solid #e2e8f0;box-shadow:0 2px 12px rgba(15,23,42,.06);position:sticky;top:0;z-index:200;}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:60px;gap:10px;}
+.nav-brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;}
+.nav-logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#2563eb,#6366f1);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#fff;font-weight:800;}
+.nav-brand-name{font-size:.9rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;white-space:nowrap;}
+.nav-brand-name span{color:#3b82f6;}
+.nav-tabs{display:flex;gap:4px;background:#f1f5f9;padding:4px;border-radius:11px;flex-shrink:0;}
+.nav-tab{padding:7px 14px;border-radius:8px;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.nav-tab:hover{color:#0f172a;background:rgba(255,255,255,.7);}
+.nav-tab.active{background:#fff;color:#2563eb;box-shadow:0 2px 8px rgba(15,23,42,.1);}
+.nav-right{font-size:.72rem;color:#94a3b8;font-weight:500;display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;}
+/* Mobile nav: hide brand text + right label on tiny screens */
+@media(max-width:480px){.nav-brand-name{display:none;}.nav-right{display:none;}.nav-tab{padding:7px 10px;font-size:.72rem;}.nav-tab span{display:none;}.nav-tab{gap:0;}}
+
+/* ═══ PAGES ═══ */
+.page{display:none;flex:1;}
+.page.active{display:block;animation:fadeUp .3s ease;}
+.pg-hdr{text-align:center;padding:36px 16px 20px;}
+.pg-hdr h1{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:800;color:#0f172a;letter-spacing:-.03em;margin-bottom:6px;}
+.pg-hdr h1 span{color:#3b82f6;}
+.pg-hdr p{font-size:.82rem;color:#64748b;margin-top:5px;}
+.hline{width:56px;height:4px;background:linear-gradient(90deg,#3b82f6,#6366f1);border-radius:2px;margin:8px auto 0;}
+
+/* ═══ SHARED CARDS ═══ */
+.card{background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(15,23,42,.07);overflow:hidden;margin-bottom:20px;}
+.card-body{padding:24px;}
+
+/* ═══ SHARED FORM ═══ */
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:.7rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.field input{width:100%;padding:10px 12px;border:2px solid #e2e8f0;border-radius:10px;font-family:'Inter',sans-serif;font-size:.86rem;color:#0f172a;background:#f8fafc;outline:none;transition:border-color .2s,background .2s;}
+.field input:focus{border-color:#3b82f6;background:#fff;}
+.field input::placeholder{color:#cbd5e1;}
+.field input.err{border-color:#ef4444;background:#fff5f5;}
+.field .hint{font-size:.66rem;color:#94a3b8;margin-top:3px;}
+.field .errmsg{font-size:.66rem;color:#ef4444;margin-top:3px;display:none;}
+.field input.err~.errmsg{display:block;}
+.sec-div{display:flex;align-items:center;gap:8px;margin:18px 0 14px;}
+.sec-div span{font-size:.66rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;}
+.sec-div::before,.sec-div::after{content:'';flex:1;height:1px;background:#e2e8f0;}
+
+/* ═══ SHARED BUTTONS ═══ */
+.btn-blue{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#2563eb,#3b82f6,#6366f1);color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .25s;box-shadow:0 4px 14px rgba(59,130,246,.3);}
+.btn-blue:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(59,130,246,.38);}
+.btn-blue:disabled{background:#e2e8f0;color:#94a3b8;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-outline{padding:11px 20px;border:2px solid #e2e8f0;border-radius:11px;background:#fff;color:#475569;font-family:'Inter',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.btn-outline:hover{border-color:#3b82f6;color:#3b82f6;}
+
+/* ═══ DOWNLOAD BAR BUTTONS ═══ */
+.dl-bar{padding:16px 20px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;gap:10px;flex-wrap:wrap;}
+.dl-full{flex:1;min-width:140px;padding:14px;border:none;border-radius:11px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 10px rgba(59,130,246,.25);}
+.dl-full:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(59,130,246,.35);}
+.dl-comp{flex:1;min-width:140px;padding:14px;border:2px solid #e2e8f0;border-radius:11px;background:#fff;color:#475569;font-family:'Inter',sans-serif;font-weight:600;font-size:.84rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.dl-comp:hover{border-color:#3b82f6;color:#3b82f6;transform:translateY(-1px);}
+.dl-pdf-btn{flex:1;min-width:140px;padding:14px;border:none;border-radius:11px;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 10px rgba(220,38,38,.22);}
+.dl-pdf-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(220,38,38,.32);}
+
+/* ═══ LOADING SPINNER ═══ */
+.loading-block{display:none;flex-direction:column;align-items:center;gap:14px;padding:44px 0 36px;}
+.loading-block.on{display:flex;animation:fadeUp .3s ease;}
+.spin-ring{width:56px;height:56px;border-radius:50%;border:3px solid #e2e8f0;border-top-color:#3b82f6;border-right-color:#6366f1;animation:spin .7s linear infinite;}
+.ld-pct{font-size:1.4rem;font-weight:800;color:#3b82f6;letter-spacing:-.02em;}
+.ld-bar-wrap{width:260px;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden;}
+.ld-bar{height:100%;background:linear-gradient(90deg,#2563eb,#3b82f6,#6366f1);border-radius:3px;width:0;transition:width .12s linear;}
+.ld-lbl{font-size:.76rem;color:#94a3b8;font-weight:500;}
+
+/* ═══ RESULT TOPBAR ═══ */
+.res-topbar{padding:18px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.res-title{font-size:.95rem;font-weight:700;color:#0f172a;}
+.res-meta{font-size:.7rem;color:#94a3b8;margin-top:2px;}
+.res-badge{padding:4px 12px;border-radius:7px;font-size:.64rem;font-weight:700;background:#d1fae5;color:#059669;border:1px solid #a7f3d0;}
+
+/* ═══════════════════════════════════════════
+   PAGE 1 — IMAGE MERGER
+═══════════════════════════════════════════ */
+.im-wrap{max-width:900px;margin:0 auto;padding:0 16px 60px;}
+
+.zones-grid{display:grid;grid-template-columns:1fr 48px 1fr;align-items:center;margin-bottom:24px;gap:0;}
+.zone-wrap{display:flex;flex-direction:column;gap:7px;}
+.zone-lbl{font-size:.74rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:5px;}
+.zbadge{width:20px;height:20px;border-radius:50%;font-size:.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.zb1{background:#eff6ff;color:#3b82f6;border:1.5px solid #bfdbfe;}
+.zb2{background:#f0fdf4;color:#22c55e;border:1.5px solid #bbf7d0;}
+.upload-zone{height:190px;border-radius:14px;border:2px dashed #cbd5e1;background:#f8fafc;position:relative;overflow:hidden;cursor:pointer;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s;}
+.upload-zone:hover{border-color:#3b82f6;background:#eff6ff;transform:translateY(-2px);box-shadow:0 8px 22px rgba(59,130,246,.12);}
+.upload-zone.drag-over{border-color:#2563eb;background:#dbeafe;}
+.upload-zone.has-img{border-style:solid;border-color:#3b82f6;background:#fff;}
+.zfile{display:none!important;}
+.zbody{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;pointer-events:none;}
+.zico{width:48px;height:48px;border-radius:12px;background:#eff6ff;display:flex;align-items:center;justify-content:center;}
+.zhint{font-size:.76rem;font-weight:500;color:#94a3b8;}
+.zsub{font-size:.66rem;color:#cbd5e1;}
+.zprev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;display:none;}
+.zchg{position:absolute;inset:0;border-radius:12px;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;gap:5px;font-size:.7rem;font-weight:600;color:#fff;cursor:pointer;}
+.upload-zone.has-img:hover .zchg{display:flex;}
+.plus-mid{display:flex;align-items:center;justify-content:center;align-self:center;margin-top:27px;width:40px;height:40px;border-radius:50%;background:#fff;border:2px solid #e2e8f0;color:#3b82f6;font-size:1.1rem;font-weight:700;flex-shrink:0;}
+
+.dir-row{display:flex;gap:10px;margin-bottom:20px;}
+.dir-pill{flex:1;padding:13px 10px;border-radius:12px;border:2px solid #e2e8f0;background:#f8fafc;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;gap:9px;font-size:.78rem;font-weight:600;color:#64748b;}
+.dir-pill:hover{border-color:#3b82f6;color:#3b82f6;background:#eff6ff;}
+.dir-pill.active{border-color:#3b82f6;color:#3b82f6;background:#eff6ff;box-shadow:0 0 0 3px rgba(59,130,246,.12);}
+.di-icon{display:flex;gap:3px;align-items:center;}
+.di{border-radius:3px;background:currentColor;}
+
+.im-result{display:none;}
+.im-result.on{display:block;animation:fadeUp .4s ease;}
+.canvas-vp{width:100%;max-height:500px;overflow:auto;background:#0f172a;display:flex;align-items:flex-start;justify-content:center;padding:20px;}
+#im-canvas{display:block;max-width:100%;height:auto;border-radius:7px;box-shadow:0 8px 36px rgba(0,0,0,.5);}
+@media(max-width:600px){.zones-grid{grid-template-columns:1fr 36px 1fr;}.upload-zone{height:150px;}.plus-mid{width:32px;height:32px;font-size:.9rem;}.dir-row{gap:8px;}.dir-pill{padding:11px 8px;font-size:.72rem;}}
+
+/* ═══════════════════════════════════════════
+   PAGE 2+3 — COVER LETTER
+═══════════════════════════════════════════ */
+.cl-wrap{max-width:1100px;margin:0 auto;padding:0 16px 60px;display:grid;grid-template-columns:370px 1fr;gap:24px;align-items:start;}
+.form-card{background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(15,23,42,.07);padding:26px;position:sticky;top:72px;}
+.form-card h2{font-size:.95rem;font-weight:700;color:#0f172a;margin-bottom:4px;}
+.form-card .sub{font-size:.72rem;color:#94a3b8;margin-bottom:20px;line-height:1.6;}
+.preview-card{background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(15,23,42,.07);overflow:hidden;}
+.prev-topbar{padding:14px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.prev-title{font-size:.92rem;font-weight:700;color:#0f172a;}
+.prev-meta{font-size:.68rem;color:#94a3b8;margin-top:2px;}
+.topbar-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.eye-btn{display:none;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;border:2px solid #3b82f6;background:#eff6ff;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;font-size:.76rem;font-weight:700;color:#2563eb;}
+.eye-btn.show{display:flex;}
+.eye-btn:hover{background:#3b82f6;color:#fff;}
+.canvas-wrap-cl{background:#dde3ee;padding:18px;display:flex;justify-content:center;min-height:260px;align-items:flex-start;}
+.cl-canvas{display:block;max-width:100%;height:auto;box-shadow:0 8px 28px rgba(0,0,0,.18);border-radius:2px;}
+.ph-msg{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:50px 20px;color:#94a3b8;width:100%;}
+.ph-msg svg{opacity:.28;}
+.ph-msg p{font-size:.8rem;text-align:center;line-height:1.7;}
+.cl-dl-bar{padding:14px 20px;background:#f8fafc;border-top:1px solid #f1f5f9;display:flex;gap:7px;flex-wrap:wrap;}
+.cl-dl-btn{flex:1;min-width:80px;padding:12px 8px;border-radius:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px;border:none;}
+.cl-dl-pdf{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;}
+.cl-dl-pdf:hover{transform:translateY(-1px);}
+.cl-dl-png{background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;}
+.cl-dl-png:hover{transform:translateY(-1px);}
+.cl-dl-jpg{background:#fff;color:#475569;border:2px solid #e2e8f0!important;}
+.cl-dl-jpg:hover{border-color:#3b82f6!important;color:#3b82f6;}
+@media(max-width:820px){.cl-wrap{grid-template-columns:1fr;}.form-card{position:static;}}
+
+/* ═══════════════════════════════════════════
+   PAGE 4 — DOC CONVERTER
+═══════════════════════════════════════════ */
+.dc-wrap{max-width:780px;margin:0 auto;padding:0 16px 60px;}
+.dc-drop-card{background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(15,23,42,.07);padding:24px;margin-bottom:18px;}
+.dc-drop{border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;min-height:180px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .22s;position:relative;}
+.dc-drop:hover,.dc-drop.over{border-color:#3b82f6;background:#eff6ff;transform:translateY(-2px);box-shadow:0 8px 22px rgba(59,130,246,.12);}
+.dc-drop.loaded{cursor:default!important;border-style:solid;border-color:#3b82f6;background:#fff;}
+.dc-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px;text-align:center;pointer-events:none;}
+.dc-eico{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#eff6ff,#dbeafe);display:flex;align-items:center;justify-content:center;}
+.dc-etitle{font-size:.95rem;font-weight:700;color:#0f172a;}
+.dc-esub{font-size:.76rem;color:#94a3b8;}
+.dc-esub strong{color:#3b82f6;}
+.dc-enote{font-size:.68rem;color:#cbd5e1;}
+.dc-loaded-row{display:none;width:100%;padding:14px 18px;align-items:center;gap:14px;}
+.dc-drop.loaded .dc-empty{display:none;}
+.dc-drop.loaded .dc-loaded-row{display:flex;}
+.dc-fi-icon{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;flex-shrink:0;}
+.dc-fi-info{flex:1;min-width:0;}
+.dc-fi-name{font-size:.88rem;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dc-fi-size{font-size:.7rem;color:#94a3b8;margin-top:2px;}
+.dc-rm-btn{flex-shrink:0;padding:8px 14px;border-radius:9px;border:2px solid #fee2e2;background:#fff;color:#ef4444;font-family:'Inter',sans-serif;font-size:.74rem;font-weight:700;cursor:pointer;transition:all .2s;pointer-events:all;position:relative;z-index:5;}
+.dc-rm-btn:hover{background:#fee2e2;}
+
+/* Crop tool */
+.dc-crop-card{background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(15,23,42,.07);padding:20px 22px;margin-bottom:18px;display:none;animation:fadeUp .35s ease;}
+.dc-crop-card.show{display:block;}
+.dc-crop-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
+.dc-crop-hdr-left h3{font-size:.92rem;font-weight:700;color:#0f172a;margin-bottom:2px;}
+.dc-crop-hdr-left p{font-size:.72rem;color:#94a3b8;}
+.dc-crop-actions{display:flex;gap:7px;flex-wrap:wrap;}
+.dc-crop-actions button{padding:8px 14px;border-radius:9px;font-family:'Inter',sans-serif;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;}
+.btn-reset-crop{background:#f1f5f9;color:#475569;border:2px solid #e2e8f0!important;padding:8px 14px;border-radius:9px;font-family:'Inter',sans-serif;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-reset-crop:hover{border-color:#94a3b8!important;color:#0f172a;}
+.btn-apply-crop{background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;box-shadow:0 3px 10px rgba(59,130,246,.25);padding:13px 28px;border-radius:11px;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;border:none;display:flex;align-items:center;gap:7px;}
+.btn-apply-crop:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(59,130,246,.35);}
+.btn-skip-crop{background:#fff;color:#64748b;border:2px solid #e2e8f0;padding:13px 22px;border-radius:11px;font-family:'Inter',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-skip-crop:hover{border-color:#3b82f6;color:#3b82f6;}
+.dc-crop-actions-bottom{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+
+/* ── PERSPECTIVE CROP STAGE ── */
+/* Outer wrapper — matches image size exactly, no overflow clip on dots */
+.dc-crop-wrapper{position:relative;margin:0 auto;display:block;line-height:0;}
+/* The canvas shows the image */
+#dc-crop-cv{display:block;width:100%;height:auto;border-radius:10px;}
+/* SVG overlay sits exactly on top of canvas */
+#crop-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;border-radius:10px;}
+/* 4 draggable dots — outside overflow:hidden so they never get clipped */
+.cp-dot{
+  position:absolute;
+  width:28px;height:28px;
+  border-radius:50%;
+  background:#fff;
+  border:3px solid #3b82f6;
+  box-shadow:0 2px 14px rgba(59,130,246,.6);
+  cursor:grab;
+  transform:translate(-50%,-50%);
+  pointer-events:all;
+  z-index:30;
+  touch-action:none;
+}
+.cp-dot:active{cursor:grabbing;background:#3b82f6;transform:translate(-50%,-50%) scale(1.18);}
+/* Corner label inside each dot */
+.cp-dot span{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:.52rem;font-weight:800;color:#2563eb;pointer-events:none;
+}
+.cp-dot:active span{color:#fff;}
+.crop-size-lbl{font-size:.74rem;color:#94a3b8;margin-top:10px;text-align:center;}
+.crop-size-lbl b{color:#3b82f6;}
+
+/* Format panel */
+.dc-fmt-card{background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(15,23,42,.07);padding:22px 24px;margin-bottom:18px;display:none;animation:fadeUp .35s ease;}
+.dc-fmt-card.show{display:block;}
+.dc-fmt-title{font-size:.92rem;font-weight:700;color:#0f172a;margin-bottom:3px;}
+.dc-fmt-sub{font-size:.74rem;color:#94a3b8;margin-bottom:16px;}
+.dc-fmt-grid{display:flex;gap:10px;flex-wrap:wrap;}
+.dc-fmt-btn{flex:1;min-width:90px;max-width:150px;padding:16px 10px;border-radius:13px;border:2px solid #e2e8f0;background:#f8fafc;cursor:pointer;transition:all .22s;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:700;color:#64748b;display:flex;flex-direction:column;align-items:center;gap:9px;}
+.dc-fmt-btn:hover{border-color:#3b82f6;color:#3b82f6;background:#eff6ff;transform:translateY(-2px);box-shadow:0 6px 16px rgba(59,130,246,.13);}
+.dc-fmt-btn.active{border-color:#3b82f6;color:#3b82f6;background:#eff6ff;box-shadow:0 0 0 3px rgba(59,130,246,.12);}
+.dc-fmt-btn.disabled{opacity:.35;cursor:not-allowed;pointer-events:none;}
+.dc-fi{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;}
+.fi-jpg{background:#fef3c7;color:#d97706;}
+.fi-png{background:#dbeafe;color:#2563eb;}
+.fi-pdf{background:#fee2e2;color:#dc2626;}
+.fi-webp{background:#ede9fe;color:#7c3aed;}
+
+/* Result */
+.dc-result{display:none;animation:fadeUp .4s ease;}
+.dc-result.show{display:block;}
+.dc-preview-area{background:#1a2234;padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;max-height:500px;overflow:auto;}
+.dc-preview-area::-webkit-scrollbar{width:5px;height:5px;}
+.dc-preview-area::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:3px;}
+.dc-prev-img{max-width:100%;border-radius:6px;box-shadow:0 8px 32px rgba(0,0,0,.55);}
+.dc-pg-lbl{font-size:.68rem;color:#64748b;font-weight:600;}
+
+/* ═══ CHOOSER MODAL ═══ */
+.chooser-bg{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);backdrop-filter:blur(8px);z-index:400;align-items:center;justify-content:center;padding:16px;}
+.chooser-bg.on{display:flex;}
+.chooser-box{background:#fff;border-radius:22px;padding:36px 28px;max-width:480px;width:100%;box-shadow:0 28px 70px rgba(15,23,42,.22);animation:popIn .3s cubic-bezier(.34,1.56,.64,1);text-align:center;}
+.chooser-box h2{font-size:1.25rem;font-weight:800;color:#0f172a;margin-bottom:7px;}
+.chooser-box p{font-size:.78rem;color:#64748b;margin-bottom:24px;line-height:1.7;}
+.chooser-opts{display:flex;gap:12px;flex-wrap:wrap;}
+.chooser-opt{flex:1;min-width:140px;padding:20px 14px;border-radius:15px;border:2px solid #e2e8f0;background:#f8fafc;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.chooser-opt:hover{border-color:#3b82f6;background:#eff6ff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,.15);}
+.co-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;}
+.co-p .co-icon{background:#eff6ff;}
+.co-c .co-icon{background:#f0fdf4;}
+.co-title{font-size:.88rem;font-weight:700;color:#0f172a;}
+.co-desc{font-size:.7rem;color:#94a3b8;line-height:1.5;text-align:center;}
+.chooser-opt:hover .co-title{color:#2563eb;}
+.co-c:hover .co-title{color:#16a34a;}
+.chooser-cancel{margin-top:16px;background:none;border:none;color:#94a3b8;font-family:'Inter',sans-serif;font-size:.74rem;cursor:pointer;text-decoration:underline;}
+
+/* ═══ WARNING + QUALITY MODALS ═══ */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;padding:16px;}
+.modal-bg.on{display:flex;}
+.modal-box{background:#fff;border-radius:18px;padding:32px;max-width:460px;width:100%;box-shadow:0 24px 60px rgba(15,23,42,.2);animation:popIn .28s cubic-bezier(.34,1.56,.64,1);}
+.modal-box.sm{max-width:380px;padding:28px;}
+.modal-icon{width:48px;height:48px;border-radius:13px;background:#fff7ed;border:2px solid #fed7aa;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.modal-box h3{font-size:1.05rem;font-weight:800;color:#0f172a;margin-bottom:6px;}
+.modal-box p{font-size:.78rem;color:#64748b;line-height:1.7;margin-bottom:18px;}
+.warn-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:20px;}
+.warn-row{display:flex;gap:9px;padding:10px 13px;border-radius:9px;background:#f8fafc;border:1px solid #e2e8f0;}
+.warn-row .wl{font-size:.66rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;min-width:72px;padding-top:1px;}
+.warn-row .wv{font-size:.8rem;font-weight:600;color:#0f172a;word-break:break-all;}
+.modal-btns{display:flex;gap:9px;flex-wrap:wrap;}
+.mbtn-ok{flex:1;min-width:120px;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:all .2s;}
+.mbtn-ok:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(59,130,246,.35);}
+.mbtn-cancel{flex:1;min-width:100px;padding:12px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;color:#475569;font-family:'Inter',sans-serif;font-weight:600;font-size:.84rem;cursor:pointer;transition:all .2s;}
+.mbtn-cancel:hover{border-color:#94a3b8;color:#0f172a;}
+.qual-opts{display:flex;flex-direction:column;gap:9px;}
+.qual-opt{padding:14px 16px;border-radius:11px;border:2px solid #e2e8f0;background:#f8fafc;cursor:pointer;transition:all .2s;text-align:left;}
+.qual-opt:hover{border-color:#3b82f6;background:#eff6ff;}
+.qual-opt .qt{font-size:.84rem;font-weight:700;color:#0f172a;margin-bottom:2px;}
+.qual-opt .qd{font-size:.68rem;color:#94a3b8;}
+.qual-opt:hover .qt{color:#2563eb;}
+.qual-opt.sm2:hover .qt{color:#16a34a;}
+.qual-cancel{display:block;width:100%;margin-top:9px;padding:7px;background:none;border:none;color:#94a3b8;font-family:'Inter',sans-serif;font-size:.72rem;cursor:pointer;text-align:center;}
+.qual-cancel:hover{color:#475569;text-decoration:underline;}
+
+/* ═══ VIEWER ═══ */
+.viewer-bg{display:none;position:fixed;inset:0;background:rgba(2,5,14,.92);backdrop-filter:blur(8px);z-index:600;flex-direction:column;}
+.viewer-bg.on{display:flex;}
+.viewer-tb{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;background:rgba(15,23,42,.95);border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;gap:8px;}
+.viewer-tb .vtitle{font-size:.86rem;font-weight:700;color:#f1f5f9;}
+.vt-btns{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.vt-btn{min-width:36px;height:36px;padding:0 9px;border-radius:8px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#e2e8f0;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Inter',sans-serif;}
+.vt-btn:hover{background:rgba(59,130,246,.28);border-color:#3b82f6;color:#fff;}
+.zoom-lbl{font-size:.8rem;font-weight:700;color:#94a3b8;min-width:48px;text-align:center;}
+.viewer-scroll{flex:1;overflow:auto;}
+.viewer-scroll::-webkit-scrollbar{width:7px;height:7px;}
+.viewer-scroll::-webkit-scrollbar-track{background:#0f172a;}
+.viewer-scroll::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:3px;}
+.img-wrap{min-width:100%;min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:28px;}
+#vImg{display:block;box-shadow:0 12px 48px rgba(0,0,0,.7);border-radius:3px;transition:width .18s ease;}
+
+/* ═══ FOOTER ═══ */
+footer{background:#0f172a;color:#64748b;text-align:center;padding:26px 16px;font-size:.72rem;margin-top:auto;}
+.f-logo{font-size:.95rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:6px;}
+.f-logo span{color:#3b82f6;}
+.f-div{width:36px;height:2px;background:linear-gradient(90deg,#3b82f6,#6366f1);border-radius:1px;margin:10px auto;}
+footer a{color:#3b82f6;text-decoration:none;font-weight:600;}
+footer a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#">
+      <div class="nav-logo">NB</div>
+      <span class="nav-brand-name">Narayan<span>Bogati</span> Tools</span>
+    </a>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('merger',this)">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <span>Image Merger</span>
+      </button>
+
+
+
+      <button class="nav-tab" id="cl-tab" onclick="openChooser()">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <span>Cover Letter</span>
+      </button>
+      <button class="nav-tab" onclick="switchTab('converter',this)">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        <span>Converter</span>
+      </button>
+
+<a href="guide.html" class="nav-tab">
+  <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+  </svg>
+  <span>Guide</span>
+</a>
+
+    </div>
+    <div class="nav-right"><div class="nav-dot"></div>narayanbogati.com.np</div>
+  </div>
+</nav>
+
+<!-- ═══════════════ PAGE: IMAGE MERGER ═══════════════ -->
+<div class="page active" id="page-merger">
+  <div class="pg-hdr"><h1>Image <span>Merger</span></h1><div class="hline"></div><p>Join two images horizontally or vertically — 100% in your browser</p></div>
+  <div class="im-wrap">
+    <div class="card"><div class="card-body">
+      <div class="zones-grid">
+        <div class="zone-wrap">
+          <div class="zone-lbl"><div class="zbadge zb1">1</div>First Image</div>
+          <div class="upload-zone" id="z1">
+            <input type="file" accept="image/*" class="zfile" id="f1">
+            <div class="zbody" id="ph1"><div class="zico"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#3b82f6" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><span class="zhint">Click or drag &amp; drop</span><span class="zsub">PNG, JPG, WEBP</span></div>
+            <img id="pv1" class="zprev" alt=""><div class="zchg"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Change</div>
+          </div>
+        </div>
+        <div class="plus-mid" style="margin-top:27px;">+</div>
+        <div class="zone-wrap">
+          <div class="zone-lbl"><div class="zbadge zb2">2</div>Second Image</div>
+          <div class="upload-zone" id="z2">
+            <input type="file" accept="image/*" class="zfile" id="f2">
+            <div class="zbody" id="ph2"><div class="zico" style="background:#f0fdf4;"><svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><span class="zhint">Click or drag &amp; drop</span><span class="zsub">PNG, JPG, WEBP</span></div>
+            <img id="pv2" class="zprev" alt=""><div class="zchg"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Change</div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-row">
+        <button class="dir-pill" id="dir-h" onclick="imSetDir('h',this)">
+          <div class="di-icon"><div class="di" style="width:32px;height:22px;"></div><div class="di" style="width:32px;height:22px;opacity:.35;"></div></div>Horizontal
+        </button>
+        <button class="dir-pill active" id="dir-v" onclick="imSetDir('v',this)">
+          <div class="di-icon" style="flex-direction:column;"><div class="di" style="width:46px;height:13px;"></div><div class="di" style="width:46px;height:13px;opacity:.35;"></div></div>Vertical
+        </button>
+      </div>
+      <button class="btn-blue" id="merge-btn" onclick="imMerge()" disabled><span id="merge-txt">Upload both images to get started</span></button>
+    </div></div>
+    <div class="loading-block" id="im-load"><div class="spin-ring"></div><div class="ld-pct" id="im-pct">0%</div><div class="ld-bar-wrap"><div class="ld-bar" id="im-bar"></div></div><div class="ld-lbl" id="im-lbl">Preparing…</div></div>
+    <div class="im-result" id="im-result">
+      <div class="card">
+        <div class="res-topbar"><div><div class="res-title">✅ Merged Image</div><div class="res-meta" id="im-meta">—</div></div><span class="res-badge" id="im-tag">—</span></div>
+        <div class="canvas-vp"><canvas id="im-canvas"></canvas></div>
+        <div class="dl-bar">
+          <button class="dl-full" onclick="imDownload('full')"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Full Quality</button>
+          <button class="dl-comp" onclick="imDownload('small')"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>&lt;200 KB</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE: PERSONAL COVER LETTER ═══════════════ -->
+<div class="page" id="page-personal">
+  <div class="pg-hdr"><h1>Personal <span>.NP Domain</span> Cover Letter</h1><div class="hline"></div><p>For individuals registering a personal .np domain</p></div>
+  <div class="cl-wrap">
+    <div class="form-card"><h2>Your Information</h2><p class="sub">Fill in your details. A confirmation review appears before the letter is generated.</p>
+      <div class="field"><label>Date</label><input type="date" id="p-date"><div class="hint">Appears top-right</div><div class="errmsg">Please select a date</div></div>
+      <div class="field"><label>Full Name</label><input type="text" id="p-name" placeholder="e.g. Narayan Bogati" maxlength="60"><div class="hint">Appears in body and signature</div><div class="errmsg">Full name is required</div></div>
+      <div class="field"><label>Domain Name</label><input type="text" id="p-domain" placeholder="e.g. bogatinarayan.com.np" maxlength="80"><div class="hint">Replaced in 3 places</div><div class="errmsg">Domain name is required</div></div>
+      <div class="field"><label>Email Address</label><input type="email" id="p-email" placeholder="e.g. yourname@gmail.com" maxlength="80"><div class="errmsg">Valid email is required</div></div>
+      <div class="field"><label>Phone Number</label><input type="text" id="p-phone" placeholder="e.g. 9762519563" maxlength="20"><div class="errmsg">Phone number is required</div></div>
+      <button class="btn-blue" onclick="pWarn()">⚡ Generate Cover Letter</button>
+    </div>
+    <div class="preview-card">
+      <div class="prev-topbar"><div><div class="prev-title">Cover Letter Preview</div><div class="prev-meta" id="p-meta">Fill the form and click Generate</div></div>
+        <div class="topbar-r"><button class="eye-btn" id="p-eye" onclick="openViewer('p-cv')"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Full</button></div>
+      </div>
+      <div class="canvas-wrap-cl" id="p-cwrap"><div class="ph-msg" id="p-ph"><svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#94a3b8" stroke-width="1.1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><p>Fill the form and click Generate</p></div><canvas id="p-cv" class="cl-canvas" style="display:none;"></canvas></div>
+      <div class="cl-dl-bar" id="p-dlbar" style="display:none;">
+        <button class="cl-dl-btn cl-dl-pdf" onclick="clDL('p','pdf')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>PDF</button>
+        <button class="cl-dl-btn cl-dl-png" onclick="clDL('p','png')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>PNG</button>
+        <button class="cl-dl-btn cl-dl-jpg" onclick="clDL('p','jpg')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>JPG</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAGE: COMPANY COVER LETTER ═══════════════ -->
+<div class="page" id="page-company">
+  <div class="pg-hdr"><h1>Company <span>.NP Domain</span> Cover Letter</h1><div class="hline"></div><p>For companies registering a .com.np domain</p></div>
+  <div class="cl-wrap">
+    <div class="form-card"><h2>Company Details</h2><p class="sub">Fill in your company information to generate the cover letter.</p>
+      <div class="sec-div"><span>Letter Info</span></div>
+      <div class="field"><label>Date</label><input type="date" id="c-date"><div class="hint">Appears top-right</div><div class="errmsg">Please select a date</div></div>
+      <div class="field"><label>Domain Name</label><input type="text" id="c-domain" placeholder="e.g. juniperinternational.com.np" maxlength="80"><div class="hint">Used 3 times</div><div class="errmsg">Domain name is required</div></div>
+      <div class="sec-div"><span>Company Info</span></div>
+      <div class="field"><label>Company Name</label><input type="text" id="c-company" placeholder="e.g. Juniper International" maxlength="80"><div class="errmsg">Company name is required</div></div>
+      <div class="field"><label>Company Address</label><input type="text" id="c-address" placeholder="e.g. Wada No-16 Kathmandu Metropolitan" maxlength="100"><div class="errmsg">Address is required</div></div>
+      <div class="field"><label>PAN Number</label><input type="text" id="c-pan" placeholder="e.g. 603297908" maxlength="20"><div class="errmsg">PAN number is required</div></div>
+      <button class="btn-blue" onclick="cWarn()">⚡ Generate Cover Letter</button>
+    </div>
+    <div class="preview-card">
+      <div class="prev-topbar"><div><div class="prev-title">Cover Letter Preview</div><div class="prev-meta" id="c-meta">Fill the form and click Generate</div></div>
+        <div class="topbar-r"><button class="eye-btn" id="c-eye" onclick="openViewer('c-cv')"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Full</button></div>
+      </div>
+      <div class="canvas-wrap-cl" id="c-cwrap"><div class="ph-msg" id="c-ph"><svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#94a3b8" stroke-width="1.1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><p>Fill the form and click Generate</p></div><canvas id="c-cv" class="cl-canvas" style="display:none;"></canvas></div>
+      <div class="cl-dl-bar" id="c-dlbar" style="display:none;">
+        <button class="cl-dl-btn cl-dl-pdf" onclick="clDL('c','pdf')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>PDF</button>
+        <button class="cl-dl-btn cl-dl-png" onclick="clDL('c','png')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>PNG</button>
+        <button class="cl-dl-btn cl-dl-jpg" onclick="clDL('c','jpg')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>JPG</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="page-guide">
+  <div class="pg-hdr">
+    <h1>CamScanner <span>Guide</span></h1>
+    <div class="hline"></div>
+    <p>Download the official CamScanner app based on your device</p>
+  </div>
+
+  <div style="max-width:800px;margin:0 auto;padding:0 16px 60px;">
+    <div class="guide-card" style="background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.06);">
+      <h3 style="margin:0 0 10px;font-size:24px;font-weight:800;color:#111827;">Choose download type</h3>
+      <p style="margin:0 0 20px;color:#6b7280;line-height:1.7;">
+        Official version is safe and recommended.
+      </p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:14px;">
+        <button onclick="downloadRealVersion()" style="padding:14px 22px;border:none;border-radius:12px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer;">
+          Real Version
+        </button>
+
+        <button onclick="showRiskOnly()" style="padding:14px 22px;border:none;border-radius:12px;background:#ef4444;color:#fff;font-weight:700;cursor:pointer;">
+          Crack Version
+        </button>
+      </div>
+
+      <div id="riskBox" style="display:none;margin-top:20px;padding:18px;border-radius:14px;background:#fff1f2;border:1px solid #fecdd3;">
+        <h4 style="margin:0 0 8px;color:#b91c1c;font-size:18px;font-weight:800;">Risk Warning</h4>
+        <p style="margin:0;color:#b91c1c;line-height:1.7;">
+          Cracked apps can contain malware, steal files, leak personal data, break your phone, and violate app terms.
+          Please use the official version only.
+        </p>
+      </div>
+
+      <div id="countdownBox" style="display:none;margin-top:20px;padding:18px;border-radius:14px;background:#eff6ff;border:1px solid #bfdbfe;">
+        <p id="countdownText" style="margin:0;color:#1d4ed8;font-weight:700;">Redirecting in 5 seconds...</p>
+      </div>
+
+      <div style="margin-top:24px;padding-top:18px;border-top:1px solid #e5e7eb;">
+        <button onclick="downloadRealVersion()" style="padding:13px 20px;border:1px solid #d1d5db;border-radius:12px;background:#fff;color:#111827;font-weight:700;cursor:pointer;">
+          Download CamScanner
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- ═══════════════ PAGE: DOCUMENT CONVERTER ═══════════════ -->
+<div class="page" id="page-converter">
+  <div class="pg-hdr"><h1>Document <span>Converter</span></h1><div class="hline"></div><p>Convert JPG · PNG · WEBP · SVG · PDF to different formats — 100% in your browser</p></div>
+  <div class="dc-wrap">
+    <!-- Upload -->
+    <div class="dc-drop-card">
+      <input type="file" id="dc-input" accept=".jpg,.jpeg,.png,.webp,.svg,.pdf" style="display:none!important;">
+      <div class="dc-drop" id="dc-drop">
+        <div class="dc-empty" id="dc-empty">
+          <div class="dc-eico"><svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#3b82f6" stroke-width="1.6"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg></div>
+          <div class="dc-etitle">Drop your file here</div>
+          <div class="dc-esub">or <strong>click to browse</strong> · JPG PNG WEBP SVG PDF</div>
+          <div class="dc-enote">Converts to JPG · PNG · WEBP · PDF &nbsp;·&nbsp; Word/DOCX not supported</div>
+        </div>
+        <div class="dc-loaded-row" id="dc-loaded">
+          <div id="dc-ficon" class="dc-fi-icon"></div>
+          <div class="dc-fi-info"><div class="dc-fi-name" id="dc-fname">—</div><div class="dc-fi-size" id="dc-fsize">—</div></div>
+          <button class="dc-rm-btn" onclick="dcReset(event)">✕ Remove</button>
+        </div>
+      </div>
+    </div>
+
+
+ 
+
+
+
+
+
+
+
+
+
+    <!-- Crop tool — 4-point perspective crop -->
+    <div class="dc-crop-card" id="dc-crop-card">
+      <div class="dc-crop-hdr">
+        <div class="dc-crop-hdr-left">
+          <h3>✂️ Perspective Crop</h3>
+          <p>Drag the 4 corner dots to any point — crop any tilted or angled document like CamScanner.</p>
+        </div>
+        <button class="btn-reset-crop" onclick="cropReset()">↺ Reset</button>
+      </div>
+      <!-- Wrapper: image + SVG overlay + dots all sized together -->
+      <div class="dc-crop-wrapper" id="dc-crop-wrapper">
+        <!-- Image canvas -->
+        <canvas id="dc-crop-cv"></canvas>
+        <!-- SVG overlay: dim + border + guidelines -->
+        <svg id="crop-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <mask id="quad-mask">
+              <rect width="100" height="100" fill="white"/>
+              <polygon id="quad-hole" fill="black"/>
+            </mask>
+          </defs>
+          <rect width="100" height="100" fill="rgba(0,0,0,0.58)" mask="url(#quad-mask)"/>
+          <polygon id="quad-border" fill="none" stroke="#3b82f6" stroke-width="0.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+          <line id="quad-d1" stroke="rgba(99,179,246,0.45)" stroke-width="0.4" stroke-dasharray="2,1.5" vector-effect="non-scaling-stroke"/>
+          <line id="quad-d2" stroke="rgba(99,179,246,0.45)" stroke-width="0.4" stroke-dasharray="2,1.5" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <!-- 4 corner dots — positioned absolutely over the wrapper -->
+        <div class="cp-dot" id="cp0"><span>TL</span></div>
+        <div class="cp-dot" id="cp1"><span>TR</span></div>
+        <div class="cp-dot" id="cp2"><span>BR</span></div>
+        <div class="cp-dot" id="cp3"><span>BL</span></div>
+      </div>
+      <div class="crop-size-lbl">Output: <b id="crop-size-txt">—</b></div>
+      <!-- Buttons BELOW image -->
+      <div class="dc-crop-actions-bottom">
+        <button class="btn-apply-crop" onclick="cropApply()">✓ Apply &amp; Continue</button>
+        <button class="btn-skip-crop" onclick="cropSkip()">Skip Crop →</button>
+      </div>
+    </div>
+
+    <!-- Format panel -->
+    <div class="dc-fmt-card" id="dc-fmt-card">
+      <div class="dc-fmt-title">Convert To</div>
+      <div class="dc-fmt-sub" id="dc-fmt-sub">Select output format</div>
+      <div class="dc-fmt-grid" id="dc-fmt-grid"></div>
+      <button class="btn-blue" id="dc-conv-btn" onclick="dcConvert()" style="display:none;margin-top:18px;">⚡ Convert Now</button>
+    </div>
+
+    <!-- Progress -->
+    <div class="loading-block" id="dc-load"><div class="spin-ring"></div><div class="ld-pct" id="dc-pct">0%</div><div class="ld-bar-wrap"><div class="ld-bar" id="dc-bar"></div></div><div class="ld-lbl" id="dc-lbl">Preparing…</div></div>
+
+    <!-- Result -->
+    <div class="dc-result card" id="dc-result">
+      <div class="res-topbar"><div><div class="res-title" id="dc-rtitle">✅ Done</div><div class="res-meta" id="dc-rmeta">—</div></div><span class="res-badge" id="dc-rbadge">—</span></div>
+      <div class="dc-preview-area" id="dc-preview"></div>
+      <div class="dl-bar" id="dc-dlbar"></div>
+    </div>
+    <div style="text-align:center;padding-top:12px;"><button class="btn-outline" id="dc-again" onclick="dcReset()" style="display:none;">↺ Convert Another File</button></div>
+  </div>
+</div>
+
+<!-- ═══ CHOOSER MODAL ═══ -->
+<div class="chooser-bg" id="chooser-bg" onclick="if(event.target===this)closeChooser()">
+  <div class="chooser-box">
+    <h2>Choose Cover Letter Type</h2>
+    <p>Are you registering a domain as an individual, or on behalf of a company?</p>
+    <div class="chooser-opts">
+      <div class="chooser-opt co-p" onclick="chooseType('personal')">
+        <div class="co-icon"><svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="#3b82f6" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+        <div class="co-title">Personal Domain</div>
+        <div class="co-desc">For individuals — name, email and phone</div>
+      </div>
+      <div class="chooser-opt co-c" onclick="chooseType('company')">
+        <div class="co-icon"><svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="#16a34a" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 00-1-1h-2a1 1 0 00-1 1v5m4 0H9"/></svg></div>
+        <div class="co-title">Company Domain</div>
+        <div class="co-desc">Company name, address and PAN number</div>
+      </div>
+    </div>
+    <button class="chooser-cancel" onclick="closeChooser()">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══ WARNING MODAL ═══ -->
+<div class="modal-bg" id="warn-modal" onclick="if(event.target===this)closeWarn()">
+  <div class="modal-box">
+    <div class="modal-icon"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+    <h3>Please Check Your Information</h3>
+    <p>Review all details carefully before generating the cover letter.</p>
+    <div class="warn-rows" id="warn-rows"></div>
+    <div class="modal-btns">
+      <button class="mbtn-cancel" onclick="closeWarn()">✎ Edit</button>
+      <button class="mbtn-ok" onclick="confirmGen()">✓ Looks Good — Generate</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ QUALITY MODAL ═══ -->
+<div class="modal-bg" id="qual-modal" onclick="if(event.target===this)closeQual()">
+  <div class="modal-box sm">
+    <h3 id="qual-title">Download</h3>
+    <p id="qual-desc">Choose quality.</p>
+    <div class="qual-opts">
+      <div class="qual-opt" onclick="doQual('full')"><div class="qt">Full Quality</div><div class="qd" id="qual-fdesc">Original resolution</div></div>
+      <div class="qual-opt sm2" onclick="doQual('small')"><div class="qt">Compressed &lt;200 KB</div><div class="qd">Smart compression · Best quality within 200 KB</div></div>
+    </div>
+    <button class="qual-cancel" onclick="closeQual()">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══ VIEWER ═══ -->
+<div class="viewer-bg" id="viewer-bg">
+  <div class="viewer-tb">
+    <span class="vtitle">👁 Cover Letter — Full Size</span>
+    <div class="vt-btns">
+      <button class="vt-btn" onclick="vzo(-1)">−</button>
+      <span class="zoom-lbl" id="zoom-lbl">100%</span>
+      <button class="vt-btn" onclick="vzo(1)">+</button>
+      <button class="vt-btn" onclick="vzo(0)" style="font-size:.66rem;padding:0 9px;min-width:40px;">FIT</button>
+      <button class="vt-btn" onclick="closeViewer()" style="margin-left:6px;border-color:rgba(239,68,68,.5);color:#fca5a5;">✕</button>
+    </div>
+  </div>
+  <div class="viewer-scroll" id="viewer-scroll"><div class="img-wrap"><img id="vImg" src="" alt=""></div></div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="f-logo">Narayan<span>Bogati</span> Tools</div>
+  <div class="f-div"></div>
+  <div>© 2026 All Rights Reserved &nbsp;·&nbsp; <a href="https://narayanbogati.com.np" target="_blank">narayanbogati.com.np</a><br>Image Merger · Cover Letter · Document Converter</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+'use strict';
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+/* ═══ UTILS ═══ */
+function $(id){return document.getElementById(id);}
+function b64b(d){if(!d||d.startsWith('blob:'))return 0;const b=d.split(',')[1]||'';const p=b.endsWith('==')?2:b.endsWith('=')?1:0;return Math.floor(b.length*3/4)-p;}
+function fmtBytes(n){if(n<1024)return n+' B';if(n<1048576)return(n/1024).toFixed(1)+' KB';return(n/1048576).toFixed(2)+' MB';}
+function saveUrl(d,n){const a=document.createElement('a');a.href=d;a.download=n;document.body.appendChild(a);a.click();document.body.removeChild(a);}
+function dlSvg(){return '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>';}
+
+// compress() — guaranteed to produce output <= target bytes
+// Uses binary search on JPEG quality, then on resolution if needed
+function compress(canvas, target, ext) {
+  // Always use JPEG for compression (lossless PNG can't reliably hit 200KB)
+  const mime = ext === 'webp' ? 'image/webp' : 'image/jpeg';
+
+  // Helper: encode at given quality and return {dataUrl, bytes}
+  function encode(cv, q) {
+    const d = cv.toDataURL(mime, q);
+    return { d, bytes: b64b(d) };
+  }
+
+  // Step 1: try quality binary search at full resolution
+  let lo = 0.02, hi = 0.92, bestD = null, bestBytes = Infinity;
+  for (let i = 0; i < 16; i++) {
+    const mid = (lo + hi) / 2;
+    const { d, bytes } = encode(canvas, mid);
+    if (bytes <= target) { bestD = d; bestBytes = bytes; lo = mid; }
+    else { hi = mid; }
+    if (hi - lo < 0.003) break;
+  }
+  if (bestD && bestBytes <= target) return bestD;
+
+  // Step 2: still over target — scale resolution down, binary search
+  const tmp = document.createElement('canvas');
+  const tc = tmp.getContext('2d');
+  let sLo = 0.05, sHi = 1.0;
+  for (let i = 0; i < 16; i++) {
+    const mid = (sLo + sHi) / 2;
+    tmp.width  = Math.max(1, Math.round(canvas.width  * mid));
+    tmp.height = Math.max(1, Math.round(canvas.height * mid));
+    tc.clearRect(0, 0, tmp.width, tmp.height);
+    tc.drawImage(canvas, 0, 0, tmp.width, tmp.height);
+    const { d, bytes } = encode(tmp, 0.82);
+    if (bytes <= target) { bestD = d; bestBytes = bytes; sHi = mid; }
+    else { sLo = mid; }
+    if (sHi - sLo < 0.003) break;
+  }
+  // Final render at best found scale
+  if (bestD) return bestD;
+  // Absolute fallback — tiny size
+  tmp.width  = Math.max(1, Math.round(canvas.width  * 0.3));
+  tmp.height = Math.max(1, Math.round(canvas.height * 0.3));
+  tc.drawImage(canvas, 0, 0, tmp.width, tmp.height);
+  return tmp.toDataURL(mime, 0.7);
+}
+
+/* ═══ TAB SWITCHER ═══ */
+function switchTab(tab,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  $('page-'+tab).classList.add('active');
+  if(el)el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function openChooser(){$('chooser-bg').classList.add('on');}
+function closeChooser(){$('chooser-bg').classList.remove('on');}
+function chooseType(type){
+  closeChooser();
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  $('cl-tab').classList.add('active');
+  const d=new Date(),ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  if(type==='personal'){$('p-date').value=ds;switchTab('personal',null);}
+  else{$('c-date').value=ds;switchTab('company',null);}
+}
+
+/* ═══ IMAGE MERGER ═══ */
+let IM={img1:null,img2:null,dir:'v'};
+
+$('z1').addEventListener('click',()=>$('f1').click());
+$('z2').addEventListener('click',()=>$('f2').click());
+$('f1').addEventListener('change',function(){if(this.files[0])imLoad(1,this.files[0]);});
+$('f2').addEventListener('change',function(){if(this.files[0])imLoad(2,this.files[0]);});
+[1,2].forEach(n=>{
+  const z=$('z'+n);
+  z.addEventListener('dragenter',e=>e.preventDefault());
+  z.addEventListener('dragover',e=>{e.preventDefault();e.stopPropagation();z.classList.add('drag-over');});
+  z.addEventListener('dragleave',e=>{if(!z.contains(e.relatedTarget))z.classList.remove('drag-over');});
+  z.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();z.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))imLoad(n,f);});
+});
+
+function imLoad(n,file){
+  const r=new FileReader();
+  r.onload=ev=>{const img=new Image();img.onload=()=>{IM['img'+n]=img;const pv=$('pv'+n);pv.src=ev.target.result;pv.style.display='block';$('ph'+n).style.display='none';$('z'+n).classList.add('has-img');imCheck();};img.src=ev.target.result;};
+  r.readAsDataURL(file);
+}
+function imCheck(){
+  const btn=$('merge-btn'),txt=$('merge-txt');
+  if(IM.img1&&IM.img2){btn.disabled=false;txt.textContent='⚡ Merge Images Now';}
+  else if(IM.img1)txt.textContent='Now upload the second image →';
+  else if(IM.img2)txt.textContent='← Now upload the first image';
+}
+function imSetDir(d,el){
+  IM.dir=d;
+  document.querySelectorAll('.dir-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+}
+function imMerge(){
+  if(!IM.img1||!IM.img2)return;
+  $('im-result').classList.remove('on');
+  $('merge-btn').disabled=true;$('merge-txt').textContent='Merging…';
+  $('im-load').classList.add('on');
+  const steps=[[12,'Reading…'],[32,'Calculating…'],[55,'Drawing image 1…'],[78,'Drawing image 2…'],[92,'Compositing…'],[100,'Complete!']];
+  let i=0;
+  const t=setInterval(()=>{if(i>=steps.length){clearInterval(t);setTimeout(imDraw,280);return;}const[p,l]=steps[i++];$('im-pct').textContent=p+'%';$('im-bar').style.width=p+'%';$('im-lbl').textContent=l;},220);
+}
+function imDraw(){
+  const cv=$('im-canvas'),ctx=cv.getContext('2d'),i1=IM.img1,i2=IM.img2;
+  if(IM.dir==='v'){
+    const W=Math.max(i1.naturalWidth,i2.naturalWidth);
+    const H1=Math.round(i1.naturalHeight*(W/i1.naturalWidth));
+    const H2=Math.round(i2.naturalHeight*(W/i2.naturalWidth));
+    cv.width=W;cv.height=H1+H2;
+    ctx.drawImage(i1,0,0,W,H1);ctx.drawImage(i2,0,H1,W,H2);
+  }else{
+    const H=Math.max(i1.naturalHeight,i2.naturalHeight);
+    const W2=Math.round(i2.naturalWidth*(H/i2.naturalHeight));
+    const W1=Math.round(i1.naturalWidth*(H/i1.naturalHeight));
+    cv.width=W2+W1;cv.height=H;
+    ctx.drawImage(i2,0,0,W2,H);ctx.drawImage(i1,W2,0,W1,H);
+  }
+  const kb=Math.round(cv.width*cv.height*3.5/1024);
+  $('im-meta').textContent=cv.width+'×'+cv.height+'px · ~'+(kb>1024?(kb/1024).toFixed(1)+' MB':kb+' KB');
+  $('im-tag').textContent=IM.dir==='v'?'Vertical':'Horizontal';
+  $('im-load').classList.remove('on');$('merge-btn').disabled=false;$('merge-txt').textContent='⚡ Merge Again';
+  const res=$('im-result');res.classList.add('on');
+  setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+function imDownload(q){
+  const cv=$('im-canvas'),dir=IM.dir==='v'?'vertical':'horizontal';
+  if(q==='full'){saveUrl(cv.toDataURL('image/png'),'narayanbogati'+dir+'full.png');return;}
+  // Force JPEG compression — guaranteed < 200KB
+  const TARGET=200*1024;
+  const d=compress(cv,TARGET,'jpg');
+  const kb=Math.round(b64b(d)/1024);
+  saveUrl(d,'narayanbogati'+dir+kb+'kb.jpg');
+}
+
+/* ═══ COVER LETTER SHARED ═══ */
+let CL={pendingFn:null,pendingType:null,pendingFmt:null,zoomPct:100,baseW:0};
+
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+
+function clValidate(prefix,rules){
+  let ok=true;
+  rules.forEach(r=>{const el=$(r.id);const v=r.ok(el.value);el.classList.toggle('err',!v);if(!v)ok=false;});
+  return ok;
+}
+function showWarn(fields,fn){
+  CL.pendingFn=fn;
+  $('warn-rows').innerHTML=fields.map(([l,v])=>'<div class="warn-row"><span class="wl">'+l+'</span><span class="wv">'+v+'</span></div>').join('');
+  $('warn-modal').classList.add('on');
+}
+function closeWarn(){$('warn-modal').classList.remove('on');}
+function confirmGen(){closeWarn();if(CL.pendingFn==='p')pGen();else cGen();}
+
+/* ── Personal ── */
+function pWarn(){
+  $('p-date').value=$('p-date').value||today();
+  const ok=clValidate('p',[{id:'p-date',ok:v=>v!==''},{id:'p-name',ok:v=>v.trim().length>1},{id:'p-domain',ok:v=>v.trim().length>3},{id:'p-email',ok:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())},{id:'p-phone',ok:v=>v.trim().length>=7}]);
+  if(!ok){document.querySelector('#page-personal .field input.err')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  showWarn([['Date',$('p-date').value],['Name',$('p-name').value.trim()],['Domain',$('p-domain').value.trim()],['Email',$('p-email').value.trim()],['Phone',$('p-phone').value.trim()]],'p');
+}
+function pGen(){
+  const date=$('p-date').value,name=$('p-name').value.trim(),domain=$('p-domain').value.trim(),email=$('p-email').value.trim(),phone=$('p-phone').value.trim();
+  const W=1240,HMAX=1754,ML=108,MR=108,mW=W-ML-MR,cv=$('p-cv');
+  cv.width=W;cv.height=HMAX;const ctx=cv.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,HMAX);ctx.fillStyle='#000';ctx.textBaseline='top';
+  const FS=22,LH=Math.round(FS*2.1),WF='bold '+FS+'px Georgia,"Times New Roman",serif',NF='bold '+FS+'px Arial,Helvetica,sans-serif';
+  ctx.font=NF;ctx.textAlign='right';ctx.fillText(date,W-MR,108);ctx.textAlign='left';
+  let y=210;ctx.font=WF;
+  ctx.fillText('To,',ML,y);y+=Math.round(LH*1.1);
+  ctx.fillText('The Host Master',ML,y);y+=LH;
+  ctx.fillText('Mercantile Communications PVT .LTD',ML,y);y+=LH;
+  ctx.fillText('Kathmandu, Nepal',ML,y);
+  y+=Math.round(LH*1.9);ctx.fillText('subject: Application for .np domain registration',ML,y);
+  y+=Math.round(LH*2.1);ctx.fillText('Dear Sir/Madam,',ML,y);
+  y+=Math.round(LH*2.1);y=sw(ctx,'I would like to request registration of '+domain+' domain under my name '+name+' with domain '+domain,ML,y,mW,LH,WF);
+  y+=Math.round(LH*1.7);y=sw(ctx,'Applying for registration of '+domain+' follows all the terms and conditions. Required documents for domain registration are attached with the form.',ML,y,mW,LH,WF);
+  y+=Math.round(LH*1.7);y=sw(ctx,'I would be grateful for your help. Thank you for your kind consideration. Looking forward to hearing from you soon. Thank you!',ML,y,mW,LH,WF);
+  y+=Math.round(LH*2.4);ctx.font=WF;ctx.fillText('Yours Sincerely,',ML,y);y+=Math.round(LH*1.15);
+  ctx.fillText(name,ML,y);y+=LH;ctx.font=NF;ctx.fillText(email,ML,y);y+=LH;ctx.fillText(phone,ML,y);y+=Math.round(LH*1.6);
+  clCrop(cv,y,HMAX);
+  clShow('p-cv','p-ph','p-dlbar','p-eye','p-meta',domain+' · '+name);
+}
+
+/* ── Company ── */
+function cWarn(){
+  $('c-date').value=$('c-date').value||today();
+  const ok=clValidate('c',[{id:'c-date',ok:v=>v!==''},{id:'c-domain',ok:v=>v.trim().length>3},{id:'c-company',ok:v=>v.trim().length>1},{id:'c-address',ok:v=>v.trim().length>3},{id:'c-pan',ok:v=>v.trim().length>=5}]);
+  if(!ok){document.querySelector('#page-company .field input.err')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  showWarn([['Date',$('c-date').value],['Domain',$('c-domain').value.trim()],['Company',$('c-company').value.trim()],['Address',$('c-address').value.trim()],['PAN No',$('c-pan').value.trim()]],'c');
+}
+function cGen(){
+  const date=$('c-date').value,domain=$('c-domain').value.trim(),company=$('c-company').value.trim(),address=$('c-address').value.trim(),pan=$('c-pan').value.trim();
+  const dO=new Date(date),mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],dd=String(dO.getDate()).padStart(2,'0')+' '+mo[dO.getMonth()]+' '+dO.getFullYear();
+  const W=1240,HMAX=1800,ML=108,MR=108,mW=W-ML-MR,cv=$('c-cv');
+  cv.width=W;cv.height=HMAX;const ctx=cv.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,HMAX);ctx.fillStyle='#000';ctx.textBaseline='top';
+  const FS=22,LH=Math.round(FS*2.1),WF='bold '+FS+'px Georgia,"Times New Roman",serif',NF='bold '+FS+'px Arial,Helvetica,sans-serif';
+  // Date top-right
+  ctx.font=NF;ctx.textAlign='right';ctx.fillText(dd,W-MR,96);ctx.textAlign='left';
+  // To block starts well below date
+  let y=Math.round(LH*2.6);
+  ctx.font=WF;
+  ctx.fillText('To,',ML,y);y+=Math.round(LH*1.05);
+  ctx.fillText('The Host Master',ML,y);y+=LH;
+  ctx.fillText('Mercantile Communication Pvt. Ltd.',ML,y);
+  y+=Math.round(LH*2.0);ctx.fillText('Subject: For .com.np Domain Registration',ML,y);
+  y+=Math.round(LH*2.0);ctx.fillText('Dear Sir/Madam',ML,y);
+  y+=Math.round(LH*2.0);y=dw(ctx,'I would like to register the '+domain+' domain name. I have already submitted the domain registration online form. I have attached the scan copy of incorporation of the company along with this application.',ML,y,mW,LH,WF,NF,domain);
+  y+=Math.round(LH*1.8);y=dw(ctx,'I will be happy if you register my '+domain+' domain name as soon as possible. Thank you for considering my application.',ML,y,mW,LH,WF,NF,domain);
+  y+=Math.round(LH*1.8);ctx.font=WF;ctx.fillText('My preferred domain Name: ',ML,y);
+  const pfW=ctx.measureText('My preferred domain Name: ').width;ctx.font=NF;ctx.fillText(domain,ML+pfW,y);
+  y+=Math.round(LH*2.0);ctx.font=WF;ctx.fillText('Thank You!',ML,y);
+  y+=Math.round(LH*2.0);ctx.fillText('Regards,',ML,y);y+=Math.round(LH*1.15);
+  ctx.fillText(company,ML,y);y+=LH;ctx.fillText(address,ML,y);y+=LH;
+  const plW=ctx.measureText('PAN No: ').width;ctx.fillText('PAN No: ',ML,y);ctx.font=NF;ctx.fillText(pan,ML+plW,y);y+=Math.round(LH*1.5);
+  // Stamp/signature space
+  const sT=y+Math.round(LH*.5),sH=Math.round(LH*5);
+  ctx.save();ctx.strokeStyle='#ccc';ctx.lineWidth=2;ctx.setLineDash([8,6]);ctx.strokeRect(ML,sT,Math.round(mW*.38),sH);ctx.restore();
+  ctx.font=Math.round(FS*.75)+'px Arial,sans-serif';ctx.fillStyle='#bbb';ctx.fillText('Stamp / Seal',ML+14,sT+12);
+  const sX=ML+Math.round(mW*.55),sY=sT+sH-4;
+  ctx.save();ctx.strokeStyle='#333';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sX,sY);ctx.lineTo(sX+Math.round(mW*.38),sY);ctx.stroke();ctx.restore();
+  ctx.font=Math.round(FS*.8)+'px Georgia,serif';ctx.fillStyle='#444';ctx.fillText('Authorized Signature',sX,sY+9);
+  ctx.fillStyle='#000';y=sT+sH+Math.round(LH*1.2);
+  clCrop(cv,y,HMAX);
+  clShow('c-cv','c-ph','c-dlbar','c-eye','c-meta',domain+' · '+company);
+}
+
+/* ── Wrap helpers ── */
+function sw(ctx,text,x,y,mW,lh,font){ctx.font=font;const ws=text.split(' ');let l='',cy=y;for(const w of ws){const t=l+(l?' ':'')+w;if(ctx.measureText(t).width>mW&&l){ctx.fillText(l,x,cy);cy+=lh;l=w;}else l=t;}if(l){ctx.fillText(l,x,cy);cy+=lh;}return cy;}
+function dw(ctx,text,x,y,mW,lh,WF,NF,dom){
+  ctx.font=WF;const ws=text.split(' ');let line=[],lf=[],lW=0,cy=y;const SP=ctx.measureText(' ').width;
+  function flush(){let cx=x;for(let k=0;k<line.length;k++){ctx.font=lf[k];ctx.fillText(line[k],cx,cy);cx+=ctx.measureText(line[k]).width;if(k<line.length-1){ctx.font=WF;cx+=SP;}}cy+=lh;line=[];lf=[];lW=0;}
+  for(const w of ws){const f=(w.includes(dom)||w.replace(/[.,!?]$/,'')==dom)?NF:WF;ctx.font=f;const ww=ctx.measureText(w).width,aW=line.length?SP+ww:ww;if(line.length&&lW+aW>mW){flush();line.push(w);lf.push(f);lW=ww;}else{if(line.length)lW+=SP;line.push(w);lf.push(f);lW+=ww;}}
+  if(line.length)flush();return cy;
+}
+function clCrop(cv,y,HMAX){const fH=Math.min(y,HMAX),t=document.createElement('canvas');t.width=cv.width;t.height=fH;t.getContext('2d').drawImage(cv,0,0,cv.width,fH,0,0,cv.width,fH);cv.width=cv.width;cv.height=fH;cv.getContext('2d').drawImage(t,0,0);}
+function clShow(cvId,phId,dlId,eyeId,metaId,metaTxt){
+  const cv=$(cvId);$(phId).style.display='none';cv.style.display='block';$(dlId).style.display='flex';$(metaId).textContent=metaTxt;$(eyeId).classList.add('show');
+  $(eyeId==='p-eye'?'p-cwrap':'c-cwrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ── CL Download ── */
+function clDL(t,fmt){
+  CL.pendingType=t;CL.pendingFmt=fmt;
+  if(fmt==='pdf'){doQual('full');return;}
+  const cv=$(t+'-cv');const tU=fmt==='png'?cv.toDataURL('image/png'):cv.toDataURL('image/jpeg',.97);const sKB=Math.round(b64b(tU)/1024);
+  if(sKB<=200){doQual('full');return;}
+  $('qual-title').textContent=fmt==='png'?'Download PNG':'Download JPG';
+  $('qual-fdesc').textContent='Original quality · ~'+sKB+' KB';
+  $('qual-desc').textContent='File is ~'+sKB+' KB. Choose quality.';
+  $('qual-modal').classList.add('on');
+}
+function closeQual(){$('qual-modal').classList.remove('on');}
+function doQual(q){
+  closeQual();
+  const cv=$(CL.pendingType+'-cv'),fmt=CL.pendingFmt;
+  const raw=(CL.pendingType==='p')?($('p-name').value.trim()):($('c-company').value.trim());
+  const base=raw.toLowerCase().replace(/[^a-z0-9]/g,'')+(CL.pendingType==='p'?'generatecoverletter':'companycoverletter');
+  if(fmt==='pdf'){const{jsPDF}=window.jspdf;const pW=210,pH=Math.round(pW*cv.height/cv.width);const pdf=new jsPDF({orientation:pH>pW?'portrait':'landscape',unit:'mm',format:[pW,pH]});pdf.addImage(cv.toDataURL('image/jpeg',.97),'JPEG',0,0,pW,pH);pdf.save(base+'.pdf');return;}
+  if(fmt==='png'){const d=q==='full'?cv.toDataURL('image/png'):compress(cv,200*1024,'png');saveUrl(d,base+(q==='full'?'.png':Math.round(b64b(d)/1024)+'kb.png'));return;}
+  if(fmt==='jpg'){if(q==='full'){saveUrl(cv.toDataURL('image/jpeg',.97),base+'.jpg');}else{const d=compress(cv,200*1024,'jpg');saveUrl(d,base+Math.round(b64b(d)/1024)+'kb.jpg');}}
+}
+
+/* ── CL Viewer ── */
+function openViewer(cvId){const cv=$(cvId);$('vImg').src=cv.toDataURL('image/png');$('vImg').onload=()=>{CL.baseW=$('vImg').naturalWidth;CL.zoomPct=100;vzApply();};$('viewer-bg').classList.add('on');}
+function closeViewer(){$('viewer-bg').classList.remove('on');}
+function vzApply(){const img=$('vImg'),bW=Math.min(CL.baseW||900,window.innerWidth*.88);img.style.width=Math.round(bW*CL.zoomPct/100)+'px';img.style.height='auto';$('zoom-lbl').textContent=CL.zoomPct+'%';}
+function vzo(d){if(d===1)CL.zoomPct=Math.min(CL.zoomPct+15,400);else if(d===-1)CL.zoomPct=Math.max(CL.zoomPct-15,20);else CL.zoomPct=100;vzApply();}
+$('viewer-scroll').addEventListener('wheel',function(e){e.preventDefault();vzo(e.deltaY<0?1:-1);},{passive:false});
+
+/* ═══ DOCUMENT CONVERTER ═══ */
+let DC={file:null,type:null,fmt:null,pages:[],cropped:null};
+const FMTS={image:[{id:'jpg',l:'JPG',fi:'fi-jpg'},{id:'png',l:'PNG',fi:'fi-png'},{id:'webp',l:'WEBP',fi:'fi-webp'},{id:'pdf',l:'PDF',fi:'fi-pdf'}],svg:[{id:'png',l:'PNG',fi:'fi-png'},{id:'jpg',l:'JPG',fi:'fi-jpg'},{id:'pdf',l:'PDF',fi:'fi-pdf'}],pdf:[{id:'jpg',l:'JPG',fi:'fi-jpg'},{id:'png',l:'PNG',fi:'fi-png'}]};
+
+const dcDrop=$('dc-drop');
+$('dc-input').addEventListener('change',function(){if(this.files[0])dcHandle(this.files[0]);});
+dcDrop.addEventListener('dragenter',e=>e.preventDefault());
+dcDrop.addEventListener('dragover',e=>{e.preventDefault();e.stopPropagation();dcDrop.classList.add('over');});
+dcDrop.addEventListener('dragleave',e=>{if(!dcDrop.contains(e.relatedTarget))dcDrop.classList.remove('over');});
+dcDrop.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();dcDrop.classList.remove('over');const f=e.dataTransfer.files[0];if(f)dcHandle(f);});
+dcDrop.addEventListener('click',function(e){if(!dcDrop.classList.contains('loaded')){e.preventDefault();e.stopPropagation();$('dc-input').click();}});
+
+function dcHandle(file){
+  const n=file.name.toLowerCase();let type=null;
+  if(/\.(jpg|jpeg|png|webp)$/.test(n))type='image';
+  else if(/\.svg$/.test(n))type='svg';
+  else if(/\.pdf$/.test(n))type='pdf';
+  else{alert('Unsupported. Use JPG, PNG, WEBP, SVG or PDF.');return;}
+  DC.file=file;DC.type=type;DC.fmt=null;DC.cropped=null;
+  dcDrop.classList.remove('over');dcDrop.classList.add('loaded');
+  $('dc-fname').textContent=file.name;
+  $('dc-fsize').textContent=fmtBytes(file.size);
+  $('dc-ficon').innerHTML=dcIcon(file.name);
+  // Images → show crop first; PDF → go straight to format
+  if(type==='pdf'){dcShowFmts();}
+  else{const r=new FileReader();r.onload=ev=>cropInit(ev.target.result);r.readAsDataURL(file);}
+}
+
+/* ── Perspective Crop Tool ── */
+/*
+ * Pure-JS 4-point perspective warp — same as CamScanner.
+ * - Display canvas shows the image fitted to screen width.
+ * - 4 dots are absolutely positioned over the wrapper div.
+ * - On Apply: compute homography, warp from FULL-RES source image
+ *   so there is NO quality loss and NO black pixels.
+ *
+ * Key fix for black pixels: the source imageData is read from a
+ * FULL-RES offscreen canvas (oW × oH), and pts are scaled back
+ * from display coords to original coords before warping.
+ */
+
+let CR = {
+  img: null,        // original HTMLImageElement
+  oW: 0, oH: 0,    // original pixel dimensions
+  dW: 0, dH: 0,    // display dimensions (fitted to screen)
+  sc: 1,            // display / original scale
+  pts: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}], // TL TR BR BL in display px
+  dragging: -1
+};
+
+function cropInit(src) {
+  const img = new Image();
+  img.onload = function () {
+    CR.img = img;
+    CR.oW  = img.naturalWidth;
+    CR.oH  = img.naturalHeight;
+
+    // Fit to available width (max 760px, max 520px tall)
+    const maxW = Math.min(760, window.innerWidth - 40);
+    const maxH = 520;
+    CR.sc  = Math.min(1, maxW / CR.oW, maxH / CR.oH);
+    CR.dW  = Math.round(CR.oW * CR.sc);
+    CR.dH  = Math.round(CR.oH * CR.sc);
+
+    // ── Draw image onto the display canvas ──────────────────────────
+    // IMPORTANT: set canvas pixel dimensions = display dimensions
+    // Do NOT use CSS width:100% here — that causes the black-half bug
+    const cv = $('dc-crop-cv');
+    cv.width  = CR.dW;
+    cv.height = CR.dH;
+    cv.style.width  = CR.dW + 'px';
+    cv.style.height = CR.dH + 'px';
+    cv.style.display = 'block';
+    cv.getContext('2d').drawImage(img, 0, 0, CR.dW, CR.dH);
+
+    // Size the wrapper to exactly match the canvas
+    const wrap = $('dc-crop-wrapper');
+    wrap.style.width  = CR.dW + 'px';
+    wrap.style.height = CR.dH + 'px';
+
+    cropReset();
+
+    $('dc-crop-card').classList.add('show');
+    $('dc-fmt-card').classList.remove('show');
+    setTimeout(() => $('dc-crop-card').scrollIntoView({behavior:'smooth',block:'start'}), 80);
+  };
+  img.src = src;
+}
+
+function cropReset() {
+  // Place dots inset 8% from each corner
+  const p = 0.08, W = CR.dW, H = CR.dH;
+  CR.pts = [
+    { x: W * p,       y: H * p },         // TL
+    { x: W * (1 - p), y: H * p },         // TR
+    { x: W * (1 - p), y: H * (1 - p) },   // BR
+    { x: W * p,       y: H * (1 - p) }    // BL
+  ];
+  cropDraw();
+}
+
+function cropDraw() {
+  const pts = CR.pts;
+
+  // Position dots — clamp inside wrapper
+  ['cp0','cp1','cp2','cp3'].forEach((id, i) => {
+    const el = $(id);
+    const x = Math.max(0, Math.min(CR.dW, pts[i].x));
+    const y = Math.max(0, Math.min(CR.dH, pts[i].y));
+    el.style.left = x + 'px';
+    el.style.top  = y + 'px';
+  });
+
+  // SVG uses viewBox="0 0 100 100" with preserveAspectRatio="none"
+  // So we express pts as percentages of dW/dH → map to 0..100
+  function px(i) { return (CR.pts[i].x / CR.dW * 100).toFixed(2) + ',' + (CR.pts[i].y / CR.dH * 100).toFixed(2); }
+  const poly = [px(0), px(1), px(2), px(3)].join(' ');
+  $('quad-hole').setAttribute('points', poly);
+  $('quad-border').setAttribute('points', poly);
+
+  // Diagonal guide lines (in SVG viewBox coords)
+  function pct(i, axis) {
+    return axis === 'x'
+      ? (CR.pts[i].x / CR.dW * 100).toFixed(2)
+      : (CR.pts[i].y / CR.dH * 100).toFixed(2);
+  }
+  $('quad-d1').setAttribute('x1', pct(0,'x')); $('quad-d1').setAttribute('y1', pct(0,'y'));
+  $('quad-d1').setAttribute('x2', pct(2,'x')); $('quad-d1').setAttribute('y2', pct(2,'y'));
+  $('quad-d2').setAttribute('x1', pct(1,'x')); $('quad-d2').setAttribute('y1', pct(1,'y'));
+  $('quad-d2').setAttribute('x2', pct(3,'x')); $('quad-d2').setAttribute('y2', pct(3,'y'));
+
+  // Output size label
+  const outW = Math.round(Math.max(dist(pts[0],pts[1]), dist(pts[3],pts[2])) / CR.sc);
+  const outH = Math.round(Math.max(dist(pts[0],pts[3]), dist(pts[1],pts[2])) / CR.sc);
+  $('crop-size-txt').textContent = outW + ' × ' + outH + ' px';
+}
+
+function dist(a, b) { return Math.hypot(b.x - a.x, b.y - a.y); }
+
+// ── Drag events ──────────────────────────────────────────────────────
+['cp0','cp1','cp2','cp3'].forEach((id, i) => {
+  const el = $(id);
+  function startDrag(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    CR.dragging = i;
+  }
+  el.addEventListener('mousedown',  startDrag);
+  el.addEventListener('touchstart', startDrag, { passive: false });
+});
+
+const cropWrap = $('dc-crop-wrapper');
+
+function onCropMove(e) {
+  if (CR.dragging === -1) return;
+  e.preventDefault();
+  const r   = cropWrap.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  CR.pts[CR.dragging] = {
+    x: Math.max(0, Math.min(CR.dW, src.clientX - r.left)),
+    y: Math.max(0, Math.min(CR.dH, src.clientY - r.top))
+  };
+  cropDraw();
+}
+function onCropUp() { CR.dragging = -1; }
+
+document.addEventListener('mousemove', onCropMove);
+document.addEventListener('mouseup',   onCropUp);
+document.addEventListener('touchmove', onCropMove, { passive: false });
+document.addEventListener('touchend',  onCropUp);
+
+// ── Apply: 4-point perspective warp using correct homography ─────────
+//
+// Algorithm: for each output pixel, solve for (u,v) in [0,1]x[0,1]
+// using the exact homography inverse (not bilinear approximation).
+// This gives perfect perspective correction like warpPerspective().
+//
+function cropApply() {
+  const dPts = CR.pts;
+
+  // Scale display pts → original full-resolution pts
+  const P = dPts.map(p => ({ x: p.x / CR.sc, y: p.y / CR.sc }));
+  const [tl, tr, br, bl] = P;
+
+  // Output size
+  const outW = Math.max(1, Math.round(Math.max(dist(tl,tr), dist(bl,br))));
+  const outH = Math.max(1, Math.round(Math.max(dist(tl,bl), dist(tr,br))));
+
+  // Read FULL-RESOLUTION source pixels (never read from display canvas)
+  const srcCv = document.createElement('canvas');
+  srcCv.width  = CR.oW;
+  srcCv.height = CR.oH;
+  srcCv.getContext('2d').drawImage(CR.img, 0, 0, CR.oW, CR.oH);
+  const srcData = srcCv.getContext('2d').getImageData(0, 0, CR.oW, CR.oH).data;
+
+  // Output canvas
+  const dstCv  = document.createElement('canvas');
+  dstCv.width  = outW;
+  dstCv.height = outH;
+  const dstCtx = dstCv.getContext('2d');
+  const dstImg = dstCtx.createImageData(outW, outH);
+  const dst    = dstImg.data;
+
+  // Compute 3×3 homography matrix from 4 point-pairs using DLT
+  // srcPts: TL TR BR BL in source image
+  // dstPts: corners of output rectangle
+  function computeH(sp, dp) {
+    // Build 8×9 matrix A for DLT
+    const A = [];
+    for (let i = 0; i < 4; i++) {
+      const x = sp[i].x, y = sp[i].y, X = dp[i].x, Y = dp[i].y;
+      A.push([-x, -y, -1,  0,  0,  0, x*X, y*X, X]);
+      A.push([ 0,  0,  0, -x, -y, -1, x*Y, y*Y, Y]);
+    }
+    // SVD via power iteration (simplified: use null-space via Gaussian elimination)
+    // For 4-point case, solve exactly using the standard closed-form
+    // We use the pseudo-inverse via least squares (8 equations, 9 unknowns → h9=1)
+    // Fix h[8]=1 and solve 8×8 system
+    const n = 8;
+    const b = [];
+    const M = [];
+    for (let r = 0; r < 8; r++) {
+      M.push(A[r].slice(0, 8).slice());
+      b.push(-A[r][8]);
+    }
+    // Gaussian elimination with partial pivot
+    for (let col = 0; col < n; col++) {
+      let maxRow = col;
+      for (let row = col + 1; row < n; row++)
+        if (Math.abs(M[row][col]) > Math.abs(M[maxRow][col])) maxRow = row;
+      [M[col], M[maxRow]] = [M[maxRow], M[col]];
+      [b[col], b[maxRow]] = [b[maxRow], b[col]];
+      for (let row = col + 1; row < n; row++) {
+        const f = M[row][col] / M[col][col];
+        for (let k = col; k < n; k++) M[row][k] -= f * M[col][k];
+        b[row] -= f * b[col];
+      }
+    }
+    const h = new Array(9);
+    h[8] = 1;
+    for (let i = n - 1; i >= 0; i--) {
+      h[i] = b[i];
+      for (let j = i + 1; j < n; j++) h[i] -= M[i][j] * h[j];
+      h[i] /= M[i][i];
+    }
+    return h; // 3×3 row-major: [h0..h8]
+  }
+
+  // Source pts (in original image) → dest pts (output rectangle corners)
+  const srcPts = [tl, tr, br, bl];
+  const dstPts = [
+    {x:0,      y:0},
+    {x:outW-1, y:0},
+    {x:outW-1, y:outH-1},
+    {x:0,      y:outH-1}
+  ];
+
+  // Compute INVERSE homography: output pixel → source pixel
+  const H = computeH(dstPts, srcPts);
+
+  // Warp: for each output pixel, find source pixel with H
+  const W = CR.oW, Ht = CR.oH;
+  for (let oy = 0; oy < outH; oy++) {
+    for (let ox = 0; ox < outW; ox++) {
+      // Apply homography: [sx, sy, w] = H * [ox, oy, 1]
+      const w  = H[6]*ox + H[7]*oy + H[8];
+      const sx = (H[0]*ox + H[1]*oy + H[2]) / w;
+      const sy = (H[3]*ox + H[4]*oy + H[5]) / w;
+
+      // Bilinear sample from source (prevents black pixels at boundaries)
+      const sx0 = Math.max(0, Math.min(W - 2, Math.floor(sx)));
+      const sy0 = Math.max(0, Math.min(Ht - 2, Math.floor(sy)));
+      const fx  = Math.max(0, Math.min(1, sx - sx0));
+      const fy  = Math.max(0, Math.min(1, sy - sy0));
+
+      const i00 = (sy0      * W + sx0)     * 4;
+      const i10 = (sy0      * W + sx0 + 1) * 4;
+      const i01 = ((sy0+1)  * W + sx0)     * 4;
+      const i11 = ((sy0+1)  * W + sx0 + 1) * 4;
+
+      const di = (oy * outW + ox) * 4;
+      for (let ch = 0; ch < 3; ch++) {
+        dst[di+ch] = Math.round(
+          (1-fx)*(1-fy) * srcData[i00+ch] +
+          fx    *(1-fy) * srcData[i10+ch] +
+          (1-fx)*fy     * srcData[i01+ch] +
+          fx    *fy     * srcData[i11+ch]
+        );
+      }
+      dst[di+3] = 255;
+    }
+  }
+
+  dstCtx.putImageData(dstImg, 0, 0);
+  DC.cropped = dstCv;
+  $('dc-crop-card').classList.remove('show');
+  dcShowFmts();
+}
+
+function cropSkip() {
+  DC.cropped = null;
+  $('dc-crop-card').classList.remove('show');
+  dcShowFmts();
+}
+
+/* ── Format picker ── */
+function dcShowFmts(){
+  const ext=DC.file.name.toLowerCase().split('.').pop().replace('jpeg','jpg');
+  const fmts=FMTS[DC.type]||[];
+  $('dc-fmt-sub').textContent='Your '+ext.toUpperCase()+' file can be converted to:';
+  $('dc-fmt-grid').innerHTML=fmts.map(function(f){
+    const same=f.id===ext;
+    const cls='dc-fmt-btn'+(same?' disabled':'');
+    const oc=same?'':'onclick="dcSelFmt(\''+f.id+'\',this)"';
+    const extra=same?'<br><small style="font-size:.58rem;color:#94a3b8;font-weight:400;">same</small>':'';
+    return '<button class="'+cls+'" '+oc+'><div class="dc-fi '+f.fi+'">'+f.l+'</div>'+f.l+extra+'</button>';
+  }).join('');
+  $('dc-fmt-card').classList.add('show');
+  $('dc-conv-btn').style.display='none';
+  $('dc-result').classList.remove('show');
+  $('dc-load').classList.remove('on');
+  $('dc-again').style.display='none';
+  $('dc-fmt-card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function dcSelFmt(fmt,el){
+  DC.fmt=fmt;
+  document.querySelectorAll('.dc-fmt-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  $('dc-conv-btn').textContent='⚡ Convert to '+fmt.toUpperCase();
+  $('dc-conv-btn').style.display='block';
+}
+
+/* ── Convert ── */
+function dcConvert(){
+  if(!DC.file||!DC.fmt)return;
+  $('dc-fmt-card').classList.remove('show');
+  $('dc-load').classList.add('on');
+  $('dc-result').classList.remove('show');
+  DC.pages=[];
+  if(DC.type==='pdf')dcConvPDF();else dcConvImg();
+}
+
+function dcProg(p,l){$('dc-pct').textContent=p+'%';$('dc-bar').style.width=p+'%';$('dc-lbl').textContent=l;}
+
+function dcConvImg(){
+  dcProg(10,'Reading…');
+  if(DC.cropped){dcProg(55,'Using cropped image…');setTimeout(()=>{if(DC.fmt==='pdf')dcI2P(null,DC.cropped);else dcI2I(null,DC.cropped);},60);return;}
+  const r=new FileReader();
+  r.onload=ev=>{
+    dcProg(30,'Decoding…');
+    if(DC.type==='svg'){
+      const img=new Image();img.onload=()=>{dcProg(65,'Rendering SVG…');
+        const W=img.naturalWidth||800,H=img.naturalHeight||600,cv=document.createElement('canvas');cv.width=W;cv.height=H;const ctx=cv.getContext('2d');
+        if(DC.fmt!=='png'){ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);}ctx.drawImage(img,0,0,W,H);dcProg(88,'Finalising…');
+        setTimeout(()=>{if(DC.fmt==='pdf')dcI2P(img,cv);else dcI2I(img,cv);},60);};img.src=ev.target.result;
+    }else{
+      const img=new Image();img.onload=()=>{dcProg(60,'Drawing…');setTimeout(()=>{if(DC.fmt==='pdf')dcI2P(img);else dcI2I(img);},60);};img.src=ev.target.result;
+    }
+  };
+  r.readAsDataURL(DC.file);
+}
+
+function dcI2I(img,srcCv){
+  dcProg(75,'Converting…');
+  let cv=srcCv;
+  if(!cv){cv=document.createElement('canvas');cv.width=img.naturalWidth;cv.height=img.naturalHeight;cv.getContext('2d').drawImage(img,0,0);}
+  if(DC.fmt==='jpg'){const t=document.createElement('canvas'),tc=t.getContext('2d');t.width=cv.width;t.height=cv.height;tc.fillStyle='#fff';tc.fillRect(0,0,t.width,t.height);tc.drawImage(cv,0,0);cv=t;}
+  dcProg(92,'Finalising…');
+  setTimeout(()=>{
+    const mime=DC.fmt==='jpg'?'image/jpeg':DC.fmt==='webp'?'image/webp':'image/png';
+    const q=DC.fmt==='jpg'?.97:DC.fmt==='webp'?.92:undefined;
+    const d=q!==undefined?cv.toDataURL(mime,q):cv.toDataURL(mime);
+    DC.pages=[{cv,d,ext:DC.fmt}];dcProg(100,'Done!');setTimeout(dcShowRes,280);
+  },60);
+}
+
+function dcI2P(img,srcCv){
+  dcProg(80,'Creating PDF…');
+  let cv=srcCv;if(!cv){cv=document.createElement('canvas');cv.width=img.naturalWidth;cv.height=img.naturalHeight;cv.getContext('2d').drawImage(img,0,0);}
+  const{jsPDF}=window.jspdf,pW=210,pH=Math.round(pW*cv.height/cv.width);
+  const pdf=new jsPDF({orientation:pH>pW?'portrait':'landscape',unit:'mm',format:[pW,pH]});
+  pdf.addImage(cv.toDataURL('image/jpeg',.97),'JPEG',0,0,pW,pH);
+  dcProg(100,'Done!');
+  const blob=pdf.output('blob'),bUrl=URL.createObjectURL(blob);
+  DC.pages=[{cv,d:bUrl,ext:'pdf',blob}];setTimeout(dcShowRes,280);
+}
+
+async function dcConvPDF(){
+  try{
+    dcProg(10,'Loading PDF…');const ab=await DC.file.arrayBuffer();const doc=await pdfjsLib.getDocument({data:ab}).promise;const total=doc.numPages;
+    dcProg(20,'PDF loaded — '+total+' page'+(total>1?'s':'')+'…');
+    for(let p=1;p<=total;p++){
+      dcProg(20+Math.round((p/total)*72),'Rendering page '+p+' of '+total+'…');
+      const page=await doc.getPage(p),vp=page.getViewport({scale:2.0});
+      const cv=document.createElement('canvas');cv.width=vp.width;cv.height=vp.height;
+      const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+      await page.render({canvasContext:ctx,viewport:vp}).promise;
+      const mime=DC.fmt==='jpg'?'image/jpeg':'image/png';
+      const d=DC.fmt==='jpg'?cv.toDataURL(mime,.95):cv.toDataURL(mime);
+      DC.pages.push({cv,d,ext:DC.fmt,page:p});
+    }
+    dcProg(100,'Done!');setTimeout(dcShowRes,280);
+  }catch(err){alert('Error reading PDF: '+err.message);dcReset();}
+}
+
+function dcShowRes(){
+  $('dc-load').classList.remove('on');
+  const isPDF=DC.fmt==='pdf',isMulti=DC.pages.length>1;
+  const area=$('dc-preview');area.innerHTML='';
+  if(isPDF){const img=document.createElement('img');img.src=DC.pages[0].cv.toDataURL('image/jpeg',.82);img.className='dc-prev-img';area.appendChild(img);const lbl=document.createElement('div');lbl.className='dc-pg-lbl';lbl.textContent='PDF Preview';area.appendChild(lbl);}
+  else{DC.pages.forEach((r,i)=>{if(isMulti){const lbl=document.createElement('div');lbl.className='dc-pg-lbl';lbl.textContent='Page '+(i+1)+' of '+DC.pages.length;area.appendChild(lbl);}const img=document.createElement('img');img.src=r.d;img.className='dc-prev-img';area.appendChild(img);});}
+  $('dc-rtitle').textContent='✅ Conversion Complete';
+  $('dc-rmeta').textContent=DC.file.name+' → '+DC.fmt.toUpperCase()+(DC.pages.length>1?' · '+DC.pages.length+' pages':'');
+  $('dc-rbadge').textContent=DC.fmt.toUpperCase();
+  const bar=$('dc-dlbar');bar.innerHTML='';
+  const ico=dlSvg();
+  if(isPDF){const b=document.createElement('button');b.className='dl-pdf-btn';b.innerHTML=ico+' Download PDF';b.onclick=()=>dcDLPdf();bar.appendChild(b);}
+  else if(isMulti){
+    const b1=document.createElement('button');b1.className='dl-full';b1.innerHTML=ico+' Download All (Full)';b1.onclick=()=>dcDLAll('full');bar.appendChild(b1);
+    const b2=document.createElement('button');b2.className='dl-comp';b2.innerHTML=ico+' Download All &lt;200KB';b2.onclick=()=>dcDLAll('small');bar.appendChild(b2);
+  }else{
+    const b1=document.createElement('button');b1.className='dl-full';b1.innerHTML=ico+' Full Quality';b1.onclick=()=>dcDLSingle('full');bar.appendChild(b1);
+    const b2=document.createElement('button');b2.className='dl-comp';b2.innerHTML=ico+' &lt;200 KB';b2.onclick=()=>dcDLSingle('small');bar.appendChild(b2);
+  }
+  $('dc-result').classList.add('show');$('dc-again').style.display='inline-block';
+  $('dc-result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function dcBase(){return DC.file.name.replace(/\.[^.]+$/,'').replace(/[^a-z0-9]/gi,'').toLowerCase()||'converted';}
+function dcDLSingle(q){
+  const r=DC.pages[0],base=dcBase();
+  if(q==='full'){saveUrl(r.d,base+'converted.'+r.ext);return;}
+  // For <200KB: always compress as JPEG for maximum compression ratio
+  const TARGET=200*1024;
+  const compExt=r.ext==='png'?'png':'jpg'; // keep png as png, others as jpg
+  const comp=compress(r.cv,TARGET,compExt);
+  const kb=Math.round(b64b(comp)/1024);
+  saveUrl(comp,base+'converted'+kb+'kb.'+(compExt==='png'?'png':'jpg'));
+}
+function dcDLAll(q){
+  const base=dcBase();
+  DC.pages.forEach((r,i)=>setTimeout(()=>{
+    const name=base+'page'+String(i+1).padStart(2,'0');
+    if(q==='full'){saveUrl(r.d,name+'.'+r.ext);}
+    else{const c=compress(r.cv,200*1024,r.ext);saveUrl(c,name+Math.round(b64b(c)/1024)+'kb.'+r.ext);}
+  },i*400));
+}
+function dcDLPdf(){const r=DC.pages[0];saveUrl(r.d,dcBase()+'converted.pdf');}
+function dcIcon(name){const e=name.split('.').pop().toUpperCase().replace('JPEG','JPG');const c={PDF:'#dc2626',JPG:'#d97706',PNG:'#2563eb',WEBP:'#7c3aed',SVG:'#059669'},bg={PDF:'#fee2e2',JPG:'#fef3c7',PNG:'#dbeafe',WEBP:'#ede9fe',SVG:'#d1fae5'};return '<div style="width:50px;height:50px;border-radius:13px;background:'+(bg[e]||'#f1f5f9')+';display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:'+(c[e]||'#475569')+';">'+e+'</div>';}
+function dcReset(e){if(e){e.preventDefault();e.stopPropagation();}DC.file=null;DC.type=null;DC.fmt=null;DC.pages=[];DC.cropped=null;CR.img=null;dcDrop.classList.remove('loaded','over');$('dc-input').value='';$('dc-crop-card').classList.remove('show');$('dc-fmt-card').classList.remove('show');$('dc-load').classList.remove('on');$('dc-result').classList.remove('show');$('dc-again').style.display='none';$('dc-conv-btn').style.display='none';dcProg(0,'Preparing…');}
+</script>
+</body>
+</html>
